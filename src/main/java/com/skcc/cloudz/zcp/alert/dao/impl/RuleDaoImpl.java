@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -23,6 +23,10 @@ import org.springframework.stereotype.Repository;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.esotericsoftware.yamlbeans.YamlConfig;
 import com.esotericsoftware.yamlbeans.YamlException;
 import com.esotericsoftware.yamlbeans.YamlReader;
@@ -30,7 +34,9 @@ import com.esotericsoftware.yamlbeans.YamlWriter;
 import com.skcc.cloudz.zcp.alert.dao.RuleDao;
 import com.skcc.cloudz.zcp.alert.service.impl.RuleServiceImpl;
 import com.skcc.cloudz.zcp.alert.vo.RuleData;
+import com.skcc.cloudz.zcp.common.util.JsonUtil;
 import com.skcc.cloudz.zcp.common.util.Message;
+
 
 import io.kubernetes.client.ApiClient;
 import io.kubernetes.client.ApiException;
@@ -38,6 +44,9 @@ import io.kubernetes.client.Configuration;
 import io.kubernetes.client.apis.CoreV1Api;
 import io.kubernetes.client.models.V1ConfigMap;
 import io.kubernetes.client.util.Config;
+import net.minidev.json.JSONObject;
+
+
 
 @Repository("ruleDao")
 public class RuleDaoImpl implements RuleDao {
@@ -64,6 +73,7 @@ public class RuleDaoImpl implements RuleDao {
 			V1ConfigMap configMap;
 			
 			configMap = api.readNamespacedConfigMap("prometheus-user-rules", "monitoring", null, null, null);
+			System.out.println(configMap);
 			
 			File file = new File("rule.yaml");
 	        
@@ -126,17 +136,13 @@ public class RuleDaoImpl implements RuleDao {
                 e.printStackTrace();
             }
         }
-		
-		
-		
-		
 		return ruleList;
 	}
 
 	/* (non-Javadoc)
 	 * @see com.skcc.cloudz.zcp.alert.dao.RuleDao#createRule(com.skcc.cloudz.zcp.alert.vo.Rule)
 	 */
-	@SuppressWarnings({ "null", "unchecked" })
+	@SuppressWarnings({ "null", "unchecked", "static-access" })
 	@Override
 	public RuleData createRule(RuleData createRuleVo) {
 		// TODO Auto-generated method stub
@@ -154,61 +160,123 @@ public class RuleDaoImpl implements RuleDao {
 			configMap = api.readNamespacedConfigMap("prometheus-user-rules", "monitoring", null, null, null);
 			System.out.println(configMap);
 			
-			File file = new File("rule.yaml");
+			String rules = configMap.getData().get("users-rules.rules");
+			System.out.println(rules);
+			
+			HashMap<String, String> labels = new HashMap<String, String>();
+			labels.put("severity", createRuleVo.getRuleSeverity());
+			labels.put("channel", createRuleVo.getRuleChannel());
+			
+			HashMap<String, String> annotations = new HashMap<String, String>();
+			createRuleVo.setRuleDescription(message.get("NodeCPUUsage"));
+			annotations.put("description", createRuleVo.getRuleDescription());
+			
+			HashMap<String, Object> newRules = new HashMap<String, Object>();
+			
+			newRules.put("alert", createRuleVo.getRuleAlert());
+			newRules.put("expr", createRuleVo.getRuleExpr());
+			newRules.put("for", createRuleVo.getRuleFor());
+			newRules.put("labels", labels);
+			newRules.put("annotations", annotations);
+			
+			HashMap<String, Object> groups = new HashMap<String, Object>();
+			groups.put("name", "users-rules.rules");
+			groups.put("rules", newRules);
+			
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("groups", groups);
+			
+			YamlConfig config = new YamlConfig();
+	        config.writeConfig.setWriteRootTags(false);
+	        config.writeConfig.setWriteRootElementTags(false);
 	        
-	        writer = new FileWriter(file, false);
-	        writer.write(configMap.getData().get("users-rules.rules"));
-	        writer.flush();
-	        
-	        YamlReader reader = new YamlReader(new FileReader("rule.yaml"));
-            Object object = reader.read();
+			YamlWriter ywriter = new YamlWriter(new FileWriter("createRule.yaml"), config);
+			ywriter.write(newRules);
+			ywriter.close();
 			
-			/*groups*/
-			Map<String, Map<String, Object>> mapGroups = (Map)object;
-			List listGroups = (List)mapGroups.get("groups");
+			YamlReader reader = new YamlReader(new FileReader("createRule.yaml"));
+            Object newRule = reader.read();
+            System.out.println(newRule);
 			
-			Iterator iteratorData = listGroups.iterator();
-			Map<String, Object> maplistGroups;
+    		
+//			File file = new File("readRule.yaml");
+//	        
+//	        writer = new FileWriter(file, false);
+//	        writer.write(configMap.getData().get("users-rules.rules"));
+//	        writer.flush();
+//	        
+//	        YamlReader reader = new YamlReader(new FileReader("readRule.yaml"));
+//            Object object = reader.read();
+//            System.out.println(object);
+//            
+//            Map<String, Map<String, Object>> mapGroups = (Map)object;
+//			List listGroups = (List)mapGroups.get("groups");
 			
-			RuleData ruleData = new RuleData();
+            
+//            JsonNode jsonNodeTree = new ObjectMapper().readTree(jsonObject.toString());
+//            String jsonAsYaml = new YAMLMapper().writeValueAsString(jsonNodeTree);
+//            System.out.println(jsonAsYaml);
 			
-			while (iteratorData.hasNext()) {
-				maplistGroups = (Map) iteratorData.next();
-			    
-			    /*rules*/
-			    Map<String, Object> maplistRules;
-				List listRules = (List)maplistGroups.get("rules");
-				
-				Iterator iteratorRules = listRules.iterator();
-				
-				while (iteratorRules.hasNext()) {
-				    maplistRules = (Map) iteratorRules.next();
-				    
-				    /*labels*/
-				    Map<String, Object> maplistLabels;
-				    maplistLabels = (Map<String, Object>) maplistRules.get("labels");
-				    
-				    /*annotations*/
-				    Map<String, Object> maplistAnnotations;
-				    maplistAnnotations = (Map<String, Object>) maplistRules.get("annotations");
-				    
-				    ruleData.setRuleAlert(maplistRules.get("alert").toString());
-				    ruleData.setRuleExpr(maplistRules.get("expr").toString());
-				    ruleData.setRuleFor(maplistRules.get("for").toString());
-				    ruleData.setRuleSeverity(maplistLabels.get("severity").toString());
-				    ruleData.setRuleChannel(maplistLabels.get("channel").toString());
-				    
-					ruleList.add(ruleData);
-				}
-				ruleData.setRuleAlert(createRuleVo.getRuleAlert());
-				ruleData.setRuleExpr(createRuleVo.getRuleExpr());
-				ruleData.setRuleFor(createRuleVo.getRuleFor());
-				ruleData.setRuleSeverity(createRuleVo.getRuleSeverity());
-				ruleData.setRuleChannel(createRuleVo.getRuleChannel());
-				
-				ruleList.add(ruleData);
-				
-			}
+//			File file = new File("rule.yaml");
+//	        
+//	        writer = new FileWriter(file, false);
+//	        writer.write(configMap.getData().get("users-rules.rules"));
+//	        writer.flush();
+//	        
+//	        YamlReader reader = new YamlReader(new FileReader("rule.yaml"));
+//            Object object = reader.read();
+//			
+//			Map<String, Map<String, Object>> mapGroups = (Map)object;
+//			List listGroups = (List)mapGroups.get("groups");
+//			
+//			Iterator iteratorData = listGroups.iterator();
+//			Map<String, Object> maplistGroups;
+//			
+//			RuleData ruleData = new RuleData();
+//			
+//			while (iteratorData.hasNext()) {
+//				maplistGroups = (Map) iteratorData.next();
+//			    
+//			    /*rules*/
+//			    Map<String, Object> maplistRules;
+//				List listRules = (List)maplistGroups.get("rules");
+//				
+//				Iterator iteratorRules = listRules.iterator();
+//				
+//				while (iteratorRules.hasNext()) {
+//				    maplistRules = (Map) iteratorRules.next();
+//				    
+//				    /*labels*/
+//				    Map<String, Object> maplistLabels;
+//				    maplistLabels = (Map<String, Object>) maplistRules.get("labels");
+//				    
+//				    /*annotations*/
+//				    Map<String, Object> maplistAnnotations;
+//				    maplistAnnotations = (Map<String, Object>) maplistRules.get("annotations");
+//				    
+//				    ruleData.setRuleAlert(maplistRules.get("alert").toString());
+//				    ruleData.setRuleExpr(maplistRules.get("expr").toString());
+//				    ruleData.setRuleFor(maplistRules.get("for").toString());
+//				    ruleData.setRuleSeverity(maplistLabels.get("severity").toString());
+//				    ruleData.setRuleChannel(maplistLabels.get("channel").toString());
+//				    
+//					ruleList.add(ruleData);
+//				}
+//				ruleData.setRuleAlert(createRuleVo.getRuleAlert());
+//				ruleData.setRuleExpr(createRuleVo.getRuleExpr());
+//				ruleData.setRuleFor(createRuleVo.getRuleFor());
+//				ruleData.setRuleSeverity(createRuleVo.getRuleSeverity());
+//				ruleData.setRuleChannel(createRuleVo.getRuleChannel());
+//				
+//				ruleList.add(ruleData);
+//				
+//			}
+			
+			
+			
+			
+			
+			
 //			HashMap<String, Object> rule = new LinkedHashMap<String, Object>();
 //			HashMap<String, Object> groups = new HashMap<String, Object>();
 //			List<RuleDto> valueList = new ArrayList<RuleDto>();
@@ -272,40 +340,59 @@ public class RuleDaoImpl implements RuleDao {
 //				System.out.println(rulelistGroups.get("labels"));
 //			}
 			
-			HashMap<String, String> labels = new HashMap<String, String>();
-			labels.put("severity", createRuleVo.getRuleSeverity());
-			labels.put("channel", createRuleVo.getRuleChannel());
+//			HashMap<String, String> labels = new HashMap<String, String>();
+//			labels.put("severity", createRuleVo.getRuleSeverity());
+//			labels.put("channel", createRuleVo.getRuleChannel());
+//			
+//			HashMap<String, String> annotations = new HashMap<String, String>();
+//			createRuleVo.setRuleDescription(message.get("NodeCPUUsage"));
+//			annotations.put("description", createRuleVo.getRuleDescription());
+//			
+//			HashMap<String, Object> rules = new HashMap<String, Object>();
+//			
+//			rules.put("alert", createRuleVo.getRuleAlert());
+//			rules.put("expr", createRuleVo.getRuleExpr());
+//			rules.put("for", createRuleVo.getRuleFor());
+//			rules.put("labels", labels);
+//			rules.put("annotations", annotations);
 			
-			HashMap<String, String> annotations = new HashMap<String, String>();
-			createRuleVo.setRuleDescription(message.get("NodeCPUUsage_warning"));
+//			HashMap<String, Object> groups = new HashMap<String, Object>();
+//			groups.put("name", "users-rules.rules");
+//			groups.put("rules", rules);
 			
-			annotations.put("description", createRuleVo.getRuleDescription());
+//			HashMap<String, String> labels2 = new HashMap<String, String>();
+//			labels2.put("severity", createRuleVo.getRuleSeverity());
+//			labels2.put("channel", createRuleVo.getRuleChannel());
+//			
+//			HashMap<String, String> annotations2 = new HashMap<String, String>();
+//			createRuleVo.setRuleDescription(message.get("NodeCPUUsage"));
+//			annotations2.put("description", createRuleVo.getRuleDescription());
+//			
+//			HashMap<String, Object> rules2 = new HashMap<String, Object>();
+//			
+//			rules2.put("alert", createRuleVo.getRuleAlert());
+//			rules2.put("expr", createRuleVo.getRuleExpr());
+//			rules2.put("for", createRuleVo.getRuleFor());
+//			rules2.put("labels", labels2);
+//			rules2.put("annotations", annotations2);
 			
-			HashMap<String, Object> rules = new LinkedHashMap<String, Object>();
+//			HashMap<String, Object> map = new HashMap<String, Object>();
+//			map.put("groups", groups);
 			
-			rules.put("alert", createRuleVo.getRuleAlert());
-			rules.put("expr", createRuleVo.getRuleExpr());
-			rules.put("for", createRuleVo.getRuleFor());
-			rules.put("labels", labels);
-			rules.put("annotations", annotations);
+//			YamlConfig config = new YamlConfig();
+//	        config.writeConfig.setWriteRootTags(false);
+//	        config.writeConfig.setWriteRootElementTags(false);
+//	        
+//			YamlWriter ywriter = new YamlWriter(new FileWriter("createRule.yaml"), config);
+//			ywriter.write(rules);
+//			ywriter.write(rules2);
+//			ywriter.close();
 			
-			HashMap<String, Object> groups = new HashMap<String, Object>();
-			groups.put("name", "users-rules.rules");
-			groups.put("rules", rules);
+//			System.out.println(configMap.getApiVersion());
+//			System.out.println(configMap.getKind());
+//			System.out.println(configMap.getMetadata());
 			
-			HashMap<String, Object> map = new HashMap<String, Object>();
-			map.put("groups", groups);
-			
-			/*
-			YamlConfig config = new YamlConfig();
-	        config.writeConfig.setWriteRootTags(false);
-	        config.writeConfig.setWriteRootElementTags(false);
-	        
-			YamlWriter writer = new YamlWriter(new FileWriter("createRule.yaml"), config);
-			writer.write(map);
-			writer.close(); */
-			
-			DumperOptions options = new DumperOptions();
+			/*DumperOptions options = new DumperOptions();
 			options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 			options.setPrettyFlow(true);
 			
@@ -317,13 +404,13 @@ public class RuleDaoImpl implements RuleDao {
 		    fileWriter.close();
 			
     		String yamlString = FileUtils.readFileToString(new File("createRule.yaml"), "utf8");
-    		System.out.println(yamlString);
+    		System.out.println(yamlString);*/
 			
-			HashMap<String, String> data = new HashMap<String, String>();
-			data.put("users-rules.rules", yamlString);
-			
-			configMap.setData(data);
-			System.out.println(configMap);
+//			HashMap<String, String> data = new HashMap<String, String>();
+//			data.put("users-rules.rules", yamlString);
+//			
+//			configMap.setData(data);
+//			System.out.println(configMap);
 			
 //			V1ConfigMap replacedConfigmap = api.replaceNamespacedConfigMap("prometheus-user-rules", "monitoring", configMap, null);
 			

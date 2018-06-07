@@ -1,0 +1,27 @@
+groups:
+- name: users-rules.rules
+  rules:
+  - alert: NodeCPUUsage
+    expr: (100 - (avg by (instance) (irate(node_cpu{component="node-exporter",mode="idle"}[5m])) * 100)) > 75
+    for: 2m
+    labels:
+      severity: warning
+      channel : first_receiver
+    annotations:
+      description: "{{$labels.instance}}: CPU usage is above 75% (current value is: {{ $value }})"
+  - alert: NodeCPUUsage
+    expr: (100 - (avg by (instance) (irate(node_cpu{component="node-exporter",mode="idle"}[5m])) * 100)) > 60
+    for: 2m
+    labels:
+      severity: warning
+      channel: second_receiver
+    annotations:
+      description: "{{$labels.instance}}: CPU usage is above 60% (current value is: {{ $value }})"
+  - alert: NodeMemoryUsage
+    expr: (((node_memory_MemTotal-node_memory_MemFree-node_memory_Cached)/(node_memory_MemTotal)*100)) > 10
+    for: 2m
+    labels:
+      severity: warning
+      channel: second_receiver
+    annotations:
+      description: "{{$labels.instance}}: Memory usage is above 10% (current value is: {{ $value }})"

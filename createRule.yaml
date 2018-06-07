@@ -1,0 +1,8 @@
+alert: NodeMemoryUsage
+for: 2m
+annotations: 
+   description: '{{$labels.instance}}: CPU usage (current value is: {{ $value }})'
+expr: (((node_memory_MemTotal-node_memory_MemFree-node_memory_Cached)/(node_memory_MemTotal)*100))  >  10
+labels: 
+   severity: warning
+   channel: second_receiver

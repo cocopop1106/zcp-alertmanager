@@ -1,0 +1,15 @@
+"groups:\n- name: users-rules.rules\n  rules:\n  - alert: NodeCPUUsage\n    expr: (100 - (avg by (ins\
+   tance) (irate(node_cpu{component=\"node-exporter\",mode=\"idle\"}[5m])) * 100)) > 75\n    for: 2m\n\
+   \    labels:\n      severity: warning\n      channel : first_receiver\n    annotations:\n      des\
+   cription: \"{{$labels.instance}}: CPU usage is above 75% (current value is: {{ $value }})\"\n  - a\
+   lert: NodeCPUUsage\n    expr: (100 - (avg by (instance) (irate(node_cpu{component=\"node-exporter\"\
+   ,mode=\"idle\"}[5m])) * 100)) > 60\n    for: 2m\n    labels:\n      severity: warning\n      chann\
+   el: second_receiver\n    annotations:\n      description: \"{{$labels.instance}}: CPU usage is abo\
+   ve 60% (current value is: {{ $value }})\"\n  - alert: NodeMemoryUsage\n    expr: (((node_memory_Me\
+   mTotal-node_memory_MemFree-node_memory_Cached)/(node_memory_MemTotal)*100)) > 10\n    for: 2m\n   \
+   \ labels:\n      severity: warning\n      channel: second_receiver\n    annotations:\n      descri\
+   ption: \"{{$labels.instance}}: Memory usage is above 10% (current value is: {{ $value }})\"\nalert\
+   : NodeMemoryUsage\r\nfor: 2m\r\nannotations: \r\n   description: '{{$labels.instance}}: CPU usage \
+   (current value is: {{ $value }})'\r\nexpr: (((node_memory_MemTotal-node_memory_MemFree-node_memory\
+   _Cached)/(node_memory_MemTotal)*100))  >  10\r\nlabels: \r\n   severity: warning\r\n   channel: se\
+   cond_receiver\r\n"
