@@ -11,7 +11,7 @@ import org.springframework.session.web.http.DefaultCookieSerializer;
 
 @Configuration
 @EnableRedisHttpSession
-@PropertySource("classpath:application-dev.properties")
+@PropertySource("classpath:application.properties")
 public class SessionConfig
 {
 	@Value("${redis.host}")
