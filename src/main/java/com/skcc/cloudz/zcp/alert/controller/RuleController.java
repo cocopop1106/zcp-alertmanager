@@ -38,7 +38,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.esotericsoftware.yamlbeans.YamlReader;
 import com.esotericsoftware.yamlbeans.YamlWriter;
 import com.skcc.cloudz.zcp.alert.service.impl.RuleServiceImpl;
-import com.skcc.cloudz.zcp.alert.vo.RuleDto;
 import com.skcc.cloudz.zcp.alert.vo.RuleVo;
 
 import ch.qos.logback.core.net.SyslogOutputStream;
@@ -60,11 +59,12 @@ public class RuleController {
 	RuleServiceImpl ruleService;
 
 	/**
+	 * 
 	 * @return
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "rule", method = RequestMethod.GET)
-	public ResponseEntity<List<RuleVo>> getRule() throws IOException {
+	public ResponseEntity<List<RuleVo>> getRuleList() throws IOException {
 		
 		List<RuleVo> ruleList = ruleService.getRuleListService();
 		if (ruleList.isEmpty()) {
@@ -74,6 +74,7 @@ public class RuleController {
 	}
 	
 	/**
+	 * 
 	 * @param id
 	 * @return
 	 */
@@ -87,6 +88,7 @@ public class RuleController {
 	}
 	
 	/**
+	 * 
 	 * @param ruleVo
 	 * @param ucBuilder
 	 * @return
@@ -101,6 +103,7 @@ public class RuleController {
 	}
 	
 	/**
+	 * 
 	 * @param id
 	 * @param ruleVo
 	 * @return
@@ -118,6 +121,7 @@ public class RuleController {
 	}
 	
 	/**
+	 * 
 	 * @param id
 	 * @return
 	 */

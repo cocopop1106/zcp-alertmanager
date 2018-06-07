@@ -1,0 +1,12 @@
+groups:
+  name: users-rules.rules
+  rules:
+    alert: NodeMemoryUsage
+    expr: (((node_memory_MemTotal-node_memory_MemFree-node_memory_Cached)/(node_memory_MemTotal) * 100))  >  10
+    for: 2m
+    labels:
+      severity: warning
+      channel: second_receiver
+    annotations:
+      description: '{{$labels.instance}}: CPU usage is above 75% (current value is:
+        {{ $value }})'

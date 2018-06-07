@@ -1,5 +1,5 @@
 package com.skcc.cloudz.zcp.alert.vo;
 
-public class Channel {
+public class AlertHistoryData {
 
 }

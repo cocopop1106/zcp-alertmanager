@@ -29,7 +29,7 @@ import com.esotericsoftware.yamlbeans.YamlReader;
 import com.esotericsoftware.yamlbeans.YamlWriter;
 import com.skcc.cloudz.zcp.alert.dao.RuleDao;
 import com.skcc.cloudz.zcp.alert.service.impl.RuleServiceImpl;
-import com.skcc.cloudz.zcp.alert.vo.RuleDto;
+import com.skcc.cloudz.zcp.alert.vo.RuleData;
 import com.skcc.cloudz.zcp.common.util.Message;
 
 import io.kubernetes.client.ApiClient;
@@ -50,10 +50,10 @@ public class RuleDaoImpl implements RuleDao {
 	 * @see com.skcc.cloudz.zcp.alert.dao.RuleDao#getRuleListDao()
 	 */
 	@Override
-	public List<RuleDto> getRuleListDao()  {
+	public List<RuleData> getRuleListDao()  {
 		// TODO Auto-generated method stub
 		
-		List<RuleDto> ruleList = new ArrayList<RuleDto>();
+		List<RuleData> ruleList = new ArrayList<RuleData>();
 		FileWriter writer = null;
 		
 		try {
@@ -81,7 +81,7 @@ public class RuleDaoImpl implements RuleDao {
 			Iterator iteratorData = listGroups.iterator();
 			Map<String, Object> maplistGroups;
 			
-			RuleDto ruleDto = new RuleDto();
+			RuleData ruleData = new RuleData();
 			
 			while (iteratorData.hasNext()) {
 				maplistGroups = (Map) iteratorData.next();
@@ -103,13 +103,13 @@ public class RuleDaoImpl implements RuleDao {
 				    Map<String, Object> maplistAnnotations;
 				    maplistAnnotations = (Map<String, Object>) maplistRules.get("annotations");
 				    
-				    ruleDto.setRuleDataAlert(maplistRules.get("alert").toString());
-				    ruleDto.setRuleDataExpr(maplistRules.get("expr").toString());
-				    ruleDto.setRuleDataFor(maplistRules.get("for").toString());
-				    ruleDto.setRuleDataSeverity(maplistLabels.get("severity").toString());
-				    ruleDto.setRuleDataChannel(maplistLabels.get("channel").toString());
+				    ruleData.setRuleAlert(maplistRules.get("alert").toString());
+				    ruleData.setRuleExpr(maplistRules.get("expr").toString());
+				    ruleData.setRuleFor(maplistRules.get("for").toString());
+				    ruleData.setRuleSeverity(maplistLabels.get("severity").toString());
+				    ruleData.setRuleChannel(maplistLabels.get("channel").toString());
 				    
-					ruleList.add(ruleDto);
+					ruleList.add(ruleData);
 					
 				}
 			}
@@ -138,10 +138,10 @@ public class RuleDaoImpl implements RuleDao {
 	 */
 	@SuppressWarnings({ "null", "unchecked" })
 	@Override
-	public RuleDto createRule(RuleDto createRuleVo) {
+	public RuleData createRule(RuleData createRuleVo) {
 		// TODO Auto-generated method stub
 		
-		List<RuleDto> ruleList = new ArrayList<RuleDto>();
+		List<RuleData> ruleList = new ArrayList<RuleData>();
 		FileWriter writer = null;
 		
 		try {
@@ -170,7 +170,7 @@ public class RuleDaoImpl implements RuleDao {
 			Iterator iteratorData = listGroups.iterator();
 			Map<String, Object> maplistGroups;
 			
-			RuleDto ruleDto = new RuleDto();
+			RuleData ruleData = new RuleData();
 			
 			while (iteratorData.hasNext()) {
 				maplistGroups = (Map) iteratorData.next();
@@ -192,21 +192,21 @@ public class RuleDaoImpl implements RuleDao {
 				    Map<String, Object> maplistAnnotations;
 				    maplistAnnotations = (Map<String, Object>) maplistRules.get("annotations");
 				    
-				    ruleDto.setRuleDataAlert(maplistRules.get("alert").toString());
-				    ruleDto.setRuleDataExpr(maplistRules.get("expr").toString());
-				    ruleDto.setRuleDataFor(maplistRules.get("for").toString());
-				    ruleDto.setRuleDataSeverity(maplistLabels.get("severity").toString());
-				    ruleDto.setRuleDataChannel(maplistLabels.get("channel").toString());
+				    ruleData.setRuleAlert(maplistRules.get("alert").toString());
+				    ruleData.setRuleExpr(maplistRules.get("expr").toString());
+				    ruleData.setRuleFor(maplistRules.get("for").toString());
+				    ruleData.setRuleSeverity(maplistLabels.get("severity").toString());
+				    ruleData.setRuleChannel(maplistLabels.get("channel").toString());
 				    
-					ruleList.add(ruleDto);
+					ruleList.add(ruleData);
 				}
-				ruleDto.setRuleDataAlert(createRuleVo.getRuleDataAlert());
-				ruleDto.setRuleDataExpr(createRuleVo.getRuleDataExpr());
-				ruleDto.setRuleDataFor(createRuleVo.getRuleDataFor());
-				ruleDto.setRuleDataSeverity(createRuleVo.getRuleDataSeverity());
-				ruleDto.setRuleDataChannel(createRuleVo.getRuleDataChannel());
+				ruleData.setRuleAlert(createRuleVo.getRuleAlert());
+				ruleData.setRuleExpr(createRuleVo.getRuleExpr());
+				ruleData.setRuleFor(createRuleVo.getRuleFor());
+				ruleData.setRuleSeverity(createRuleVo.getRuleSeverity());
+				ruleData.setRuleChannel(createRuleVo.getRuleChannel());
 				
-				ruleList.add(ruleDto);
+				ruleList.add(ruleData);
 				
 			}
 //			HashMap<String, Object> rule = new LinkedHashMap<String, Object>();
@@ -273,19 +273,19 @@ public class RuleDaoImpl implements RuleDao {
 //			}
 			
 			HashMap<String, String> labels = new HashMap<String, String>();
-			labels.put("severity", createRuleVo.getRuleDataSeverity());
-			labels.put("channel", createRuleVo.getRuleDataChannel());
+			labels.put("severity", createRuleVo.getRuleSeverity());
+			labels.put("channel", createRuleVo.getRuleChannel());
 			
 			HashMap<String, String> annotations = new HashMap<String, String>();
-			createRuleVo.setRuleDataDescription(message.get("NodeCPUUsage"));
+			createRuleVo.setRuleDescription(message.get("NodeCPUUsage_warning"));
 			
-			annotations.put("description", createRuleVo.getRuleDataDescription());
+			annotations.put("description", createRuleVo.getRuleDescription());
 			
 			HashMap<String, Object> rules = new LinkedHashMap<String, Object>();
 			
-			rules.put("alert", createRuleVo.getRuleDataAlert());
-			rules.put("expr", createRuleVo.getRuleDataExpr());
-			rules.put("for", createRuleVo.getRuleDataFor());
+			rules.put("alert", createRuleVo.getRuleAlert());
+			rules.put("expr", createRuleVo.getRuleExpr());
+			rules.put("for", createRuleVo.getRuleFor());
 			rules.put("labels", labels);
 			rules.put("annotations", annotations);
 			

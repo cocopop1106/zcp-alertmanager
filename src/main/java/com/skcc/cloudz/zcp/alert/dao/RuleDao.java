@@ -5,23 +5,23 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.skcc.cloudz.zcp.alert.vo.RuleDto;
+import com.skcc.cloudz.zcp.alert.vo.RuleData;
 import com.skcc.cloudz.zcp.alert.vo.RuleVo;
 
 @Repository("ruleDao")
 public interface RuleDao {
 	
 	/**
-	 * getRuleListDao
+	 * 
 	 * @return
 	 */
-	List<RuleDto> getRuleListDao();
+	List<RuleData> getRuleListDao();
 	
 	/**
-	 * createRule
+	 * 
 	 * @param rule
 	 * @return
 	 */
-	RuleDto createRule(RuleDto rule);
+	RuleData createRule(RuleData rule);
 	
 }
