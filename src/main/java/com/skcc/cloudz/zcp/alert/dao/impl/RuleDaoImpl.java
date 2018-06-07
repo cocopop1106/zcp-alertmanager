@@ -163,6 +163,24 @@ public class RuleDaoImpl implements RuleDao {
 			String rules = configMap.getData().get("users-rules.rules");
 			System.out.println(rules);
 			
+			// 기존 룰 맵으로 변환 
+			File file = new File("readRule.yaml");
+	        
+	        writer = new FileWriter(file, false);
+	        writer.write(configMap.getData().get("users-rules.rules"));
+	        writer.flush();
+	        
+	        YamlReader reader = new YamlReader(new FileReader("readRule.yaml"));
+            Object object = reader.read();
+            
+			
+			Map<String, Map<String, Object>> mapGroups = (Map)object;
+			List listGroups = (List)mapGroups.get("groups");
+			
+			Iterator iteratorData = listGroups.iterator();
+			Map<String, Object> maplistGroups;
+			
+			// 새로운 룰 생성 
 			HashMap<String, String> labels = new HashMap<String, String>();
 			labels.put("severity", createRuleVo.getRuleSeverity());
 			labels.put("channel", createRuleVo.getRuleChannel());
@@ -194,9 +212,18 @@ public class RuleDaoImpl implements RuleDao {
 			ywriter.write(newRules);
 			ywriter.close();
 			
-			YamlReader reader = new YamlReader(new FileReader("createRule.yaml"));
-            Object newRule = reader.read();
+			YamlReader yReader = new YamlReader(new FileReader("createRule.yaml"));
+            Object newRule = yReader.read();
             System.out.println(newRule);
+			
+			while (iteratorData.hasNext()) {
+				maplistGroups = (Map) iteratorData.next();
+				System.out.println(maplistGroups);
+				maplistGroups.put("rules", newRule);
+				System.out.println("#### "+maplistGroups);
+				
+			}
+			
 			
     		
 //			File file = new File("readRule.yaml");
