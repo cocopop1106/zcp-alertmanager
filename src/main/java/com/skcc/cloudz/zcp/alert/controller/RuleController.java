@@ -127,13 +127,13 @@ public class RuleController {
 	 */
 	@RequestMapping(value = "rule/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> deleteRule(@PathVariable("id") final Long id) {
-//		Boolean deleteResult = customerService.deleteCustomer(id);
-		
-//		if (deleteResult == null || !deleteResult) {
-//			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
-//		}
-		
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		RuleVo ruleResult = ruleService.findById(id);
+		if (ruleResult == null) {
+			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+		} else {
+			ruleService.deleteRule(id);
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		}
 	}
 	
 }

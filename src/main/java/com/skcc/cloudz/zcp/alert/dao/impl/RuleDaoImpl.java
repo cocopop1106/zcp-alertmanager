@@ -84,7 +84,6 @@ public class RuleDaoImpl implements RuleDao {
 	        YamlReader reader = new YamlReader(new FileReader("rule.yaml"));
             Object object = reader.read();
 
-            /*groups*/
 			Map<String, Map<String, Object>> mapGroups = (Map)object;
 			List listGroups = (List)mapGroups.get("groups");
 			
@@ -93,38 +92,38 @@ public class RuleDaoImpl implements RuleDao {
 			
 			RuleData ruleData = new RuleData();
 			
-			while (iteratorData.hasNext()) {
-				maplistGroups = (Map) iteratorData.next();
+			maplistGroups = (Map) iteratorData.next();
+		    
+		    Map<String, Object> maplistRules;
+			List listRules = (List)maplistGroups.get("rules");
+			
+			Iterator iteratorRules = listRules.iterator();
+			int ruleCnt = 0;
+			while (iteratorRules.hasNext()) {
+			    maplistRules = (Map) iteratorRules.next();
 			    
-			    /*rules*/
-			    Map<String, Object> maplistRules;
-				List listRules = (List)maplistGroups.get("rules");
-				
-				Iterator iteratorRules = listRules.iterator();
-				
-				while (iteratorRules.hasNext()) {
-				    maplistRules = (Map) iteratorRules.next();
-				    
-				    /*labels*/
-				    Map<String, Object> maplistLabels;
-				    maplistLabels = (Map<String, Object>) maplistRules.get("labels");
-				    
-				    /*annotations*/
-				    Map<String, Object> maplistAnnotations;
-				    maplistAnnotations = (Map<String, Object>) maplistRules.get("annotations");
-				    
-				    ruleData.setRuleAlert(maplistRules.get("alert").toString());
-				    ruleData.setRuleExpr(maplistRules.get("expr").toString());
-				    ruleData.setRuleFor(maplistRules.get("for").toString());
-				    ruleData.setRuleSeverity(maplistLabels.get("severity").toString());
-				    ruleData.setRuleChannel(maplistLabels.get("channel").toString());
-				    
-					ruleList.add(ruleData);
-					
-				}
+			    Map<String, Object> maplistLabels;
+			    maplistLabels = (Map<String, Object>) maplistRules.get("labels");
+			    
+			    Map<String, Object> maplistAnnotations;
+			    maplistAnnotations = (Map<String, Object>) maplistRules.get("annotations");
+			    
+			    ruleData.setRuleAlert(maplistRules.get("alert").toString());
+			    ruleData.setRuleExpr(maplistRules.get("expr").toString());
+			    ruleData.setRuleFor(maplistRules.get("for").toString());
+			    ruleData.setRuleSeverity(maplistLabels.get("severity").toString());
+			    ruleData.setRuleChannel(maplistLabels.get("channel").toString());
+			    
+				ruleList.add(ruleCnt, ruleData);
+				System.out.println(ruleData.getRuleAlert());
+				ruleCnt++;
 			}
 			
-//			V1ConfigMap replacedConfigmap = api.replaceNamespacedConfigMap("prometheus-user-rules", "monitoring", configMap, null);
+			for(int i=0; i<ruleList.size(); i++) {
+				System.out.println("#"+ruleList.get(i).getRuleAlert());
+				
+			}
+			
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -163,7 +162,6 @@ public class RuleDaoImpl implements RuleDao {
 			String rules = configMap.getData().get("users-rules.rules");
 			System.out.println(rules);
 			
-			// 기존 룰 맵으로 변환 
 			File file = new File("readRule.yaml");
 	        
 	        writer = new FileWriter(file, false);
@@ -180,7 +178,6 @@ public class RuleDaoImpl implements RuleDao {
 			Iterator iteratorData = listGroups.iterator();
 			Map<String, Object> maplistGroups;
 			
-			// 새로운 룰 생성 
 			HashMap<String, String> labels = new HashMap<String, String>();
 			labels.put("severity", createRuleVo.getRuleSeverity());
 			labels.put("channel", createRuleVo.getRuleChannel());
@@ -214,17 +211,20 @@ public class RuleDaoImpl implements RuleDao {
 			
 			YamlReader yReader = new YamlReader(new FileReader("createRule.yaml"));
             Object newRule = yReader.read();
-            System.out.println(newRule);
+            System.out.println("newRule: "+newRule);
 			
+            Map<String, Object> mapSum = new HashMap<String, Object>();
+            
 			while (iteratorData.hasNext()) {
 				maplistGroups = (Map) iteratorData.next();
-				System.out.println(maplistGroups);
-				maplistGroups.put("rules", newRule);
-				System.out.println("#### "+maplistGroups);
+				System.out.println("origin: "+maplistGroups.get("rules"));
+				mapSum.put("rules", newRule);
+				mapSum.put("rules", maplistGroups.get("rules"));
+				System.out.println("mapSum: "+mapSum);
 				
 			}
 			
-			
+//			V1ConfigMap replacedConfigmap = api.replaceNamespacedConfigMap("prometheus-user-rules", "monitoring", configMap, null);
     		
 //			File file = new File("readRule.yaml");
 //	        
@@ -449,5 +449,95 @@ public class RuleDaoImpl implements RuleDao {
 		
 		return createRuleVo;
 	}
+
+	/* (non-Javadoc)
+	 * @see com.skcc.cloudz.zcp.alert.dao.RuleDao#deleteRule(java.lang.Long)
+	 */
+	@Override
+	public Boolean deleteRule(Long ruleId) {
+		// TODO Auto-generated method stub
+		List<RuleData> ruleList = new ArrayList<RuleData>();
+		FileWriter writer = null;
+		
+		try {
+			ApiClient client = Config.defaultClient();
+			Configuration.setDefaultApiClient(client);
+	
+			CoreV1Api api = new CoreV1Api();
+			V1ConfigMap configMap;
+			
+			configMap = api.readNamespacedConfigMap("prometheus-user-rules", "monitoring", null, null, null);
+			System.out.println(configMap);
+			
+			File file = new File("rule.yaml");
+	        
+	        writer = new FileWriter(file, false);
+	        writer.write(configMap.getData().get("users-rules.rules"));
+	        writer.flush();
+	        
+	        YamlReader reader = new YamlReader(new FileReader("rule.yaml"));
+            Object object = reader.read();
+
+            /*groups*/
+			Map<String, Map<String, Object>> mapGroups = (Map)object;
+			List listGroups = (List)mapGroups.get("groups");
+			
+			Iterator iteratorData = listGroups.iterator();
+			Map<String, Object> maplistGroups;
+			
+			RuleData ruleData = new RuleData();
+			List listRules = new ArrayList();
+			
+			while (iteratorData.hasNext()) {
+				maplistGroups = (Map) iteratorData.next();
+				System.out.println("2");
+				listRules = (List)maplistGroups.get("rules");
+				for(int cnt=0; cnt<listRules.size(); cnt++) {
+					if(cnt == ruleId) {
+						listRules.remove(cnt);
+					} 
+				}
+			}
+			
+			Map<String, Object> groups = new HashMap<String, Object>();
+			groups.put("name", "users-rules.rules");
+			groups.put("rules", listRules);
+			System.out.println(groups);
+			
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("groups", groups);
+			
+			YamlConfig config = new YamlConfig();
+	        config.writeConfig.setWriteRootTags(false);
+	        config.writeConfig.setWriteRootElementTags(false);
+	        
+			YamlWriter ywriter = new YamlWriter(new FileWriter("rule.yaml"), config);
+			ywriter.write(data);
+			ywriter.close();
+			
+			String yamlString = FileUtils.readFileToString(new File("rule.yaml"), "utf8");
+    		System.out.println(yamlString);
+    		
+    		Map<String, String> map = new HashMap<String, String>();
+			map.put("users-rules.rules", yamlString);
+			System.out.println(map);
+			
+			configMap.setData(map);
+			V1ConfigMap replacedConfigmap = api.replaceNamespacedConfigMap("prometheus-user-rules", "monitoring", configMap, null);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+            try {
+                if(writer != null) writer.close();
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+        }
+		return true;
+	}
+
+	
 	
 }

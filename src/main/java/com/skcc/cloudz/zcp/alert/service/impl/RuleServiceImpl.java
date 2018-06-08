@@ -56,6 +56,7 @@ public class RuleServiceImpl implements RuleService {
 			
 			ruleViewList.add(rule);
 		}
+		System.out.println(ruleViewList);
 		
 		return ruleViewList;
 	}
@@ -144,7 +145,8 @@ public class RuleServiceImpl implements RuleService {
 	@Override
 	public Boolean deleteRule(Long id) {
 		// TODO Auto-generated method stub
-		return null;
+		Boolean result = ruleDao.deleteRule(id);
+		return result;
 	}
 	
 

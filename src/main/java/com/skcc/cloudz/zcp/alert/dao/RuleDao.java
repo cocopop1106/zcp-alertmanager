@@ -24,4 +24,11 @@ public interface RuleDao {
 	 */
 	RuleData createRule(RuleData rule);
 	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	Boolean deleteRule(Long id);
+	
 }
