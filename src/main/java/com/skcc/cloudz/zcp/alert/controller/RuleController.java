@@ -35,8 +35,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.esotericsoftware.yamlbeans.YamlReader;
-import com.esotericsoftware.yamlbeans.YamlWriter;
+import com.skcc.cloudz.zcp.common.yamlbeans.YamlReader;
+import com.skcc.cloudz.zcp.common.yamlbeans.YamlWriter;
 import com.skcc.cloudz.zcp.alert.service.impl.RuleServiceImpl;
 import com.skcc.cloudz.zcp.alert.vo.RuleVo;
 

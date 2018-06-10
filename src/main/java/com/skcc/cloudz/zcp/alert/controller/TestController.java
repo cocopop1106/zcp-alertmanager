@@ -31,8 +31,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.esotericsoftware.yamlbeans.YamlReader;
-import com.esotericsoftware.yamlbeans.YamlWriter;
+import com.skcc.cloudz.zcp.common.yamlbeans.YamlReader;
+import com.skcc.cloudz.zcp.common.yamlbeans.YamlWriter;
 
 import io.kubernetes.client.ApiClient;
 import io.kubernetes.client.ApiException;
