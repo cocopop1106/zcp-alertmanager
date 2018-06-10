@@ -2,7 +2,9 @@ package com.skcc.cloudz.zcp.alert.service.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,35 +30,48 @@ public class RuleServiceImpl implements RuleService {
 	public List<RuleVo> getRuleListService() {
 		// TODO Auto-generated method stub
 		
-		List<RuleData> ruleList = ruleDao.getRuleListDao();
+		List listRules = ruleDao.getRuleListDao();
+		
 		List<RuleVo> ruleViewList = new ArrayList<RuleVo>();
+		Map<String, Object> maplistRules;
+		int count = 0;
 		String condition = "";
 		
-		for(int i=0; i<ruleList.size(); i++) {
-			RuleVo rule = new RuleVo();
+		Iterator iteratorRules = listRules.iterator();
+		
+		while (iteratorRules.hasNext()) {
+		    maplistRules = (Map) iteratorRules.next();
+		    
+		    RuleVo rule = new RuleVo();
+		    
+		    Map<String, Object> maplistLabels;
+		    maplistLabels = (Map<String, Object>) maplistRules.get("labels");
+		    
+		    Map<String, Object> maplistAnnotations;
+		    maplistAnnotations = (Map<String, Object>) maplistRules.get("annotations");
+		    
+		    rule.setId(count);
+		    rule.setType(maplistRules.get("alert").toString());
+			System.out.println(rule.getType());
+			rule.setSeverity(maplistLabels.get("severity").toString());
 			
-			rule.setId(i);
-			rule.setType(ruleList.get(i).getRuleAlert());
-			rule.setSeverity(ruleList.get(i).getRuleSeverity());
-			
-			if(ruleList.get(i).getRuleExpr().indexOf(">") >= 0) {
-				condition = ruleList.get(i).getRuleExpr().substring(ruleList.get(i).getRuleExpr().indexOf(">"), ruleList.get(i).getRuleExpr().indexOf(">")+1);
+			if(maplistRules.get("expr").toString().indexOf(">") >= 0) {
+				condition = maplistRules.get("expr").toString().substring(maplistRules.get("expr").toString().indexOf(">"), maplistRules.get("expr").toString().indexOf(">")+1);
 			} else {
-				condition = ruleList.get(i).getRuleExpr().substring(ruleList.get(i).getRuleExpr().indexOf("<"), ruleList.get(i).getRuleExpr().indexOf("<")+1);
+				condition = maplistRules.get("expr").toString().substring(maplistRules.get("expr").toString().indexOf("<"), maplistRules.get("expr").toString().indexOf("<")+1);
 			}
 			
 			rule.setCondition(condition);
-			
-			String[] gb =  ruleList.get(i).getRuleExpr().split(">|<");
+			String[] gb = maplistRules.get("expr").toString().split(">|<");
 
 			rule.setValue1(gb[0]);
 			rule.setValue2(gb[1]);
-			rule.setDuration(ruleList.get(i).getRuleFor());
-			rule.setChannel(ruleList.get(i).getRuleChannel());
+			rule.setDuration(maplistRules.get("for").toString());
+			rule.setChannel(maplistLabels.get("channel").toString());
 			
-			ruleViewList.add(rule);
+			ruleViewList.add(count, rule);
+			count++;
 		}
-		System.out.println(ruleViewList);
 		
 		return ruleViewList;
 	}
@@ -65,37 +80,55 @@ public class RuleServiceImpl implements RuleService {
 	 * @see com.skcc.cloudz.zcp.alert.service.RuleService#findById(java.lang.Long)
 	 */
 	@Override
-	public RuleVo findById(Long ruleId) {
+	public RuleVo findById(int ruleId) {
 		// TODO Auto-generated method stub
 		
-		List<RuleData> ruleList = ruleDao.getRuleListDao();
-		List<RuleVo> ruleViewList = new ArrayList<RuleVo>();
-		String condition = "";
-		RuleVo rule = new RuleVo();
+		List listRules = ruleDao.getRuleListDao();
 		
-		for(int i=0; i<ruleList.size(); i++) {
-			if(ruleId == i) {
-				rule.setId(i);
-				rule.setType(ruleList.get(i).getRuleAlert());
-				rule.setSeverity(ruleList.get(i).getRuleSeverity());
-				
-				if(ruleList.get(i).getRuleExpr().indexOf(">") >= 0) {
-					condition = ruleList.get(i).getRuleExpr().substring(ruleList.get(i).getRuleExpr().indexOf(">"), ruleList.get(i).getRuleExpr().indexOf(">")+1);
-				} else {
-					condition = ruleList.get(i).getRuleExpr().substring(ruleList.get(i).getRuleExpr().indexOf("<"), ruleList.get(i).getRuleExpr().indexOf("<")+1);
-				}
-				
-				rule.setCondition(condition);
-				
-				String[] gb =  ruleList.get(i).getRuleExpr().split(">|<");
-
-				rule.setValue1(gb[0]);
-				rule.setValue2(gb[1]);
-				rule.setDuration(ruleList.get(i).getRuleFor());
-				rule.setChannel(ruleList.get(i).getRuleChannel());
+		List<RuleVo> ruleViewList = new ArrayList<RuleVo>();
+		Map<String, Object> maplistRules;
+		int count = 0;
+		String condition = "";
+		RuleVo ruleVo = new RuleVo();
+		
+		Iterator iteratorRules = listRules.iterator();
+		
+		while (iteratorRules.hasNext()) {
+			maplistRules = (Map) iteratorRules.next();
+			
+			RuleVo rule = new RuleVo();
+		    
+		    Map<String, Object> maplistLabels;
+		    maplistLabels = (Map<String, Object>) maplistRules.get("labels");
+		    
+		    Map<String, Object> maplistAnnotations;
+		    maplistAnnotations = (Map<String, Object>) maplistRules.get("annotations");
+		    
+		    rule.setId(count);
+		    rule.setType(maplistRules.get("alert").toString());
+		    rule.setSeverity(maplistLabels.get("severity").toString());
+			
+			if(maplistRules.get("expr").toString().indexOf(">") >= 0) {
+				condition = maplistRules.get("expr").toString().substring(maplistRules.get("expr").toString().indexOf(">"), maplistRules.get("expr").toString().indexOf(">")+1);
+			} else {
+				condition = maplistRules.get("expr").toString().substring(maplistRules.get("expr").toString().indexOf("<"), maplistRules.get("expr").toString().indexOf("<")+1);
 			}
+			
+			rule.setCondition(condition);
+			String[] gb = maplistRules.get("expr").toString().split(">|<");
+
+			rule.setValue1(gb[0]);
+			rule.setValue2(gb[1]);
+			rule.setDuration(maplistRules.get("for").toString());
+			rule.setChannel(maplistLabels.get("channel").toString());
+			
+			ruleViewList.add(count, rule);
+			count++;
 		}
-		return rule;
+		
+		ruleVo = ruleViewList.get(ruleId);
+		
+		return ruleVo;
 	}
 
 	/* (non-Javadoc)
@@ -134,7 +167,7 @@ public class RuleServiceImpl implements RuleService {
 	 * @see com.skcc.cloudz.zcp.alert.service.RuleService#updateRule(java.lang.Long, com.skcc.cloudz.zcp.alert.vo.RuleVo)
 	 */
 	@Override
-	public RuleVo updateRule(Long id, RuleVo ruleVo) {
+	public RuleVo updateRule(int id, RuleVo ruleVo) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -143,7 +176,7 @@ public class RuleServiceImpl implements RuleService {
 	 * @see com.skcc.cloudz.zcp.alert.service.RuleService#deleteRule(java.lang.Long)
 	 */
 	@Override
-	public Boolean deleteRule(Long id) {
+	public Boolean deleteRule(int id) {
 		// TODO Auto-generated method stub
 		Boolean result = ruleDao.deleteRule(id);
 		return result;

@@ -62,8 +62,8 @@ public class RuleDaoImpl implements RuleDao {
 	public List<RuleData> getRuleListDao()  {
 		// TODO Auto-generated method stub
 		
-		List<RuleData> ruleList = new ArrayList<RuleData>();
 		FileWriter writer = null;
+		List listRules = null;
 		
 		try {
 			ApiClient client = Config.defaultClient();
@@ -87,43 +87,14 @@ public class RuleDaoImpl implements RuleDao {
 			Map<String, Map<String, Object>> mapGroups = (Map)object;
 			List listGroups = (List)mapGroups.get("groups");
 			
-			Iterator iteratorData = listGroups.iterator();
 			Map<String, Object> maplistGroups;
+			Iterator iteratorData = listGroups.iterator();
 			
 			RuleData ruleData = new RuleData();
-			
 			maplistGroups = (Map) iteratorData.next();
 		    
 		    Map<String, Object> maplistRules;
-			List listRules = (List)maplistGroups.get("rules");
-			
-			Iterator iteratorRules = listRules.iterator();
-			int ruleCnt = 0;
-			while (iteratorRules.hasNext()) {
-			    maplistRules = (Map) iteratorRules.next();
-			    
-			    Map<String, Object> maplistLabels;
-			    maplistLabels = (Map<String, Object>) maplistRules.get("labels");
-			    
-			    Map<String, Object> maplistAnnotations;
-			    maplistAnnotations = (Map<String, Object>) maplistRules.get("annotations");
-			    
-			    ruleData.setRuleAlert(maplistRules.get("alert").toString());
-			    ruleData.setRuleExpr(maplistRules.get("expr").toString());
-			    ruleData.setRuleFor(maplistRules.get("for").toString());
-			    ruleData.setRuleSeverity(maplistLabels.get("severity").toString());
-			    ruleData.setRuleChannel(maplistLabels.get("channel").toString());
-			    
-				ruleList.add(ruleCnt, ruleData);
-				System.out.println(ruleData.getRuleAlert());
-				ruleCnt++;
-			}
-			
-			for(int i=0; i<ruleList.size(); i++) {
-				System.out.println("#"+ruleList.get(i).getRuleAlert());
-				
-			}
-			
+			listRules = (List)maplistGroups.get("rules");
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -135,7 +106,7 @@ public class RuleDaoImpl implements RuleDao {
                 e.printStackTrace();
             }
         }
-		return ruleList;
+		return listRules;
 	}
 
 	/* (non-Javadoc)
@@ -454,7 +425,7 @@ public class RuleDaoImpl implements RuleDao {
 	 * @see com.skcc.cloudz.zcp.alert.dao.RuleDao#deleteRule(java.lang.Long)
 	 */
 	@Override
-	public Boolean deleteRule(Long ruleId) {
+	public Boolean deleteRule(int ruleId) {
 		// TODO Auto-generated method stub
 		List<RuleData> ruleList = new ArrayList<RuleData>();
 		FileWriter writer = null;

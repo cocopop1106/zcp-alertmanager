@@ -10,7 +10,7 @@ public interface RuleService {
 	 * @param ruleId
 	 * @return
 	 */
-	RuleVo findById(Long ruleId);
+	RuleVo findById(int ruleId);
 	
 	/**
 	 * 
@@ -38,12 +38,12 @@ public interface RuleService {
 	 * @param ruleVo
 	 * @return
 	 */
-	RuleVo updateRule(Long id, RuleVo ruleVo);
+	RuleVo updateRule(int id, RuleVo ruleVo);
 	
 	/**
 	 * 
 	 * @param id
 	 * @return
 	 */
-	Boolean deleteRule(Long id);
+	Boolean deleteRule(int id);
 }

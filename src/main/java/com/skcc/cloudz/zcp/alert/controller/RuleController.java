@@ -79,7 +79,7 @@ public class RuleController {
 	 * @return
 	 */
 	@RequestMapping(value = "rule/{id}", method = RequestMethod.GET)
-	public ResponseEntity<RuleVo> getRuleDtl(@PathVariable("id") final Long id) {
+	public ResponseEntity<RuleVo> getRuleDtl(@PathVariable("id") final int id) {
 		RuleVo ruleDtl = ruleService.findById(id);
 		if (ruleDtl == null) {
 			return new ResponseEntity<RuleVo>(HttpStatus.NOT_FOUND);
@@ -126,7 +126,7 @@ public class RuleController {
 	 * @return
 	 */
 	@RequestMapping(value = "rule/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Void> deleteRule(@PathVariable("id") final Long id) {
+	public ResponseEntity<Void> deleteRule(@PathVariable("id") final int id) {
 		RuleVo ruleResult = ruleService.findById(id);
 		if (ruleResult == null) {
 			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
