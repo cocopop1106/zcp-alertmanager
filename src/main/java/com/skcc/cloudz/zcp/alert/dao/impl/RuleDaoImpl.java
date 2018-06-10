@@ -24,6 +24,7 @@ import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
@@ -83,10 +84,21 @@ public class RuleDaoImpl implements RuleDao {
 	        
 	        YamlReader reader = new YamlReader(new FileReader("rule.yaml"));
             Object object = reader.read();
+            
+            System.out.println(object);
 
 			Map<String, Map<String, Object>> mapGroups = (Map)object;
+			
+			System.out.println("##########");
+			System.out.println(mapGroups);
+			
+			
+			
 			List listGroups = (List)mapGroups.get("groups");
 			
+//			ObjectMapper mapper = new ObjectMapper();
+//			List listGroups =  mapper.convertValue(object, new TypeReference<List>() {});
+
 			Map<String, Object> maplistGroups;
 			Iterator iteratorData = listGroups.iterator();
 			
@@ -479,9 +491,6 @@ public class RuleDaoImpl implements RuleDao {
 			data.put("groups", groups);
 			
 			YamlConfig config = new YamlConfig();
-	        config.writeConfig.setWriteRootTags(false);
-	        config.writeConfig.setWriteRootElementTags(false);
-	        
 			YamlWriter ywriter = new YamlWriter(new FileWriter("rule.yaml"), config);
 			ywriter.write(data);
 			ywriter.close();

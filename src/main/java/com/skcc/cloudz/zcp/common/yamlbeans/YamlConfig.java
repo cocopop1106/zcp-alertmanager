@@ -135,11 +135,11 @@ public class YamlConfig {
 		boolean explicitFirstDocument = false;
 		boolean explicitEndDocument = false;
 		boolean writeDefaultValues = false;
-		boolean writeRootTags = true;
-		boolean writeRootElementTags = true;
-		boolean autoAnchor = true;
+		boolean writeRootTags = false;
+		boolean writeRootElementTags = false;
+		boolean autoAnchor = false;
 		boolean keepBeanPropertyOrder = false;
-		WriteClassName writeClassName = WriteClassName.AUTO;
+		WriteClassName writeClassName = WriteClassName.NEVER;
 		EmitterConfig emitterConfig = new EmitterConfig();
 
 		WriteConfig () {
