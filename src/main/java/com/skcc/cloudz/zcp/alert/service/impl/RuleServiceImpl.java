@@ -52,7 +52,6 @@ public class RuleServiceImpl implements RuleService {
 		    
 		    rule.setId(count);
 		    rule.setType(maplistRules.get("alert").toString());
-			System.out.println(rule.getType());
 			rule.setSeverity(maplistLabels.get("severity").toString());
 			
 			if(maplistRules.get("expr").toString().indexOf(">") >= 0) {
@@ -169,7 +168,6 @@ public class RuleServiceImpl implements RuleService {
 	@Override
 	public RuleVo updateRule(int ruleId, RuleVo ruleVo) {
 		// TODO Auto-generated method stub
-		System.out.println(ruleVo);
 		
 		Boolean result = ruleDao.deleteRule(ruleId);
 		
@@ -209,8 +207,6 @@ public class RuleServiceImpl implements RuleService {
 		
 		resultVo.setDuration(ruleResult.getRuleFor());
 		resultVo.setChannel(ruleResult.getRuleChannel());
-		
-		System.out.println(resultVo);
 		
 		return resultVo;
 	}
