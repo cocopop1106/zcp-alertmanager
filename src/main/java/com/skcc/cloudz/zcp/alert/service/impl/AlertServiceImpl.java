@@ -27,9 +27,9 @@ public class AlertServiceImpl implements AlertService {
 		// TODO Auto-generated method stub
 		
 		AlertCountData result = alertDao.getAlertCount();
-		result.getValue();
 		
 		AlertCountVo alertCountVo = new AlertCountVo();
+		alertCountVo.setAlertCount(result.getValue()[1]);
 		
 		return alertCountVo;
 	}
