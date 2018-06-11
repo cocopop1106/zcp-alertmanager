@@ -287,37 +287,4 @@ public class RuleDaoImpl implements RuleDao {
 		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.skcc.cloudz.zcp.alert.dao.RuleDao#updateRule(int, com.skcc.cloudz.zcp.alert.vo.RuleData)
-	 */
-//	@Override
-//	public RuleData updateRule(int id, RuleData rule) {
-//		// TODO Auto-generated method stub
-//		
-//		FileWriter writer = null;
-//		
-//		try {
-//			ApiClient client = Config.defaultClient();
-//			Configuration.setDefaultApiClient(client);
-//	
-//			CoreV1Api api = new CoreV1Api();
-//			V1ConfigMap configMap;
-//			
-////			configMap = api.readNamespacedConfigMap("prometheus-user-rules", "monitoring", null, null, null);
-//			
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} finally {
-//            try {
-//                if(writer != null) writer.close();
-//            } catch(IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//		return null;
-//	}
-
-	
-	
 }

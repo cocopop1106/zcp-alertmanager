@@ -26,13 +26,6 @@ public interface RuleDao {
 	
 	/**
 	 * 
-	 * @param rule
-	 * @return
-	 */
-//	RuleData updateRule(int id, RuleData rule);
-	
-	/**
-	 * 
 	 * @param id
 	 * @return
 	 */
