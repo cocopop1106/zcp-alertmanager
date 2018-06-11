@@ -167,9 +167,52 @@ public class RuleServiceImpl implements RuleService {
 	 * @see com.skcc.cloudz.zcp.alert.service.RuleService#updateRule(java.lang.Long, com.skcc.cloudz.zcp.alert.vo.RuleVo)
 	 */
 	@Override
-	public RuleVo updateRule(int id, RuleVo ruleVo) {
+	public RuleVo updateRule(int ruleId, RuleVo ruleVo) {
 		// TODO Auto-generated method stub
-		return null;
+		System.out.println(ruleVo);
+		
+		Boolean result = ruleDao.deleteRule(ruleId);
+		
+		RuleData ruleData = new RuleData();
+		
+		String ruleExpr = "";
+		ruleExpr = ruleVo.getValue1() + " " + ruleVo.getCondition() + " " + ruleVo.getValue2();
+			
+		ruleVo.getId();
+		ruleData.setRuleAlert(ruleVo.getType());
+		ruleData.setRuleExpr(ruleExpr);
+		ruleData.setRuleFor(ruleVo.getDuration());
+		ruleData.setRuleSeverity(ruleVo.getSeverity());
+		ruleData.setRuleChannel(ruleVo.getChannel());
+		
+		RuleData ruleResult = ruleDao.createRule(ruleData);
+		
+		RuleVo resultVo = new RuleVo();
+		
+		resultVo.setId(ruleVo.getId());
+		resultVo.setType(ruleResult.getRuleAlert());
+		resultVo.setSeverity(ruleResult.getRuleSeverity());
+		
+		String condition = "";
+		
+		if(ruleResult.getRuleExpr().toString().indexOf(">") >= 0) {
+			condition = ruleResult.getRuleExpr().toString().substring(ruleResult.getRuleExpr().toString().indexOf(">"), ruleResult.getRuleExpr().toString().indexOf(">")+1);
+		} else {
+			condition = ruleResult.getRuleExpr().toString().substring(ruleResult.getRuleExpr().toString().indexOf("<"), ruleResult.getRuleExpr().toString().indexOf("<")+1);
+		}
+		
+		resultVo.setCondition(condition);
+		String[] gb = ruleResult.getRuleExpr().toString().split(">|<");
+
+		resultVo.setValue1(gb[0]);
+		resultVo.setValue2(gb[1]);
+		
+		resultVo.setDuration(ruleResult.getRuleFor());
+		resultVo.setChannel(ruleResult.getRuleChannel());
+		
+		System.out.println(resultVo);
+		
+		return resultVo;
 	}
 
 	/* (non-Javadoc)
@@ -178,7 +221,9 @@ public class RuleServiceImpl implements RuleService {
 	@Override
 	public Boolean deleteRule(int id) {
 		// TODO Auto-generated method stub
+		
 		Boolean result = ruleDao.deleteRule(id);
+		
 		return result;
 	}
 	
