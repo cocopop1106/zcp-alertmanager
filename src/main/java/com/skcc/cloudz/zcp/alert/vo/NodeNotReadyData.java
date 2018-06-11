@@ -1,6 +1,5 @@
 package com.skcc.cloudz.zcp.alert.vo;
 
-public class AlertData {
-	
+public class NodeNotReadyData {
 
 }
