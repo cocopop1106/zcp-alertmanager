@@ -2,21 +2,20 @@ package com.skcc.cloudz.zcp.alert.vo;
 
 public class ApiServerVo {
 	
-	private String apiServer;
+	private String result;
 
 	/**
-	 * @return the apiServer
+	 * @return the result
 	 */
-	public String getApiServer() {
-		return apiServer;
+	public String getResult() {
+		return result;
 	}
 
 	/**
-	 * @param apiServer the apiServer to set
+	 * @param result the result to set
 	 */
-	public void setApiServer(String apiServer) {
-		this.apiServer = apiServer;
+	public void setResult(String result) {
+		this.result = result;
 	}
-	
 
 }

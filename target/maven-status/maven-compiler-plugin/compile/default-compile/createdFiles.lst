@@ -186,6 +186,7 @@ com\skcc\cloudz\zcp\common\yamlbeans\parser\Parser$11.class
 com\skcc\cloudz\zcp\common\yamlbeans\parser\Event.class
 com\skcc\cloudz\zcp\common\http\Response.class
 com\skcc\cloudz\zcp\common\yamlbeans\emitter\Emitter$4.class
+com\skcc\cloudz\zcp\common\http\HttpUtil.class
 com\skcc\cloudz\zcp\common\yamlbeans\parser\MappingStartEvent.class
 com\skcc\cloudz\zcp\alert\service\ChannelService.class
 com\skcc\cloudz\zcp\example\PortForwardExample.class

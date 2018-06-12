@@ -2,6 +2,7 @@ package com.skcc.cloudz.zcp.alert.dao;
 
 import java.util.List;
 
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Repository;
 
 import com.skcc.cloudz.zcp.alert.vo.AlertCountData;
@@ -14,11 +15,29 @@ public interface AlertDao {
 	 * 
 	 * @return
 	 */
-	AlertCountData getAlertCount();
-
+	JSONObject getAlertCount();
+	
 	/**
 	 * 
 	 * @return
 	 */
-	List<AlertData> getAlertListDao();
+	JSONObject getApiServer();
+	
+	/**
+	 * 
+	 * @return
+	 */
+	JSONObject getNodeNotReady();
+	
+	/**
+	 * 
+	 * @return
+	 */
+	JSONObject getNodeDown();
+	
+	/**
+	 * 
+	 * @return
+	 */
+	JSONObject getAlertList();
 }

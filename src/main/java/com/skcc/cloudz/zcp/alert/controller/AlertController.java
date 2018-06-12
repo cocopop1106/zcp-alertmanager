@@ -21,6 +21,9 @@ import com.skcc.cloudz.zcp.alert.service.impl.RuleServiceImpl;
 import com.skcc.cloudz.zcp.alert.vo.AlertCountVo;
 import com.skcc.cloudz.zcp.alert.vo.AlertHistoryVo;
 import com.skcc.cloudz.zcp.alert.vo.AlertVo;
+import com.skcc.cloudz.zcp.alert.vo.ApiServerVo;
+import com.skcc.cloudz.zcp.alert.vo.NodeDownVo;
+import com.skcc.cloudz.zcp.alert.vo.NodeNotReadyVo;
 import com.skcc.cloudz.zcp.alert.vo.RuleVo;
 
 import io.swagger.annotations.Api;
@@ -31,26 +34,6 @@ public class AlertController {
 	
 	@Autowired
 	AlertServiceImpl alertService;
-	
-	/**
-	 * 
-	 * @return
-	 * @throws IOException
-	 */
-	@RequestMapping(value = "alert", method = RequestMethod.GET)
-	public ResponseEntity<List<AlertVo>> getAlertList() throws IOException {
-		return new ResponseEntity<List<AlertVo>>(HttpStatus.OK);
-	}
-	
-	/**
-	 * 
-	 * @return
-	 * @throws IOException
-	 */
-	@RequestMapping(value = "history", method = RequestMethod.GET)
-	public ResponseEntity<List<AlertHistoryVo>> getHistoryList() throws IOException {
-		return new ResponseEntity<List<AlertHistoryVo>>(HttpStatus.OK);
-	}
 	
 	/**
 	 * 
@@ -71,9 +54,10 @@ public class AlertController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "api", method = RequestMethod.GET)
-	public ResponseEntity<List<AlertVo>> getApiServer() throws IOException {
-		return new ResponseEntity<List<AlertVo>>(HttpStatus.OK);
+	@RequestMapping(value = "server", method = RequestMethod.GET)
+	public ResponseEntity<ApiServerVo> getApiServer() throws IOException {
+		ApiServerVo result = alertService.getApiServer();
+		return new ResponseEntity<ApiServerVo>(result, HttpStatus.OK);
 	}
 	
 	/**
@@ -82,8 +66,8 @@ public class AlertController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "ready", method = RequestMethod.GET)
-	public ResponseEntity<List<AlertVo>> getNodeNotReady() throws IOException {
-		return new ResponseEntity<List<AlertVo>>(HttpStatus.OK);
+	public ResponseEntity<NodeNotReadyVo> getNodeNotReady() throws IOException {
+		return new ResponseEntity<NodeNotReadyVo>(HttpStatus.OK);
 	}
 	
 	/**
@@ -92,8 +76,32 @@ public class AlertController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "down", method = RequestMethod.GET)
-	public ResponseEntity<List<AlertVo>> getNodeDown() throws IOException {
-		return new ResponseEntity<List<AlertVo>>(HttpStatus.OK);
+	public ResponseEntity<NodeDownVo> getNodeDown() throws IOException {
+		return new ResponseEntity<NodeDownVo>(HttpStatus.OK);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "alert", method = RequestMethod.GET)
+	public ResponseEntity<List<AlertVo>> getAlertList() throws IOException {
+		List<AlertVo> result = alertService.getAlertList();
+		if (result == null) {
+			return new ResponseEntity<List<AlertVo>>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<List<AlertVo>>(result, HttpStatus.OK);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "history", method = RequestMethod.GET)
+	public ResponseEntity<List<AlertHistoryVo>> getHistoryList() throws IOException {
+		return new ResponseEntity<List<AlertHistoryVo>>(HttpStatus.OK);
 	}
 	
 }
