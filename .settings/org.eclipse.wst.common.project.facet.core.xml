@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <faceted-project>
   <installed facet="cloudfoundry.standalone.app" version="1.0"/>
 </faceted-project>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<faceted-project>
+  <installed facet="cloudfoundry.standalone.app" version="1.0"/>
+</faceted-project>
+>>>>>>> 1dcbec55a465f827c2ace9048895a308f5188beb

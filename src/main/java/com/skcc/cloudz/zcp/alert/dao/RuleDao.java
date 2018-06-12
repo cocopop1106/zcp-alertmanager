@@ -29,6 +29,6 @@ public interface RuleDao {
 	 * @param id
 	 * @return
 	 */
-	Boolean deleteRule(Long id);
+	Boolean deleteRule(int id);
 	
 }

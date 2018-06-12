@@ -35,8 +35,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.esotericsoftware.yamlbeans.YamlReader;
-import com.esotericsoftware.yamlbeans.YamlWriter;
+import com.skcc.cloudz.zcp.common.yamlbeans.YamlReader;
+import com.skcc.cloudz.zcp.common.yamlbeans.YamlWriter;
 import com.skcc.cloudz.zcp.alert.service.impl.RuleServiceImpl;
 import com.skcc.cloudz.zcp.alert.vo.RuleVo;
 
@@ -79,7 +79,7 @@ public class RuleController {
 	 * @return
 	 */
 	@RequestMapping(value = "rule/{id}", method = RequestMethod.GET)
-	public ResponseEntity<RuleVo> getRuleDtl(@PathVariable("id") final Long id) {
+	public ResponseEntity<RuleVo> getRuleDtl(@PathVariable("id") final int id) {
 		RuleVo ruleDtl = ruleService.findById(id);
 		if (ruleDtl == null) {
 			return new ResponseEntity<RuleVo>(HttpStatus.NOT_FOUND);
@@ -109,15 +109,13 @@ public class RuleController {
 	 * @return
 	 */
 	@RequestMapping(value = "rule/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<RuleVo> updateRule(@PathVariable("id") final Long id, @RequestBody final RuleVo ruleVo) {
-//		RuleVo updateRule = ruleService.updateRule(id, ruleVo);
+	public ResponseEntity<RuleVo> updateRule(@PathVariable("id") final int id, @RequestBody final RuleVo ruleVo) {
+		RuleVo updateRule = ruleService.updateRule(id, ruleVo);
 		
-//		if (updatedRule == null) {
-//			return new ResponseEntity<RuleVo>(HttpStatus.NOT_FOUND);
-//		}
-		
-//		return new ResponseEntity<Customer>(updatedRule, HttpStatus.OK);
-		return new ResponseEntity<RuleVo>(HttpStatus.OK);
+		if (updateRule == null) {
+			return new ResponseEntity<RuleVo>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<RuleVo>(updateRule, HttpStatus.OK);
 	}
 	
 	/**
@@ -126,8 +124,9 @@ public class RuleController {
 	 * @return
 	 */
 	@RequestMapping(value = "rule/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Void> deleteRule(@PathVariable("id") final Long id) {
+	public ResponseEntity<Void> deleteRule(@PathVariable("id") final int id) {
 		RuleVo ruleResult = ruleService.findById(id);
+		
 		if (ruleResult == null) {
 			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
 		} else {
