@@ -87,7 +87,6 @@ C:\Users\Administrator\git\zcp-alertmanager\src\main\java\com\skcc\cloudz\zcp\al
 C:\Users\Administrator\git\zcp-alertmanager\src\main\java\com\skcc\cloudz\zcp\common\util\JsonUtil.java
 C:\Users\Administrator\git\zcp-alertmanager\src\main\java\com\skcc\cloudz\zcp\alert\vo\AlertCountData.java
 C:\Users\Administrator\git\zcp-alertmanager\src\main\java\com\skcc\cloudz\zcp\common\yamlbeans\document\YamlAlias.java
-C:\Users\Administrator\git\zcp-alertmanager\src\main\java\com\skcc\cloudz\zcp\alert\vo\NodeDownData.java
 C:\Users\Administrator\git\zcp-alertmanager\src\main\java\com\skcc\cloudz\zcp\alert\vo\AlertHistoryVo.java
 C:\Users\Administrator\git\zcp-alertmanager\src\main\java\com\skcc\cloudz\zcp\common\util\KubeClient.java
 C:\Users\Administrator\git\zcp-alertmanager\src\main\java\com\skcc\cloudz\zcp\common\yamlbeans\emitter\EmitterWriter.java
@@ -97,7 +96,6 @@ C:\Users\Administrator\git\zcp-alertmanager\src\main\java\com\skcc\cloudz\zcp\al
 C:\Users\Administrator\git\zcp-alertmanager\src\main\java\com\skcc\cloudz\zcp\alert\vo\NodeDownVo.java
 C:\Users\Administrator\git\zcp-alertmanager\src\main\java\com\skcc\cloudz\zcp\alert\dao\impl\RuleDaoImpl.java
 C:\Users\Administrator\git\zcp-alertmanager\src\main\java\com\skcc\cloudz\zcp\common\yamlbeans\Beans.java
-C:\Users\Administrator\git\zcp-alertmanager\src\main\java\com\skcc\cloudz\zcp\alert\vo\NodeNotReadyData.java
 C:\Users\Administrator\git\zcp-alertmanager\src\main\java\com\skcc\cloudz\zcp\common\yamlbeans\scalar\DateSerializer.java
 C:\Users\Administrator\git\zcp-alertmanager\src\main\java\com\skcc\cloudz\zcp\common\yamlbeans\tokenizer\DirectiveToken.java
 C:\Users\Administrator\git\zcp-alertmanager\src\main\java\com\skcc\cloudz\zcp\common\yamlbeans\constants\Unicode.java

@@ -78,9 +78,7 @@ com\skcc\cloudz\zcp\common\yamlbeans\YamlConfig$ConstructorParameters.class
 com\skcc\cloudz\zcp\common\yamlbeans\tokenizer\Tokenizer$1.class
 com\skcc\cloudz\zcp\common\yamlbeans\parser\Parser$17.class
 com\skcc\cloudz\zcp\common\yamlbeans\parser\Parser.class
-com\skcc\cloudz\zcp\alert\vo\NodeNotReadyData.class
 com\skcc\cloudz\zcp\common\yamlbeans\parser\Parser$3.class
-com\skcc\cloudz\zcp\alert\vo\NodeDownData.class
 com\skcc\cloudz\zcp\common\yamlbeans\parser\Parser$24.class
 com\skcc\cloudz\zcp\common\yamlbeans\parser\DocumentStartEvent.class
 com\skcc\cloudz\zcp\common\yamlbeans\tokenizer\AliasToken.class

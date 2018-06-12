@@ -27,13 +27,25 @@ public interface AlertDao {
 	 * 
 	 * @return
 	 */
-	JSONObject getNodeNotReady();
+	JSONObject getNodeNotReadyCnt();
 	
 	/**
 	 * 
 	 * @return
 	 */
-	JSONObject getNodeDown();
+	JSONObject getNodeNotReadyTotCnt();
+	
+	/**
+	 * 
+	 * @return
+	 */
+	JSONObject getNodeDownCnt();
+	
+	/**
+	 * 
+	 * @return
+	 */
+	JSONObject getNodeDownTotCnt();
 	
 	/**
 	 * 

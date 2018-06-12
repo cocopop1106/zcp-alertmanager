@@ -2,20 +2,21 @@ package com.skcc.cloudz.zcp.alert.vo;
 
 public class AlertCountVo {
 	
-	private String result;
+	private String count;
 
 	/**
-	 * @return the result
+	 * @return the count
 	 */
-	public String getResult() {
-		return result;
+	public String getCount() {
+		return count;
 	}
 
 	/**
-	 * @param result the result to set
+	 * @param count the count to set
 	 */
-	public void setResult(String result) {
-		this.result = result;
+	public void setCount(String count) {
+		this.count = count;
 	}
 
+	
 }

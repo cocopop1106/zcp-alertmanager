@@ -40,7 +40,7 @@ public class AlertController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "active", method = RequestMethod.GET)
+	@RequestMapping(value = "activeCount", method = RequestMethod.GET)
 	public ResponseEntity<AlertCountVo> getAlertCount() throws IOException {
 		AlertCountVo result = alertService.getAlertCount();
 		if (result == null) {
@@ -54,7 +54,7 @@ public class AlertController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "server", method = RequestMethod.GET)
+	@RequestMapping(value = "apiServer", method = RequestMethod.GET)
 	public ResponseEntity<ApiServerVo> getApiServer() throws IOException {
 		ApiServerVo result = alertService.getApiServer();
 		return new ResponseEntity<ApiServerVo>(result, HttpStatus.OK);
@@ -65,9 +65,10 @@ public class AlertController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "ready", method = RequestMethod.GET)
+	@RequestMapping(value = "nodeNotReady", method = RequestMethod.GET)
 	public ResponseEntity<NodeNotReadyVo> getNodeNotReady() throws IOException {
-		return new ResponseEntity<NodeNotReadyVo>(HttpStatus.OK);
+		NodeNotReadyVo result = alertService.getNodeNotReady();
+		return new ResponseEntity<NodeNotReadyVo>(result, HttpStatus.OK);
 	}
 	
 	/**
@@ -75,9 +76,10 @@ public class AlertController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "down", method = RequestMethod.GET)
+	@RequestMapping(value = "nodeDown", method = RequestMethod.GET)
 	public ResponseEntity<NodeDownVo> getNodeDown() throws IOException {
-		return new ResponseEntity<NodeDownVo>(HttpStatus.OK);
+		NodeDownVo result = alertService.getNodeDown();
+		return new ResponseEntity<NodeDownVo>(result, HttpStatus.OK);
 	}
 	
 	/**
@@ -85,7 +87,7 @@ public class AlertController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "alert", method = RequestMethod.GET)
+	@RequestMapping(value = "alertList", method = RequestMethod.GET)
 	public ResponseEntity<List<AlertVo>> getAlertList() throws IOException {
 		List<AlertVo> result = alertService.getAlertList();
 		if (result == null) {
@@ -99,7 +101,7 @@ public class AlertController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "history", method = RequestMethod.GET)
+	@RequestMapping(value = "alertHistory", method = RequestMethod.GET)
 	public ResponseEntity<List<AlertHistoryVo>> getHistoryList() throws IOException {
 		return new ResponseEntity<List<AlertHistoryVo>>(HttpStatus.OK);
 	}

@@ -124,7 +124,7 @@ public class AlertDaoImpl implements AlertDao {
 	 * @see com.skcc.cloudz.zcp.alert.dao.AlertDao#getNodeNotReady()
 	 */
 	@Override
-	public JSONObject getNodeNotReady() {
+	public JSONObject getNodeNotReadyCnt() {
 		// TODO Auto-generated method stub
 		
 		JSONObject jsonObj = new JSONObject();
@@ -166,18 +166,111 @@ public class AlertDaoImpl implements AlertDao {
 		
 		return jsonObj;
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.skcc.cloudz.zcp.alert.dao.AlertDao#getNodeNotReady()
+	 */
+	@Override
+	public JSONObject getNodeNotReadyTotCnt() {
+		// TODO Auto-generated method stub
+		
+		JSONObject jsonObj = new JSONObject();
+		
+		try {
+			String addr = "http://prometheus.zcp-dev.jp-tok.containers.mybluemix.net/api/v1/query?query=count(kube_node_status_condition{condition=%22Ready%22,status=%22true%22}==1)";
+			URL url = new URL(addr);
+			
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+ 
+            if (conn.getResponseCode() == conn.HTTP_OK) {
+                InputStreamReader tmp = new InputStreamReader(conn.getInputStream(), "UTF-8");
+                BufferedReader reader = new BufferedReader(tmp);
+                StringBuffer buffer = new StringBuffer();
+                
+                while ((str = reader.readLine()) != null) {
+                    buffer.append(str);
+                }
+                receiveMsg = buffer.toString();
+                
+                JSONParser jsonParser = new JSONParser();
+                jsonObj = (JSONObject) jsonParser.parse(receiveMsg);
+                
+                reader.close();
+            } else {
+            	logger.debug(conn.getResponseCode());
+            }
+        } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return jsonObj;
+	}
 
 	/* (non-Javadoc)
 	 * @see com.skcc.cloudz.zcp.alert.dao.AlertDao#getNodeDown()
 	 */
 	@Override
-	public JSONObject getNodeDown() {
+	public JSONObject getNodeDownCnt() {
 		// TODO Auto-generated method stub
 		
 		JSONObject jsonObj = new JSONObject();
 		
 		try {
 			String addr = "http://prometheus.zcp-dev.jp-tok.containers.mybluemix.net/api/v1/query?query=count(up{component=%22node-exporter%22,job=%22kubernetes-monitoring-endpoints%22}==0)";
+			URL url = new URL(addr);
+			
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+ 
+            if (conn.getResponseCode() == conn.HTTP_OK) {
+                InputStreamReader tmp = new InputStreamReader(conn.getInputStream(), "UTF-8");
+                BufferedReader reader = new BufferedReader(tmp);
+                StringBuffer buffer = new StringBuffer();
+                
+                while ((str = reader.readLine()) != null) {
+                    buffer.append(str);
+                }
+                receiveMsg = buffer.toString();
+                
+                JSONParser jsonParser = new JSONParser();
+                jsonObj = (JSONObject) jsonParser.parse(receiveMsg);
+                
+                reader.close();
+            } else {
+            	logger.debug(conn.getResponseCode());
+            }
+        } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return jsonObj;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.skcc.cloudz.zcp.alert.dao.AlertDao#getNodeDown()
+	 */
+	@Override
+	public JSONObject getNodeDownTotCnt() {
+		// TODO Auto-generated method stub
+		
+		JSONObject jsonObj = new JSONObject();
+		
+		try {
+			String addr = "http://prometheus.zcp-dev.jp-tok.containers.mybluemix.net/api/v1/query?query=count(up{component=%22node-exporter%22,job=%22kubernetes-monitoring-endpoints%22}==1)";
 			URL url = new URL(addr);
 			
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();

@@ -2,33 +2,31 @@ package com.skcc.cloudz.zcp.alert.vo;
 
 public class NodeDownVo {
 	
-	private String resultCnt;
-	private String totalCnt;
-	
+	private String count;
+	private String totalCount;
 	/**
-	 * @return the resultCnt
+	 * @return the count
 	 */
-	public String getResultCnt() {
-		return resultCnt;
+	public String getCount() {
+		return count;
 	}
 	/**
-	 * @param resultCnt the resultCnt to set
+	 * @param count the count to set
 	 */
-	public void setResultCnt(String resultCnt) {
-		this.resultCnt = resultCnt;
+	public void setCount(String count) {
+		this.count = count;
 	}
 	/**
-	 * @return the totalCnt
+	 * @return the totalCount
 	 */
-	public String getTotalCnt() {
-		return totalCnt;
+	public String getTotalCount() {
+		return totalCount;
 	}
 	/**
-	 * @param totalCnt the totalCnt to set
+	 * @param totalCount the totalCount to set
 	 */
-	public void setTotalCnt(String totalCnt) {
-		this.totalCnt = totalCnt;
+	public void setTotalCount(String totalCount) {
+		this.totalCount = totalCount;
 	}
-
 	
 }

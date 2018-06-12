@@ -2,20 +2,21 @@ package com.skcc.cloudz.zcp.alert.vo;
 
 public class ApiServerVo {
 	
-	private String result;
+	private String status;
 
 	/**
-	 * @return the result
+	 * @return the status
 	 */
-	public String getResult() {
-		return result;
+	public String getStatus() {
+		return status;
 	}
 
 	/**
-	 * @param result the result to set
+	 * @param status the status to set
 	 */
-	public void setResult(String result) {
-		this.result = result;
+	public void setStatus(String status) {
+		this.status = status;
 	}
+
 
 }
