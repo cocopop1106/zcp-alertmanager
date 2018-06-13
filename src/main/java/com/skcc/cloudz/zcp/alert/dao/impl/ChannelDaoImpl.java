@@ -41,7 +41,7 @@ public class ChannelDaoImpl implements ChannelDao {
 		// TODO Auto-generated method stub
 		
 		FileWriter writer = null;
-		List listRules = null;
+		List listChannel = null;
 		
 		try {
 			ApiClient client = Config.defaultClient();
@@ -51,7 +51,6 @@ public class ChannelDaoImpl implements ChannelDao {
 			V1ConfigMap configMap;
 			
 			configMap = api.readNamespacedConfigMap("test-alertmanager", "monitoring", null, null, null);
-			System.out.println(configMap);
 			
 			File file = new File("channel.yaml");
 	        
@@ -62,22 +61,13 @@ public class ChannelDaoImpl implements ChannelDao {
 	        YamlReader reader = new YamlReader(new FileReader("channel.yaml"));
             Object object = reader.read();
             
-			Map<String, Map<String, Object>> mapGroups = (Map)object;
+			Map<String, Map<String, Object>> mapGlobal = (Map)object;
+			listChannel = (List)mapGlobal.get("receivers");
 			
-			System.out.println(mapGroups.get("route"));
-			
-//			Map<String, Object> maplistGroups;
-//			Iterator iteratorData = listGroups.iterator();
-//			
-//			RuleData ruleData = new RuleData();
-//			maplistGroups = (Map) iteratorData.next();
-//		    
-//		    Map<String, Object> maplistRules;
-//			listRules = (List)maplistGroups.get("rules");
-	        
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			
 		} finally {
             try {
                 if(writer != null) writer.close();
@@ -86,7 +76,7 @@ public class ChannelDaoImpl implements ChannelDao {
             }
         }
 	        
-		return listRules;
+		return listChannel;
 	}
 
 	/* (non-Javadoc)

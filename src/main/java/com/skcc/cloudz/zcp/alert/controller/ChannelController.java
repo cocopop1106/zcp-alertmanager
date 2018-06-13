@@ -38,7 +38,7 @@ public class ChannelController {
 		if (channelList.isEmpty()) {
 			return new ResponseEntity<List<ChannelVo>>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<List<ChannelVo>>(HttpStatus.OK);
+		return new ResponseEntity<List<ChannelVo>>(channelList, HttpStatus.OK);
 	}
 	
 	/**
