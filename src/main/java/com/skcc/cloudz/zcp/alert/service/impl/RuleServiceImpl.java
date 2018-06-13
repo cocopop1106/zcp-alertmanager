@@ -1,10 +1,17 @@
 package com.skcc.cloudz.zcp.alert.service.impl;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,6 +157,40 @@ public class RuleServiceImpl implements RuleService {
 		
 		RuleData ruleResult = ruleDao.createRule(ruleData);
 		
+		if(ruleResult != null) {
+			Timer timer = new Timer();
+			TimerTask task = new TimerTask() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					StringBuffer response = new StringBuffer();
+					
+					try {
+						String url = "http://prometheus.zcp-dev.jp-tok.containers.mybluemix.net/-/reload";
+						URL obj = new URL(url);
+						URLConnection conn = obj.openConnection();
+						
+						conn.setDoOutput(true);
+						OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+						
+						wr.flush();
+						
+						BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+						String inputLine;
+						
+						while((inputLine = in.readLine()) != null) {
+							response.append(inputLine);
+						}
+						
+					} catch(Exception e) {
+						e.printStackTrace();
+					}
+				}
+			};
+			timer.schedule(task, 120000);
+		}
+		
 		return ruleVo;
 	}
 
@@ -208,6 +249,40 @@ public class RuleServiceImpl implements RuleService {
 		resultVo.setDuration(ruleResult.getRuleFor());
 		resultVo.setChannel(ruleResult.getRuleChannel());
 		
+		if(ruleResult != null) {
+			Timer timer = new Timer();
+			TimerTask task = new TimerTask() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					StringBuffer response = new StringBuffer();
+					
+					try {
+						String url = "http://prometheus.zcp-dev.jp-tok.containers.mybluemix.net/-/reload";
+						URL obj = new URL(url);
+						URLConnection conn = obj.openConnection();
+						
+						conn.setDoOutput(true);
+						OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+						
+						wr.flush();
+						
+						BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+						String inputLine;
+						
+						while((inputLine = in.readLine()) != null) {
+							response.append(inputLine);
+						}
+						
+					} catch(Exception e) {
+						e.printStackTrace();
+					}
+				}
+			};
+			timer.schedule(task, 120000);
+		}
+		
 		return resultVo;
 	}
 
@@ -219,6 +294,40 @@ public class RuleServiceImpl implements RuleService {
 		// TODO Auto-generated method stub
 		
 		Boolean result = ruleDao.deleteRule(id);
+		
+		if(result != null) {
+			Timer timer = new Timer();
+			TimerTask task = new TimerTask() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					StringBuffer response = new StringBuffer();
+					
+					try {
+						String url = "http://prometheus.zcp-dev.jp-tok.containers.mybluemix.net/-/reload";
+						URL obj = new URL(url);
+						URLConnection conn = obj.openConnection();
+						
+						conn.setDoOutput(true);
+						OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+						
+						wr.flush();
+						
+						BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+						String inputLine;
+						
+						while((inputLine = in.readLine()) != null) {
+							response.append(inputLine);
+						}
+						
+					} catch(Exception e) {
+						e.printStackTrace();
+					}
+				}
+			};
+			timer.schedule(task, 120000);
+		}
 		
 		return result;
 	}
