@@ -9,7 +9,7 @@ import com.skcc.cloudz.zcp.alert.vo.ChannelData;
 @Repository("channelDao")
 public interface ChannelDao {
 
-	List<ChannelData> getChannelListDao();
+	List<ChannelData> getChannelList();
 	
 	ChannelData createChannel(ChannelData channel);
 }
