@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.skcc.cloudz.zcp.alert.vo.ChannelData;
-import com.skcc.cloudz.zcp.alert.vo.RuleData;
+import com.skcc.cloudz.zcp.common.vo.ChannelData;
+import com.skcc.cloudz.zcp.common.vo.RuleData;
 import com.skcc.cloudz.zcp.common.util.Message;
 import com.skcc.cloudz.zcp.common.yamlbeans.YamlConfig;
 import com.skcc.cloudz.zcp.common.yamlbeans.YamlReader;

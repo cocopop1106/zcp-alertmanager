@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.skcc.cloudz.zcp.rule.service.RuleService;
-import com.skcc.cloudz.zcp.alert.vo.RuleVo;
+import com.skcc.cloudz.zcp.common.vo.RuleVo;
 
 
 @RestController

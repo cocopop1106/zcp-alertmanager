@@ -9,11 +9,11 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.skcc.cloudz.zcp.alert.vo.AlertCountVo;
-import com.skcc.cloudz.zcp.alert.vo.AlertVo;
-import com.skcc.cloudz.zcp.alert.vo.ApiServerVo;
-import com.skcc.cloudz.zcp.alert.vo.NodeDownVo;
-import com.skcc.cloudz.zcp.alert.vo.NodeNotReadyVo;
+import com.skcc.cloudz.zcp.common.vo.AlertCountVo;
+import com.skcc.cloudz.zcp.common.vo.AlertVo;
+import com.skcc.cloudz.zcp.common.vo.ApiServerVo;
+import com.skcc.cloudz.zcp.common.vo.NodeDownVo;
+import com.skcc.cloudz.zcp.common.vo.NodeNotReadyVo;
 import com.skcc.cloudz.zcp.manager.AlertManager;
 import com.skcc.cloudz.zcp.manager.PrometheusManager;
 

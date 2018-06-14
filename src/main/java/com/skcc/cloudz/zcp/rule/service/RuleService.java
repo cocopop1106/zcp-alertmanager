@@ -16,8 +16,8 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.skcc.cloudz.zcp.alert.vo.RuleData;
-import com.skcc.cloudz.zcp.alert.vo.RuleVo;
+import com.skcc.cloudz.zcp.common.vo.RuleData;
+import com.skcc.cloudz.zcp.common.vo.RuleVo;
 import com.skcc.cloudz.zcp.channel.service.ChannelService;
 import com.skcc.cloudz.zcp.manager.KubeCoreManager;
 

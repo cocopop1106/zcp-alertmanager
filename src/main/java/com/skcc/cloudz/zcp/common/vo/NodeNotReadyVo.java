@@ -1,4 +1,4 @@
-package com.skcc.cloudz.zcp.alert.vo;
+package com.skcc.cloudz.zcp.common.vo;
 
 public class NodeNotReadyVo {
 	

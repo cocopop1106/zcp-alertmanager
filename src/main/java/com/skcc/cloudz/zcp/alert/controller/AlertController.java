@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.skcc.cloudz.zcp.alert.service.AlertService;
-import com.skcc.cloudz.zcp.alert.vo.AlertCountVo;
-import com.skcc.cloudz.zcp.alert.vo.AlertHistoryVo;
-import com.skcc.cloudz.zcp.alert.vo.AlertVo;
-import com.skcc.cloudz.zcp.alert.vo.ApiServerVo;
-import com.skcc.cloudz.zcp.alert.vo.NodeDownVo;
-import com.skcc.cloudz.zcp.alert.vo.NodeNotReadyVo;
+import com.skcc.cloudz.zcp.common.vo.AlertCountVo;
+import com.skcc.cloudz.zcp.common.vo.AlertHistoryVo;
+import com.skcc.cloudz.zcp.common.vo.AlertVo;
+import com.skcc.cloudz.zcp.common.vo.ApiServerVo;
+import com.skcc.cloudz.zcp.common.vo.NodeDownVo;
+import com.skcc.cloudz.zcp.common.vo.NodeNotReadyVo;
 
 
 @RestController

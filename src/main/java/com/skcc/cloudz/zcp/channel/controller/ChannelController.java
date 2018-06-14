@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.skcc.cloudz.zcp.alert.vo.ChannelDtlVo;
-import com.skcc.cloudz.zcp.alert.vo.ChannelListVo;
-import com.skcc.cloudz.zcp.alert.vo.ChannelVo;
+import com.skcc.cloudz.zcp.common.vo.ChannelDtlVo;
+import com.skcc.cloudz.zcp.common.vo.ChannelListVo;
+import com.skcc.cloudz.zcp.common.vo.ChannelVo;
 import com.skcc.cloudz.zcp.channel.service.ChannelService;
 
 @RestController

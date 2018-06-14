@@ -16,10 +16,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.skcc.cloudz.zcp.alert.vo.ChannelData;
-import com.skcc.cloudz.zcp.alert.vo.ChannelDtlVo;
-import com.skcc.cloudz.zcp.alert.vo.ChannelListVo;
-import com.skcc.cloudz.zcp.alert.vo.ChannelVo;
+import com.skcc.cloudz.zcp.common.vo.ChannelData;
+import com.skcc.cloudz.zcp.common.vo.ChannelDtlVo;
+import com.skcc.cloudz.zcp.common.vo.ChannelListVo;
+import com.skcc.cloudz.zcp.common.vo.ChannelVo;
 import com.skcc.cloudz.zcp.manager.KubeCoreManager;
 
 @Service
