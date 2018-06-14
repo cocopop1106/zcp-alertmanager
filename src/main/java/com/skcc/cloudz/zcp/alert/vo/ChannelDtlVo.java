@@ -5,11 +5,22 @@ public class ChannelDtlVo {
 	private String id;
 	private String channel;
 	private String notifications;
-	private String email;
-	private String api_url;
-	private String room_id;
-	private String auth_token;
-	private String send_resolved;
+	private String email_to;
+	private String email_from;
+	private String email_smarthost;
+	private String email_auth_username;
+	private String email_auth_password;
+	private String email_require_tls;
+	private String email_send_resolved;
+	private String slack_api_url;
+	private String slack_send_resolved;
+	private String hipchat_api_url;
+	private String hipchat_room_id;
+	private String hipchat_auth_token;
+	private String hipchat_notify;
+	private String hipchat_send_resolved;
+	private String webhook_url;
+	private String webhook_send_resolved;
 	
 	/**
 	 * @return the id
@@ -48,65 +59,198 @@ public class ChannelDtlVo {
 		this.notifications = notifications;
 	}
 	/**
-	 * @return the email
+	 * @return the email_to
 	 */
-	public String getEmail() {
-		return email;
+	public String getEmail_to() {
+		return email_to;
 	}
 	/**
-	 * @param email the email to set
+	 * @param email_to the email_to to set
 	 */
-	public void setEmail(String email) {
-		this.email = email;
+	public void setEmail_to(String email_to) {
+		this.email_to = email_to;
 	}
 	/**
-	 * @return the api_url
+	 * @return the email_from
 	 */
-	public String getApi_url() {
-		return api_url;
+	public String getEmail_from() {
+		return email_from;
 	}
 	/**
-	 * @param api_url the api_url to set
+	 * @param email_from the email_from to set
 	 */
-	public void setApi_url(String api_url) {
-		this.api_url = api_url;
+	public void setEmail_from(String email_from) {
+		this.email_from = email_from;
 	}
 	/**
-	 * @return the room_id
+	 * @return the email_smarthost
 	 */
-	public String getRoom_id() {
-		return room_id;
+	public String getEmail_smarthost() {
+		return email_smarthost;
 	}
 	/**
-	 * @param room_id the room_id to set
+	 * @param email_smarthost the email_smarthost to set
 	 */
-	public void setRoom_id(String room_id) {
-		this.room_id = room_id;
+	public void setEmail_smarthost(String email_smarthost) {
+		this.email_smarthost = email_smarthost;
 	}
 	/**
-	 * @return the auth_token
+	 * @return the email_auth_username
 	 */
-	public String getAuth_token() {
-		return auth_token;
+	public String getEmail_auth_username() {
+		return email_auth_username;
 	}
 	/**
-	 * @param auth_token the auth_token to set
+	 * @param email_auth_username the email_auth_username to set
 	 */
-	public void setAuth_token(String auth_token) {
-		this.auth_token = auth_token;
+	public void setEmail_auth_username(String email_auth_username) {
+		this.email_auth_username = email_auth_username;
 	}
 	/**
-	 * @return the send_resolved
+	 * @return the email_auth_password
 	 */
-	public String getSend_resolved() {
-		return send_resolved;
+	public String getEmail_auth_password() {
+		return email_auth_password;
 	}
 	/**
-	 * @param send_resolved the send_resolved to set
+	 * @param email_auth_password the email_auth_password to set
 	 */
-	public void setSend_resolved(String send_resolved) {
-		this.send_resolved = send_resolved;
+	public void setEmail_auth_password(String email_auth_password) {
+		this.email_auth_password = email_auth_password;
 	}
+	/**
+	 * @return the email_require_tls
+	 */
+	public String getEmail_require_tls() {
+		return email_require_tls;
+	}
+	/**
+	 * @param email_require_tls the email_require_tls to set
+	 */
+	public void setEmail_require_tls(String email_require_tls) {
+		this.email_require_tls = email_require_tls;
+	}
+	/**
+	 * @return the email_send_resolved
+	 */
+	public String getEmail_send_resolved() {
+		return email_send_resolved;
+	}
+	/**
+	 * @param email_send_resolved the email_send_resolved to set
+	 */
+	public void setEmail_send_resolved(String email_send_resolved) {
+		this.email_send_resolved = email_send_resolved;
+	}
+	/**
+	 * @return the slack_api_url
+	 */
+	public String getSlack_api_url() {
+		return slack_api_url;
+	}
+	/**
+	 * @param slack_api_url the slack_api_url to set
+	 */
+	public void setSlack_api_url(String slack_api_url) {
+		this.slack_api_url = slack_api_url;
+	}
+	/**
+	 * @return the slack_send_resolved
+	 */
+	public String getSlack_send_resolved() {
+		return slack_send_resolved;
+	}
+	/**
+	 * @param slack_send_resolved the slack_send_resolved to set
+	 */
+	public void setSlack_send_resolved(String slack_send_resolved) {
+		this.slack_send_resolved = slack_send_resolved;
+	}
+	/**
+	 * @return the hipchat_api_url
+	 */
+	public String getHipchat_api_url() {
+		return hipchat_api_url;
+	}
+	/**
+	 * @param hipchat_api_url the hipchat_api_url to set
+	 */
+	public void setHipchat_api_url(String hipchat_api_url) {
+		this.hipchat_api_url = hipchat_api_url;
+	}
+	/**
+	 * @return the hipchat_room_id
+	 */
+	public String getHipchat_room_id() {
+		return hipchat_room_id;
+	}
+	/**
+	 * @param hipchat_room_id the hipchat_room_id to set
+	 */
+	public void setHipchat_room_id(String hipchat_room_id) {
+		this.hipchat_room_id = hipchat_room_id;
+	}
+	/**
+	 * @return the hipchat_auth_token
+	 */
+	public String getHipchat_auth_token() {
+		return hipchat_auth_token;
+	}
+	/**
+	 * @param hipchat_auth_token the hipchat_auth_token to set
+	 */
+	public void setHipchat_auth_token(String hipchat_auth_token) {
+		this.hipchat_auth_token = hipchat_auth_token;
+	}
+	/**
+	 * @return the hipchat_notify
+	 */
+	public String getHipchat_notify() {
+		return hipchat_notify;
+	}
+	/**
+	 * @param hipchat_notify the hipchat_notify to set
+	 */
+	public void setHipchat_notify(String hipchat_notify) {
+		this.hipchat_notify = hipchat_notify;
+	}
+	/**
+	 * @return the hipchat_send_resolved
+	 */
+	public String getHipchat_send_resolved() {
+		return hipchat_send_resolved;
+	}
+	/**
+	 * @param hipchat_send_resolved the hipchat_send_resolved to set
+	 */
+	public void setHipchat_send_resolved(String hipchat_send_resolved) {
+		this.hipchat_send_resolved = hipchat_send_resolved;
+	}
+	/**
+	 * @return the webhook_url
+	 */
+	public String getWebhook_url() {
+		return webhook_url;
+	}
+	/**
+	 * @param webhook_url the webhook_url to set
+	 */
+	public void setWebhook_url(String webhook_url) {
+		this.webhook_url = webhook_url;
+	}
+	/**
+	 * @return the webhook_send_resolved
+	 */
+	public String getWebhook_send_resolved() {
+		return webhook_send_resolved;
+	}
+	/**
+	 * @param webhook_send_resolved the webhook_send_resolved to set
+	 */
+	public void setWebhook_send_resolved(String webhook_send_resolved) {
+		this.webhook_send_resolved = webhook_send_resolved;
+	}
+	
 	
 	
 }
