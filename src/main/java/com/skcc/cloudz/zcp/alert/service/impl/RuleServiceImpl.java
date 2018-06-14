@@ -142,7 +142,6 @@ public class RuleServiceImpl implements RuleService {
 	 */
 	@Override
 	public RuleVo createRule(RuleVo ruleVo) {
-		// TODO Auto-generated method stub
 		
 		RuleData ruleData = new RuleData();
 		
@@ -163,7 +162,6 @@ public class RuleServiceImpl implements RuleService {
 
 				@Override
 				public void run() {
-					// TODO Auto-generated method stub
 					StringBuffer response = new StringBuffer();
 					
 					try {

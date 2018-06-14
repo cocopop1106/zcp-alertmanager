@@ -21,4 +21,5 @@ public interface ChannelDao {
 	 * @return
 	 */
 	ChannelData createChannel(ChannelData channel);
+	
 }

@@ -18,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.skcc.cloudz.zcp.alert.service.impl.ChannelServiceImpl;
 import com.skcc.cloudz.zcp.alert.service.impl.RuleServiceImpl;
 import com.skcc.cloudz.zcp.alert.vo.ChannelDtlVo;
+import com.skcc.cloudz.zcp.alert.vo.ChannelListVo;
 import com.skcc.cloudz.zcp.alert.vo.ChannelVo;
 import com.skcc.cloudz.zcp.alert.vo.RuleVo;
 
@@ -34,12 +35,12 @@ public class ChannelController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "channel", method = RequestMethod.GET)
-	public ResponseEntity<List<ChannelVo>> getChannelList() throws IOException {
-		List<ChannelVo> channelList = channelService.getChannelList();
+	public ResponseEntity<List<ChannelListVo>> getChannelList() throws IOException {
+		List<ChannelListVo> channelList = channelService.getChannelList();
 		if (channelList.isEmpty()) {
-			return new ResponseEntity<List<ChannelVo>>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<List<ChannelListVo>>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<List<ChannelVo>>(channelList, HttpStatus.OK);
+		return new ResponseEntity<List<ChannelListVo>>(channelList, HttpStatus.OK);
 	}
 	
 	/**
@@ -64,7 +65,11 @@ public class ChannelController {
 	 */
 	@RequestMapping(value = "channel", method = RequestMethod.POST)
 	public ResponseEntity<Void> createChannel(@RequestBody final ChannelVo channelVo, final UriComponentsBuilder ucBuilder) {
-		return new ResponseEntity<Void>(HttpStatus.CREATED);
+		ChannelVo createChannel = channelService.createChannel(channelVo);
+		
+		HttpHeaders headers = new HttpHeaders();
+//		headers.setLocation(ucBuilder.path("channel/{id}").buildAndExpand(createChannel.getId()).toUri());
+		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 	
 	/**
@@ -74,7 +79,7 @@ public class ChannelController {
 	 * @return
 	 */
 	@RequestMapping(value = "channel/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<ChannelVo> updateChannel(@PathVariable("id") final Long id, @RequestBody final ChannelVo channelVo) {
+	public ResponseEntity<ChannelVo> updateChannel(@PathVariable("id") final int id, @RequestBody final ChannelVo channelVo) {
 		return new ResponseEntity<ChannelVo>(HttpStatus.OK);
 	}
 	
@@ -84,7 +89,7 @@ public class ChannelController {
 	 * @return
 	 */
 	@RequestMapping(value = "channel/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Void> deleteChannel(@PathVariable("id") final Long id) {
+	public ResponseEntity<Void> deleteChannel(@PathVariable("id") final int id) {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 }

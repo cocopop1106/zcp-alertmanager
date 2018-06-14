@@ -1,9 +1,10 @@
 package com.skcc.cloudz.zcp.alert.vo;
 
-public class ChannelVo {
+public class ChannelListVo {
 	
 	private String id;
 	private String channel;
+	private String notifications;
 	
 	/**
 	 * @return the id
@@ -28,6 +29,18 @@ public class ChannelVo {
 	 */
 	public void setChannel(String channel) {
 		this.channel = channel;
+	}
+	/**
+	 * @return the notifications
+	 */
+	public String getNotifications() {
+		return notifications;
+	}
+	/**
+	 * @param notifications the notifications to set
+	 */
+	public void setNotifications(String notifications) {
+		this.notifications = notifications;
 	}
 
 }

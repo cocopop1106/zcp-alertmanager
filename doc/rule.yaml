@@ -1,0 +1,35 @@
+groups: 
+-  name: users-rules.rules
+   rules: 
+   -  alert: NodeMemoryUsage
+      expr: (((node_memory_MemTotal-node_memory_MemFree-node_memory_Cached)/(node_memory_MemTotal)*100))  >  30
+      for: 3m
+      labels: 
+         severity: warning
+         channel: third_receiver
+      annotations: 
+         description: '{{$labels.instance}}: CPU usage (current value is: {{ $value }})'
+   -  alert: NodeCPUUsage
+      expr: (100 - (avg by (instance) (irate(node_cpu{component="node-exporter",mode="idle"}[5m])) * 100))  >  10
+      for: 1m
+      labels: 
+         severity: warning
+         channel: first_receiver
+      annotations: 
+         description: '{{$labels.instance}}: CPU usage (current value is: {{ $value }})'
+   -  alert: CpuTestUsage
+      expr: (((node_memory_MemTotal-node_memory_MemFree-node_memory_Cached)/(node_memory_MemTotal)*100))   >  40
+      for: 4m
+      labels: 
+         severity: warning
+         channel: fifth_receiver
+      annotations: 
+         description: '{{$labels.instance}}: CPU usage (current value is: {{ $value }})'
+   -  alert: MyCpuUsage
+      expr: (((node_memory_MemTotal-node_memory_MemFree-node_memory_Cached)/(node_memory_MemTotal)*100))    >   60
+      for: 6m
+      labels: 
+         severity: warning
+         channel: sixth_receiver
+      annotations: 
+         description: '{{$labels.instance}}: CPU usage (current value is: {{ $value }})'

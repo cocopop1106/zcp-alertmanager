@@ -1,9 +1,16 @@
 package com.skcc.cloudz.zcp.alert.service.impl;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,27 +18,27 @@ import org.springframework.stereotype.Service;
 
 import com.skcc.cloudz.zcp.alert.dao.impl.ChannelDaoImpl;
 import com.skcc.cloudz.zcp.alert.service.ChannelService;
+import com.skcc.cloudz.zcp.alert.vo.ChannelData;
 import com.skcc.cloudz.zcp.alert.vo.ChannelDtlVo;
+import com.skcc.cloudz.zcp.alert.vo.ChannelListVo;
 import com.skcc.cloudz.zcp.alert.vo.ChannelVo;
 import com.skcc.cloudz.zcp.alert.vo.RuleVo;
 
 @Service("channelService")
 public class ChannelServiceImpl implements ChannelService {
 	
+@SuppressWarnings("unused")
 private static Logger logger = Logger.getLogger(RuleServiceImpl.class);
 	
 	@Autowired
 	ChannelDaoImpl channelDao;
 
-	/* (non-Javadoc)
-	 * @see com.skcc.cloudz.zcp.alert.service.ChannelService#getChannelListService()
-	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public List<ChannelVo> getChannelList() {
-		// TODO Auto-generated method stub
+	public List<ChannelListVo> getChannelList() {
 		
 		List listChannels = channelDao.getChannelList();
-		List<ChannelVo> channelViewList = new ArrayList<ChannelVo>();
+		List<ChannelListVo> channelViewList = new ArrayList<ChannelListVo>();
 		
 		Map<String, Object> maplistReceivers;
 		int count = 0;
@@ -42,7 +49,7 @@ private static Logger logger = Logger.getLogger(RuleServiceImpl.class);
 		while (iterChannel.hasNext()) {
 			maplistReceivers = (Map) iterChannel.next();
 			count = 0;
-		    ChannelVo channel = new ChannelVo();
+			ChannelListVo channel = new ChannelListVo();
 		    
 		    
 		    if(!"sk-cps-team".equals(maplistReceivers.get("name")) && !"zcp-webhook".equals(maplistReceivers.get("name"))) {
@@ -66,12 +73,9 @@ private static Logger logger = Logger.getLogger(RuleServiceImpl.class);
 		return channelViewList;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.skcc.cloudz.zcp.alert.service.ChannelService#getChannelDtl(int)
-	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public ChannelDtlVo findById(int channelId) {
-		// TODO Auto-generated method stub
 		
 		List listChannels = channelDao.getChannelList();
 		
@@ -179,6 +183,50 @@ private static Logger logger = Logger.getLogger(RuleServiceImpl.class);
 		channelDtlVo = channelViewList.get(channelId);
 		
 		return channelDtlVo;
+	}
+
+	@Override
+	public ChannelVo createChannel(ChannelVo channelVo) {
+		
+		ChannelData channelData = new ChannelData();
+		channelData.setChannel(channelVo.getChannel());
+		
+		ChannelData channelResult = channelDao.createChannel(channelData);
+		
+		if(channelResult != null) {
+			Timer timer = new Timer();
+			TimerTask task = new TimerTask() {
+
+				@Override
+				public void run() {
+					StringBuffer response = new StringBuffer();
+					
+					try {
+						String url = "http://alertmanager.zcp-dev.jp-tok.containers.mybluemix.net/-/reload";
+						URL obj = new URL(url);
+						URLConnection conn = obj.openConnection();
+						
+						conn.setDoOutput(true);
+						OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+						
+						wr.flush();
+						
+						BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+						String inputLine;
+						
+						while((inputLine = in.readLine()) != null) {
+							response.append(inputLine);
+						}
+						
+					} catch(Exception e) {
+						e.printStackTrace();
+					}
+				}
+			};
+			timer.schedule(task, 120000);
+		}
+		
+		return channelVo;
 	}
 	
 	
