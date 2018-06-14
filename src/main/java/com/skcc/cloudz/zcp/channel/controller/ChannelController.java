@@ -18,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.skcc.cloudz.zcp.common.vo.ChannelDtlVo;
 import com.skcc.cloudz.zcp.common.vo.ChannelListVo;
 import com.skcc.cloudz.zcp.common.vo.ChannelVo;
+import com.skcc.cloudz.zcp.common.vo.RuleVo;
 import com.skcc.cloudz.zcp.channel.service.ChannelService;
 
 @RestController
@@ -62,6 +63,14 @@ public class ChannelController {
 
 	@RequestMapping(value = "channel/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> deleteChannel(@PathVariable("id") final int id) {
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		ChannelDtlVo channelResult = channelService.findById(id);
+		System.out.println(channelResult);
+		if (channelResult == null) {
+			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+		} else {
+			channelService.deleteChannel(id);
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		}
+		
 	}
 }
