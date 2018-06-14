@@ -17,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.skcc.cloudz.zcp.alert.service.impl.ChannelServiceImpl;
 import com.skcc.cloudz.zcp.alert.service.impl.RuleServiceImpl;
+import com.skcc.cloudz.zcp.alert.vo.ChannelDtlVo;
 import com.skcc.cloudz.zcp.alert.vo.ChannelVo;
 import com.skcc.cloudz.zcp.alert.vo.RuleVo;
 
@@ -34,7 +35,7 @@ public class ChannelController {
 	 */
 	@RequestMapping(value = "channel", method = RequestMethod.GET)
 	public ResponseEntity<List<ChannelVo>> getChannelList() throws IOException {
-		List<ChannelVo> channelList = channelService.getChannelListService();
+		List<ChannelVo> channelList = channelService.getChannelList();
 		if (channelList.isEmpty()) {
 			return new ResponseEntity<List<ChannelVo>>(HttpStatus.NO_CONTENT);
 		}
@@ -47,8 +48,12 @@ public class ChannelController {
 	 * @return
 	 */
 	@RequestMapping(value = "channel/{id}", method = RequestMethod.GET)
-	public ResponseEntity<ChannelVo> getChannelDtl(@PathVariable("id") final Long id) {
-		return new ResponseEntity<ChannelVo>(HttpStatus.OK);
+	public ResponseEntity<ChannelDtlVo> getChannelDtl(@PathVariable("id") final int id) {
+		ChannelDtlVo channelDtl = channelService.findById(id);
+		if(channelDtl == null) {
+			return new ResponseEntity<ChannelDtlVo>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<ChannelDtlVo>(channelDtl, HttpStatus.OK);
 	}
 	
 	/**

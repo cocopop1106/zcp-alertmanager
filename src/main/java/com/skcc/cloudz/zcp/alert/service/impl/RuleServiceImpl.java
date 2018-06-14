@@ -34,10 +34,10 @@ public class RuleServiceImpl implements RuleService {
 	 * @see com.skcc.cloudz.zcp.alert.service.RuleService#getRuleListService()
 	 */
 	@Override
-	public List<RuleVo> getRuleListService() {
+	public List<RuleVo> getRuleList() {
 		// TODO Auto-generated method stub
 		
-		List listRules = ruleDao.getRuleListDao();
+		List listRules = ruleDao.getRuleList();
 		
 		List<RuleVo> ruleViewList = new ArrayList<RuleVo>();
 		Map<String, Object> maplistRules;
@@ -89,9 +89,9 @@ public class RuleServiceImpl implements RuleService {
 	public RuleVo findById(int ruleId) {
 		// TODO Auto-generated method stub
 		
-		List listRules = ruleDao.getRuleListDao();
-		
+		List listRules = ruleDao.getRuleList();
 		List<RuleVo> ruleViewList = new ArrayList<RuleVo>();
+		
 		Map<String, Object> maplistRules;
 		int count = 0;
 		String condition = "";

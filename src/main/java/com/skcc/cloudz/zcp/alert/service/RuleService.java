@@ -16,7 +16,7 @@ public interface RuleService {
 	 * 
 	 * @return
 	 */
-	List<RuleVo> getRuleListService();
+	List<RuleVo> getRuleList();
 	
 	/**
 	 * 

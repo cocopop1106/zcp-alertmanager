@@ -61,7 +61,7 @@ public class RuleDaoImpl implements RuleDao {
 	 * @see com.skcc.cloudz.zcp.alert.dao.RuleDao#getRuleListDao()
 	 */
 	@Override
-	public List<RuleData> getRuleListDao()  {
+	public List<RuleData> getRuleList()  {
 		// TODO Auto-generated method stub
 		
 		FileWriter writer = null;

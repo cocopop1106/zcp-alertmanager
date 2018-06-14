@@ -15,7 +15,7 @@ public interface RuleDao {
 	 * 
 	 * @return
 	 */
-	List<RuleData> getRuleListDao();
+	List<RuleData> getRuleList();
 	
 	/**
 	 * 

@@ -66,7 +66,7 @@ public class RuleController {
 	@RequestMapping(value = "rule", method = RequestMethod.GET)
 	public ResponseEntity<List<RuleVo>> getRuleList() throws IOException {
 		
-		List<RuleVo> ruleList = ruleService.getRuleListService();
+		List<RuleVo> ruleList = ruleService.getRuleList();
 		if (ruleList.isEmpty()) {
 			return new ResponseEntity<List<RuleVo>>(HttpStatus.NO_CONTENT);
 		}
