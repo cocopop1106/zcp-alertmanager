@@ -99,7 +99,6 @@ public class ChannelDaoImpl implements ChannelDao {
 			V1ConfigMap configMap = new V1ConfigMap();
 			
 			configMap = api.readNamespacedConfigMap("test-alertmanager", "monitoring", null, null, null);
-			System.out.println(configMap);
 			File file = new File("channel.yaml");
 	        
 	        writer = new FileWriter(file, false);
