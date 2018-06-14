@@ -1,85 +1,99 @@
-global: 
-   resolve_timeout: 5m
-   smtp_smarthost: smtp-monitoring-mailhog.monitoring.svc.cluster.local:1025
-   smtp_from: alertmanager@zcp.com
-   smtp_require_tls: false
-templates: 
-- /etc/alertmanager-templates/*.tmpl
-route: 
-   group_by: 
-   - alertname
-   - severity
-   - receiver
-   group_wait: 30s
-   group_interval: 1m
-   repeat_interval: 1m
-   receiver: sk-cps-team
-   routes: 
-   -  match_re: 
-         severity: .*
-      receiver: zcp-webhook
-      continue: true
-   -  match_re: 
-         severity: .*
-      receiver: sk-cps-team
-   -  match: 
-         channel: first_receiver
-      receiver: first_receiver
-   -  match: 
-         channel: second_receiver
-      receiver: second_receiver
-   -  match: 
-         receiver: test_channel
-         channel: test_channel
-receivers: 
--  name: sk-cps-team
-   slack_configs: 
-   -  api_url: https://hooks.slack.com/services/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
+global:
+
+  resolve_timeout: 5m
+
+  # The smarthost and SMTP sender used for mail notifications.
+  smtp_smarthost: 'smtp-monitoring-mailhog.monitoring.svc.cluster.local:1025'
+  #smtp_smarthost: smtp.gmail.com:465
+  smtp_from: 'alertmanager@zcp.com'
+  smtp_require_tls: false
+  #smtp_auth_username: 'mjsjinsu@gmail.com'
+  #smtp_auth_password: 'ajrrhf0284!'
+
+templates:
+- '/etc/alertmanager-templates/*.tmpl'
+
+route:
+
+  group_by: ['alertname', 'severity', 'receiver']
+  group_wait: 30s
+  group_interval: 1m
+
+  repeat_interval: 1m
+
+  receiver: sk-cps-team
+
+  routes:
+  - match_re:
+      severity : .*
+    receiver: zcp-webhook
+    continue: true
+  - match_re:
+      severity : .*
+    receiver: sk-cps-team
+  - match:
+      channel: first_receiver
+    receiver: first_receiver
+  - match:
+      channel: second_receiver
+    receiver: second_receiver
+
+receivers:
+- name: sk-cps-team
+  slack_configs:
+    - api_url: https://hooks.slack.com/services/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
       send_resolved: true
-   email_configs: 
-   -  to: mjsjinsu@gmail.com
--  name: zcp-webhook
-   webhook_configs: 
-   -  url: http://webhook-svc:5000/webhook
+  email_configs:
+    - to: "mjsjinsu@gmail.com"
+
+- name: zcp-webhook
+  webhook_configs:
+    - url: http://webhook-svc:5000/webhook
       send_resolved: true
--  name: first_receiver
-   slack_configs: 
-   -  api_url: https://hooks.slack.com/services/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
+
+- name: first_receiver
+  slack_configs:
+    - api_url: https://hooks.slack.com/services/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
       send_resolved: true
-   webhook_configs: 
-   -  url: http://webhook-svc:5000/webhook
+  webhook_configs:
+    - url: http://webhook-svc:5000/webhook
       send_resolved: true
--  name: second_receiver
-   slack_configs: 
-   -  api_url: https://hooks.slack.com/services/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
+
+- name: second_receiver
+  slack_configs:
+    - api_url: https://hooks.slack.com/services/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
       send_resolved: true
-   webhook_configs: 
-   -  url: http://webhook-svc:5000/webhook
+  webhook_configs:
+    - url: http://webhook-svc:5000/webhook
       send_resolved: true
-   hipchat_configs: 
-   -  api_url: https://nexcore.hipchat.com/
-      room_id: '4603546'
+
+  hipchat_configs:
+    - api_url: https://nexcore.hipchat.com/
+      room_id: 4603546
       auth_token: HSlJFvopWxhkiqg6YsqTjOxap59JhnndCwgmwK8N
       notify: true
       send_resolved: true
--  name: zcp-alert
-   slack_configs: 
-   -  api_url: https://hooks.slack.com/services/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
-      send_resolved: true
--  name: hipchat-alert
-   hipchat_configs: 
-   -  api_url: https://nexcore.hipchat.com/
-      room_id: '4603546'
+
+- name: zcp-alert
+  slack_configs:
+    - api_url: https://hooks.slack.com/services/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
+      send_resolved: true  
+
+- name: hipchat-alert
+  hipchat_configs:
+    - api_url: https://nexcore.hipchat.com/
+      room_id: 4603546
       auth_token: HSlJFvopWxhkiqg6YsqTjOxap59JhnndCwgmwK8N
       send_resolved: true
--  name: email-alert
-   email_configs: 
-   -  to: mjsjinsu@gmail.com
-      from: Alertmanager <alertmanager@zcp.test.com>
-      smarthost: smtp.sendgrid.net:465
-      auth_username: zcp-sender-api-key
-      auth_password: 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
-      require_tls: false
-      send_resolved: true
--  name: test-alert
--  name: test_channel
+
+- name: email-alert
+  email_configs:
+  - to: 'mjsjinsu@gmail.com'
+    from: 'Alertmanager <alertmanager@zcp.test.com>'
+    smarthost: 'smtp.sendgrid.net:465'
+    auth_username: 'zcp-sender-api-key'
+    auth_password: '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'
+    require_tls: false
+    send_resolved: true
+
+- name: test-alert
