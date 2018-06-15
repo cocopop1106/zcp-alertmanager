@@ -18,7 +18,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.skcc.cloudz.zcp.common.vo.ChannelDtlVo;
 import com.skcc.cloudz.zcp.common.vo.ChannelListVo;
 import com.skcc.cloudz.zcp.common.vo.ChannelVo;
-import com.skcc.cloudz.zcp.common.vo.RuleVo;
 import com.skcc.cloudz.zcp.channel.service.ChannelService;
 
 @RestController
@@ -41,7 +40,7 @@ public class ChannelController {
 	@RequestMapping(value = "channel/{id}", method = RequestMethod.GET)
 	public ResponseEntity<ChannelDtlVo> getChannelDtl(@PathVariable("id") final int id) {
 		ChannelDtlVo channelDtl = channelService.findById(id);
-		if(channelDtl == null) {
+		if (channelDtl == null) {
 			return new ResponseEntity<ChannelDtlVo>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<ChannelDtlVo>(channelDtl, HttpStatus.OK);
@@ -49,7 +48,8 @@ public class ChannelController {
 
 	@SuppressWarnings("unused")
 	@RequestMapping(value = "channel", method = RequestMethod.POST)
-	public ResponseEntity<Void> createChannel(@RequestBody final ChannelVo channelVo, final UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<Void> createChannel(@RequestBody final ChannelVo channelVo,
+			final UriComponentsBuilder ucBuilder) {
 		ChannelVo createChannel = channelService.createChannel(channelVo);
 
 		HttpHeaders headers = new HttpHeaders();
@@ -57,8 +57,14 @@ public class ChannelController {
 	}
 
 	@RequestMapping(value = "channel/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<ChannelVo> updateChannel(@PathVariable("id") final int id, @RequestBody final ChannelVo channelVo) {
-		return new ResponseEntity<ChannelVo>(HttpStatus.OK);
+	public ResponseEntity<ChannelDtlVo> updateChannel(@PathVariable("id") final int id,
+			@RequestBody final ChannelDtlVo channelDtlVo) {
+		ChannelDtlVo updateChannel = channelService.updateChannel(id, channelDtlVo);
+
+		if (updateChannel == null) {
+			return new ResponseEntity<ChannelDtlVo>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<ChannelDtlVo>(HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "channel/{id}", method = RequestMethod.DELETE)
@@ -70,6 +76,6 @@ public class ChannelController {
 			channelService.deleteChannel(id, channelResult.getChannel());
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		}
-		
+
 	}
 }

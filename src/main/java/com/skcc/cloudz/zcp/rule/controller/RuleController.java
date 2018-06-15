@@ -18,7 +18,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.skcc.cloudz.zcp.rule.service.RuleService;
 import com.skcc.cloudz.zcp.common.vo.RuleVo;
 
-
 @RestController
 public class RuleController {
 	@SuppressWarnings("unused")

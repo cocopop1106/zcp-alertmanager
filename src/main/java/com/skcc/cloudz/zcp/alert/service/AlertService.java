@@ -28,16 +28,15 @@ public class AlertService {
 	@Autowired
 	private PrometheusManager prometheusManager;
 
-
 	public AlertCountVo getAlertCount() {
 		JSONObject resultObj = prometheusManager.getAlertCount();
 		AlertCountVo alertCountVo = new AlertCountVo();
 
-		if(resultObj != null) {
+		if (resultObj != null) {
 			JSONObject dataObj = (JSONObject) resultObj.get("data");
 			JSONArray resultArr = (JSONArray) dataObj.get("result");
 
-			for(int i=0 ; i<resultArr.size() ; i++) {
+			for (int i = 0; i < resultArr.size(); i++) {
 				JSONObject tempObj = (JSONObject) resultArr.get(i);
 				JSONArray valueArr = (JSONArray) tempObj.get("value");
 
@@ -51,16 +50,16 @@ public class AlertService {
 		JSONObject resultObj = prometheusManager.getApiServer();
 		ApiServerVo apiServerVo = new ApiServerVo();
 
-		if(resultObj != null) {
+		if (resultObj != null) {
 			JSONObject dataObj = (JSONObject) resultObj.get("data");
 			JSONArray resultArr = (JSONArray) dataObj.get("result");
 
-			for(int i=0 ; i<resultArr.size() ; i++) {
+			for (int i = 0; i < resultArr.size(); i++) {
 				JSONObject tempObj = (JSONObject) resultArr.get(i);
 				JSONArray valueArr = (JSONArray) tempObj.get("value");
 
 				apiServerVo.setStatus(valueArr.get(1).toString());
-				if("1".equals(valueArr.get(1).toString())) {
+				if ("1".equals(valueArr.get(1).toString())) {
 					apiServerVo.setStatus("normal");
 				} else {
 					apiServerVo.setStatus("down");
@@ -76,36 +75,36 @@ public class AlertService {
 		JSONObject resultObj = prometheusManager.getNodeNotReadyCnt();
 		JSONObject resultTotObj = prometheusManager.getNodeNotReadyTotCnt();
 
-		if(resultObj != null) {
+		if (resultObj != null) {
 			JSONObject dataObj = (JSONObject) resultObj.get("data");
 			JSONArray resultArr = (JSONArray) dataObj.get("result");
 
-			if(resultArr.size() == 0) {
+			if (resultArr.size() == 0) {
 				nodeNotReadyVo.setCount("0");
 			} else {
 
-				for(int i=0 ; i<resultArr.size() ; i++) {
+				for (int i = 0; i < resultArr.size(); i++) {
 					JSONObject tempObj = (JSONObject) resultArr.get(i);
 					JSONArray valueArr = (JSONArray) tempObj.get("value");
 
 					nodeNotReadyVo.setCount(valueArr.get(1).toString());
-				}	
+				}
 			}
 		}
 
-		if(resultTotObj != null) {
+		if (resultTotObj != null) {
 			JSONObject dataTotObj = (JSONObject) resultTotObj.get("data");
 			JSONArray resultTotArr = (JSONArray) dataTotObj.get("result");
-			if(resultTotArr.size() == 0) {
+			if (resultTotArr.size() == 0) {
 				nodeNotReadyVo.setTotalCount("0");
 			} else {
 
-				for(int i=0 ; i<resultTotArr.size() ; i++) {
+				for (int i = 0; i < resultTotArr.size(); i++) {
 					JSONObject tempTotObj = (JSONObject) resultTotArr.get(i);
 					JSONArray valueTotArr = (JSONArray) tempTotObj.get("value");
 
 					nodeNotReadyVo.setTotalCount(valueTotArr.get(1).toString());
-				}	
+				}
 			}
 		}
 		return nodeNotReadyVo;
@@ -117,36 +116,36 @@ public class AlertService {
 		JSONObject resultObj = prometheusManager.getNodeDownCnt();
 		JSONObject resultTotObj = prometheusManager.getNodeDownTotCnt();
 
-		if(resultObj != null) {
+		if (resultObj != null) {
 			JSONObject dataObj = (JSONObject) resultObj.get("data");
 			JSONArray resultArr = (JSONArray) dataObj.get("result");
 
-			if(resultArr.size() == 0) {
+			if (resultArr.size() == 0) {
 				nodeDownVo.setCount("0");
 			} else {
 
-				for(int i=0 ; i<resultArr.size() ; i++) {
+				for (int i = 0; i < resultArr.size(); i++) {
 					JSONObject tempObj = (JSONObject) resultArr.get(i);
 					JSONArray valueArr = (JSONArray) tempObj.get("value");
 
 					nodeDownVo.setCount(valueArr.get(1).toString());
-				}	
+				}
 			}
 		}
 
-		if(resultTotObj != null) {
+		if (resultTotObj != null) {
 			JSONObject dataTotObj = (JSONObject) resultTotObj.get("data");
 			JSONArray resultTotArr = (JSONArray) dataTotObj.get("result");
-			if(resultTotArr.size() == 0) {
+			if (resultTotArr.size() == 0) {
 				nodeDownVo.setTotalCount("0");
 			} else {
 
-				for(int i=0 ; i<resultTotArr.size() ; i++) {
+				for (int i = 0; i < resultTotArr.size(); i++) {
 					JSONObject tempTotObj = (JSONObject) resultTotArr.get(i);
 					JSONArray valueTotArr = (JSONArray) tempTotObj.get("value");
 
 					nodeDownVo.setTotalCount(valueTotArr.get(1).toString());
-				}	
+				}
 			}
 		}
 
@@ -157,33 +156,33 @@ public class AlertService {
 		List<AlertVo> resultList = new ArrayList<AlertVo>();
 		JSONObject resultObj = alertManager.getAlertList();
 
-		if(resultObj != null) {
+		if (resultObj != null) {
 			JSONArray resultArr = (JSONArray) resultObj.get("data");
 
-			for(int i=0 ; i<resultArr.size() ; i++) {
+			for (int i = 0; i < resultArr.size(); i++) {
 				JSONObject alertObj = (JSONObject) resultArr.get(i);
 				AlertVo alertVo = new AlertVo();
 
-				if(alertObj.get("startsAt") != null) {
-					alertVo.setTime(alertObj.get("startsAt").toString());	
+				if (alertObj.get("startsAt") != null) {
+					alertVo.setTime(alertObj.get("startsAt").toString());
 				}
 
 				JSONObject labelsObj = (JSONObject) alertObj.get("labels");
-				if(labelsObj.get("severity") != null) {
-					alertVo.setSeverity(labelsObj.get("severity").toString());	
+				if (labelsObj.get("severity") != null) {
+					alertVo.setSeverity(labelsObj.get("severity").toString());
 				}
 
-				if(labelsObj.get("alertname") != null) {
-					alertVo.setType(labelsObj.get("alertname").toString());	
+				if (labelsObj.get("alertname") != null) {
+					alertVo.setType(labelsObj.get("alertname").toString());
 				}
 
-				if(labelsObj.get("channel") != null) {
-					alertVo.setReceiver(labelsObj.get("channel").toString());	
+				if (labelsObj.get("channel") != null) {
+					alertVo.setReceiver(labelsObj.get("channel").toString());
 				}
 
 				JSONObject annotationsObj = (JSONObject) alertObj.get("annotations");
-				if(annotationsObj.get("description") != null) {
-					alertVo.setDescription(annotationsObj.get("description").toString());	
+				if (annotationsObj.get("description") != null) {
+					alertVo.setDescription(annotationsObj.get("description").toString());
 				}
 
 				resultList.add(alertVo);

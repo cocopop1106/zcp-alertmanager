@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import com.skcc.cloudz.zcp.common.vo.RuleData;
 import com.skcc.cloudz.zcp.common.vo.RuleVo;
-import com.skcc.cloudz.zcp.channel.service.ChannelService;
 import com.skcc.cloudz.zcp.manager.KubeCoreManager;
 
 @Service
@@ -55,10 +54,14 @@ public class RuleService {
 			rule.setType(maplistRules.get("alert").toString());
 			rule.setSeverity(maplistLabels.get("severity").toString());
 
-			if(maplistRules.get("expr").toString().indexOf(">") >= 0) {
-				condition = maplistRules.get("expr").toString().substring(maplistRules.get("expr").toString().indexOf(">"), maplistRules.get("expr").toString().indexOf(">")+1);
+			if (maplistRules.get("expr").toString().indexOf(">") >= 0) {
+				condition = maplistRules.get("expr").toString().substring(
+						maplistRules.get("expr").toString().indexOf(">"),
+						maplistRules.get("expr").toString().indexOf(">") + 1);
 			} else {
-				condition = maplistRules.get("expr").toString().substring(maplistRules.get("expr").toString().indexOf("<"), maplistRules.get("expr").toString().indexOf("<")+1);
+				condition = maplistRules.get("expr").toString().substring(
+						maplistRules.get("expr").toString().indexOf("<"),
+						maplistRules.get("expr").toString().indexOf("<") + 1);
 			}
 
 			rule.setCondition(condition);
@@ -103,10 +106,14 @@ public class RuleService {
 			rule.setType(maplistRules.get("alert").toString());
 			rule.setSeverity(maplistLabels.get("severity").toString());
 
-			if(maplistRules.get("expr").toString().indexOf(">") >= 0) {
-				condition = maplistRules.get("expr").toString().substring(maplistRules.get("expr").toString().indexOf(">"), maplistRules.get("expr").toString().indexOf(">")+1);
+			if (maplistRules.get("expr").toString().indexOf(">") >= 0) {
+				condition = maplistRules.get("expr").toString().substring(
+						maplistRules.get("expr").toString().indexOf(">"),
+						maplistRules.get("expr").toString().indexOf(">") + 1);
 			} else {
-				condition = maplistRules.get("expr").toString().substring(maplistRules.get("expr").toString().indexOf("<"), maplistRules.get("expr").toString().indexOf("<")+1);
+				condition = maplistRules.get("expr").toString().substring(
+						maplistRules.get("expr").toString().indexOf("<"),
+						maplistRules.get("expr").toString().indexOf("<") + 1);
 			}
 
 			rule.setCondition(condition);
@@ -140,7 +147,7 @@ public class RuleService {
 
 		RuleData ruleResult = kubeCoreManager.createRule(ruleData);
 
-		if(ruleResult != null) {
+		if (ruleResult != null) {
 			Timer timer = new Timer();
 			TimerTask task = new TimerTask() {
 
@@ -161,11 +168,11 @@ public class RuleService {
 						BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 						String inputLine;
 
-						while((inputLine = in.readLine()) != null) {
+						while ((inputLine = in.readLine()) != null) {
 							response.append(inputLine);
 						}
 
-					} catch(Exception e) {
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
@@ -205,10 +212,12 @@ public class RuleService {
 
 		String condition = "";
 
-		if(ruleResult.getRuleExpr().toString().indexOf(">") >= 0) {
-			condition = ruleResult.getRuleExpr().toString().substring(ruleResult.getRuleExpr().toString().indexOf(">"), ruleResult.getRuleExpr().toString().indexOf(">")+1);
+		if (ruleResult.getRuleExpr().toString().indexOf(">") >= 0) {
+			condition = ruleResult.getRuleExpr().toString().substring(ruleResult.getRuleExpr().toString().indexOf(">"),
+					ruleResult.getRuleExpr().toString().indexOf(">") + 1);
 		} else {
-			condition = ruleResult.getRuleExpr().toString().substring(ruleResult.getRuleExpr().toString().indexOf("<"), ruleResult.getRuleExpr().toString().indexOf("<")+1);
+			condition = ruleResult.getRuleExpr().toString().substring(ruleResult.getRuleExpr().toString().indexOf("<"),
+					ruleResult.getRuleExpr().toString().indexOf("<") + 1);
 		}
 
 		resultVo.setCondition(condition);
@@ -220,7 +229,7 @@ public class RuleService {
 		resultVo.setDuration(ruleResult.getRuleFor());
 		resultVo.setChannel(ruleResult.getRuleChannel());
 
-		if(ruleResult != null) {
+		if (ruleResult != null) {
 			Timer timer = new Timer();
 			TimerTask task = new TimerTask() {
 
@@ -241,11 +250,11 @@ public class RuleService {
 						BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 						String inputLine;
 
-						while((inputLine = in.readLine()) != null) {
+						while ((inputLine = in.readLine()) != null) {
 							response.append(inputLine);
 						}
 
-					} catch(Exception e) {
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
@@ -259,7 +268,7 @@ public class RuleService {
 	public Boolean deleteRule(int id) {
 		Boolean result = kubeCoreManager.deleteRule(id);
 
-		if(result != null) {
+		if (result != null) {
 			Timer timer = new Timer();
 			TimerTask task = new TimerTask() {
 
@@ -280,11 +289,11 @@ public class RuleService {
 						BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 						String inputLine;
 
-						while((inputLine = in.readLine()) != null) {
+						while ((inputLine = in.readLine()) != null) {
 							response.append(inputLine);
 						}
 
-					} catch(Exception e) {
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}

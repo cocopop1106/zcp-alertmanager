@@ -1,7 +1,7 @@
 package com.skcc.cloudz.zcp.common.vo;
 
 public class ApiServerVo {
-	
+
 	private String status;
 
 	/**
@@ -12,11 +12,11 @@ public class ApiServerVo {
 	}
 
 	/**
-	 * @param status the status to set
+	 * @param status
+	 *            the status to set
 	 */
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
 
 }

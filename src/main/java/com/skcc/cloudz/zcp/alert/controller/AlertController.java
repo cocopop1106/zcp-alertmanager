@@ -19,7 +19,6 @@ import com.skcc.cloudz.zcp.common.vo.ApiServerVo;
 import com.skcc.cloudz.zcp.common.vo.NodeDownVo;
 import com.skcc.cloudz.zcp.common.vo.NodeNotReadyVo;
 
-
 @RestController
 public class AlertController {
 	@SuppressWarnings("unused")

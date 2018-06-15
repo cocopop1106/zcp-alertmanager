@@ -6,6 +6,11 @@ global:
 templates: 
 - /etc/alertmanager-templates/*.tmpl
 route: 
+   group_by: 
+   group_wait: 
+   group_interval: 
+   repeat_interval: 
+   receiver: 
    routes: 
    -  match_re: 
          severity: .*
@@ -17,6 +22,9 @@ route:
    -  match: 
          channel: second_receiver
       receiver: second_receiver
+   -  match: 
+         channel: test_receiver
+         receiver: test_receiver
 receivers: 
 -  name: sk-cps-team
    slack_configs: 
@@ -61,3 +69,24 @@ receivers:
       require_tls: false
       send_resolved: true
 -  name: test-alert
+-  name: test2_receiver
+   email_configs: 
+   -  to: mjsjinsu@gmail.com
+      from: Alertmanager <alertmanager@zcp.test.com>
+      smarthost: smtp.sendgrid.net:465
+      auth_username: zcp-sender-api-key
+      auth_password: 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
+      require_tls: false
+      send_resolved: true
+   slack_configs: 
+   -  api_url: https://hooks.slack.com/services/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
+      send_resolved: true
+   hipchat_configs: 
+   -  api_url: https://nexcore.hipchat.com/
+      room_id: '4603546'
+      auth_token: HSlJFvopWxhkiqg6YsqTjOxap59JhnndCwgmwK8N
+      notify: true
+      send_resolved: true
+   webhook_configs: 
+   -  url: http://webhook-svc:5000/webhook
+      send_resolved: true

@@ -13,7 +13,6 @@ import org.json.simple.parser.ParseException;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-
 @Component
 public class PrometheusManager {
 	private static Logger logger = Logger.getLogger(PrometheusManager.class);
@@ -47,13 +46,10 @@ public class PrometheusManager {
 				logger.debug(conn.getResponseCode());
 			}
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -252,6 +248,5 @@ public class PrometheusManager {
 		}
 		return jsonObj;
 	}
-
 
 }

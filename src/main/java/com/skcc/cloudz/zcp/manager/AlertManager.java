@@ -13,7 +13,6 @@ import org.json.simple.parser.ParseException;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-
 @Component
 public class AlertManager {
 	private static Logger logger = Logger.getLogger(AlertManager.class);

@@ -12,17 +12,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class Message {
 
-    @Autowired
-    private MessageSource messageSource;
-    private MessageSourceAccessor accessor;
+	@Autowired
+	private MessageSource messageSource;
+	private MessageSourceAccessor accessor;
 
-    @PostConstruct
-    private void init() {
-        accessor = new MessageSourceAccessor(messageSource, Locale.getDefault());
-    }
+	@PostConstruct
+	private void init() {
+		accessor = new MessageSourceAccessor(messageSource, Locale.getDefault());
+	}
 
-    public String get(String code) {
-        return accessor.getMessage(code);
-    }
+	public String get(String code) {
+		return accessor.getMessage(code);
+	}
 
 }

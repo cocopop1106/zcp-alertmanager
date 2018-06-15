@@ -1,7 +1,7 @@
 package com.skcc.cloudz.zcp.common.vo;
 
 public class AlertCountVo {
-	
+
 	private String count;
 
 	/**
@@ -12,11 +12,11 @@ public class AlertCountVo {
 	}
 
 	/**
-	 * @param count the count to set
+	 * @param count
+	 *            the count to set
 	 */
 	public void setCount(String count) {
 		this.count = count;
 	}
 
-	
 }
