@@ -16,25 +16,17 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
 	@Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
-                .build()
-                .apiInfo(apiInfo())
-                .useDefaultResponseMessages(true);
-    }
-	
+	public Docket api() {
+		return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.any())
+				.paths(PathSelectors.any()).build().apiInfo(apiInfo()).useDefaultResponseMessages(true);
+	}
+
 	private ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-                .title("Rest API")
-                .description("")
-                .termsOfServiceUrl("http://www-03.ibm.com/software/sla/sladb.nsf/sla/bm?Open")
-                .contact(new Contact("cocopop1106", null, "cocopop1106@gmail.com"))
-                .license("Apache License Version 2.0")
-                .licenseUrl("https://github.com/IBM-Bluemix/news-aggregator/blob/master/LICENSE")
-                .version("2.0")
-                .build();
-    }
+		return new ApiInfoBuilder().title("Rest API").description("")
+				.termsOfServiceUrl("http://www-03.ibm.com/software/sla/sladb.nsf/sla/bm?Open")
+				.contact(new Contact("cocopop1106", null, "cocopop1106@gmail.com"))
+				.license("Apache License Version 2.0")
+				.licenseUrl("https://github.com/IBM-Bluemix/news-aggregator/blob/master/LICENSE").version("2.0")
+				.build();
+	}
 }
