@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.skcc.cloudz.zcp.common.vo.ChannelData;
+import com.skcc.cloudz.zcp.common.vo.ChannelVo;
 import com.skcc.cloudz.zcp.common.vo.RuleData;
 import com.skcc.cloudz.zcp.common.util.Message;
 import com.skcc.cloudz.zcp.common.yamlbeans.YamlConfig;
@@ -159,15 +160,15 @@ public class KubeCoreManager {
 
 		return channel;
 	}
-	
+
 	@SuppressWarnings({ "unused", "unchecked", "rawtypes" })
-	public Boolean deleteChannel(int ruleId) {
+	public Boolean deleteChannel(int id, String channel) {
 		List<RuleData> ruleList = new ArrayList<RuleData>();
 		FileWriter writer = null;
 		List receiverList = null;
 		Map<String, Object> routeMap = new HashMap<String, Object>();
 		List routesList = null;
-		
+
 		try {
 			ApiClient client = Config.defaultClient();
 			Configuration.setDefaultApiClient(client);
@@ -187,111 +188,35 @@ public class KubeCoreManager {
 			Object object = reader.read();
 
 			Map<String, Map<String, Object>> mapGlobal = (Map)object;
-
 			routeMap = mapGlobal.get("route");
+
 			routesList = (List)routeMap.get("routes");
-			
-			Iterator iterRoutes = routesList.iterator();
-			Map<String, Object> maplistRoutes;
-			
-//			while (iterRoutes.hasNext()) {
-//				maplistRoutes = (Map) iterRoutes.next();
-//				listRules = (List)maplistRoutes.get("rules");
-//				for(int cnt=0; cnt<listRules.size(); cnt++) {
-//					if(cnt == ruleId) {
-//						listRules.remove(cnt);
-//					} 
-//				}
-//			}
-//
-//			HashMap<String, Object> matchMap = new LinkedHashMap<String, Object>();
-//			matchMap.put("channel", channel.getChannel());
-//			matchMap.put("receiver", channel.getChannel());
-//
-//			HashMap<String, Object> routesMap = new HashMap<String, Object>();
-//			routesMap.put("match", matchMap);
-//
-//			routesList.add(routesMap);
-//
-//			newRouteMap.put("group_by", routeMap.get("group_by"));
-//			newRouteMap.put("group_wait", routeMap.get("group_wait"));
-//			newRouteMap.put("group_interval", routeMap.get("group_interval"));
-//			newRouteMap.put("repeat_interval", routeMap.get("repeat_interval"));
-//			newRouteMap.put("receiver", routeMap.get("receiver"));
-//			newRouteMap.put("routes", routesList);
-//
-//			receiverList = (List)mapGlobal.get("receivers");
-//
-//			HashMap<String, Object> newReceiver = new LinkedHashMap<String, Object>();
-//			newReceiver.put("name", channel.getChannel());
-//
-//			receiverList.add(newReceiver);
-//
-//			Map<String, Object> channelMap = new LinkedHashMap<String, Object>();
-//			channelMap.put("global", mapGlobal.get("global"));
-//			channelMap.put("templates", mapGlobal.get("templates"));
-//			channelMap.put("route", newRouteMap);
-//			channelMap.put("receivers", receiverList);
-//
-//			YamlConfig config = new YamlConfig();
-//			YamlWriter ywriter = new YamlWriter(new FileWriter("channel.yaml"), config);
-//			ywriter.write(channelMap);
-//			ywriter.close();
-//
-//			String yamlString = FileUtils.readFileToString(new File("channel.yaml"), "utf8");
-//
-//			Map<String, String> data = new HashMap<String, String>();
-//			data.put("config.yml", yamlString);
-//
-//			configMap.setData(data);
-//			V1ConfigMap replacedConfigmap = api.replaceNamespacedConfigMap("test-alertmanager", "monitoring", configMap, null);
-			
-			
-			
-			
-			
-//			Map<String, Map<String, Object>> mapGroups = (Map)object;
-//			List listGroups = (List)mapGroups.get("groups");
-//
-//			Iterator iteratorData = listGroups.iterator();
-//			Map<String, Object> maplistGroups;
-//
-//			RuleData ruleData = new RuleData();
-//			List listRules = new ArrayList();
-//
-//			while (iteratorData.hasNext()) {
-//				maplistGroups = (Map) iteratorData.next();
-//				listRules = (List)maplistGroups.get("rules");
-//				for(int cnt=0; cnt<listRules.size(); cnt++) {
-//					if(cnt == ruleId) {
-//						listRules.remove(cnt);
-//					} 
-//				}
-//			}
-//
-//			Map<String, Object> groups = new HashMap<String, Object>();
-//
-//			groups.put("name", "users-rules.rules");
-//			groups.put("rules", listRules);
-//
-//			List groupList = new ArrayList();
-//			groupList.add(groups);
-//
-//			Map<String, Object> groupMap = new HashMap<String, Object>();
-//			groupMap.put("groups", groupList);
-//
-//			YamlConfig config = new YamlConfig();
-//			YamlWriter ywriter = new YamlWriter(new FileWriter("rule.yaml"), config);
-//			ywriter.write(groupMap);
-//			ywriter.close();
-//
-//			String yamlString = FileUtils.readFileToString(new File("rule.yaml"), "utf8");
-//
-//			Map<String, String> data = new HashMap<String, String>();
-//			data.put("users-rules.rules", yamlString);
-//
-//			configMap.setData(data);
-//			V1ConfigMap replacedConfigmap = api.replaceNamespacedConfigMap("prometheus-user-rules", "monitoring", configMap, null);
+			routesList.remove(id+2);
+
+			Map<String, Object> newRouteMap = new HashMap<String, Object>();
+			newRouteMap.put("routes", routesList);
+
+			receiverList = (List)mapGlobal.get("receivers");
+			receiverList.remove(id+2);
+
+			Map<String, Object> channelMap = new LinkedHashMap<String, Object>();
+			channelMap.put("global", mapGlobal.get("global"));
+			channelMap.put("templates", mapGlobal.get("templates"));
+			channelMap.put("route", newRouteMap);
+			channelMap.put("receivers", receiverList);
+
+			YamlConfig config = new YamlConfig();
+			YamlWriter ywriter = new YamlWriter(new FileWriter("channel.yaml"), config);
+			ywriter.write(channelMap);
+			ywriter.close();
+
+			String yamlString = FileUtils.readFileToString(new File("channel.yaml"), "utf8");
+
+			Map<String, String> data = new HashMap<String, String>();
+			data.put("config.yml", yamlString);
+
+			configMap.setData(data);
+			V1ConfigMap replacedConfigmap = api.replaceNamespacedConfigMap("test-alertmanager", "monitoring", configMap, null);
 
 		} catch (Exception e) {
 			e.printStackTrace();

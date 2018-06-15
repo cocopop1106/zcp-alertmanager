@@ -64,11 +64,10 @@ public class ChannelController {
 	@RequestMapping(value = "channel/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> deleteChannel(@PathVariable("id") final int id) {
 		ChannelDtlVo channelResult = channelService.findById(id);
-		System.out.println(channelResult);
 		if (channelResult == null) {
 			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
 		} else {
-			channelService.deleteChannel(id);
+			channelService.deleteChannel(id, channelResult.getChannel());
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		}
 		

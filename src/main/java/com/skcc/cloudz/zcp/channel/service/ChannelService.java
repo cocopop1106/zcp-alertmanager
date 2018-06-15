@@ -219,8 +219,8 @@ public class ChannelService {
 		return channelVo;
 	}
 	
-	public Boolean deleteChannel(int id) {
-		Boolean result = kubeCoreManager.deleteChannel(id);
+	public Boolean deleteChannel(int id, String channel) {
+		Boolean result = kubeCoreManager.deleteChannel(id, channel);
 
 		if(result != null) {
 			Timer timer = new Timer();
