@@ -14,6 +14,7 @@ import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.skcc.cloudz.zcp.common.vo.RuleData;
@@ -27,6 +28,9 @@ public class RuleService {
 
 	@Autowired
 	private KubeCoreManager kubeCoreManager;
+	
+	@Value("${props.prometheus.baseUrl}")
+	private String baseUrl;
 
 	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
 	public List<RuleVo> getRuleList() {
@@ -156,7 +160,7 @@ public class RuleService {
 					StringBuffer response = new StringBuffer();
 
 					try {
-						String url = "http://prometheus.zcp-dev.jp-tok.containers.mybluemix.net/-/reload";
+						String url = baseUrl+"/-/reload";
 						URL obj = new URL(url);
 						URLConnection conn = obj.openConnection();
 
@@ -238,7 +242,7 @@ public class RuleService {
 					StringBuffer response = new StringBuffer();
 
 					try {
-						String url = "http://prometheus.zcp-dev.jp-tok.containers.mybluemix.net/-/reload";
+						String url = baseUrl+"/-/reload";
 						URL obj = new URL(url);
 						URLConnection conn = obj.openConnection();
 
@@ -277,7 +281,7 @@ public class RuleService {
 					StringBuffer response = new StringBuffer();
 
 					try {
-						String url = "http://prometheus.zcp-dev.jp-tok.containers.mybluemix.net/-/reload";
+						String url = baseUrl+"/-/reload";
 						URL obj = new URL(url);
 						URLConnection conn = obj.openConnection();
 

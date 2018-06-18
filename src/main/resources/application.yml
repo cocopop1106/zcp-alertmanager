@@ -1,52 +1,52 @@
 server:
   port: 8080
+  tomcat:
+    uri-encoding: UTF-8
+      
+spring:
+  application:
+    name: zcp-alertmanager
+  output:
+    ansi:
+      enabled: always
+  profiles:
+    active: local
+  session:
+    store-type: none
 
 #redis:
 #  database: 0
 #  host: 169.56.100.62
 #  password: ''
 #  port: 32000
-    
-#keycloak:
-#  clientId: account
-#  clientSecret: 611c87d9-37f3-4078-b500-542cf419b113
-#  password: admin1234
-#  realm: zcp
-#  serverUrl: http://keycloak.cberry.xyz/auth
-#  username: 1800275@partner.skcc.com
-  
-#logging:
-#  level:
-#    com:
-#      skcc:
-#        cloudz:
-#          zcp: DEBUG
-#    org:
-#      hibernate: DEBUG
-#      springframework:
-#        security: DEBUG
-#        web: DEBUG
-#    root: DEBUG
-    
+
+---
 spring:
-  session:
-    store-type: none
-#  mvc:
-#    static-path-pattern: /static/**
-#    view:
-#      prefix: /WEB-INF/jsp/
-#      suffix: .jsp
-#  profiles:
-#    active: prod
-#  resources:
-#    add-mappings: true
-#    static-locations: classpath:/static/
-    
-#springfox:
-#  documentation:
-#    swagger:
-#      v2:
-#        path: /api-docs
-        
-#zcp:
-#  realm: zcp
+  profiles: local
+
+props:
+  appName: zcp-alertmanager-local
+  alertManager:
+    baseUrl: http://alertmanager.zcp-dev.jp-tok.containers.mybluemix.net
+    configMap: test-alertmanager
+    namespace: monitoring
+  prometheus:
+    baseUrl: http://prometheus.zcp-dev.jp-tok.containers.mybluemix.net
+    configMap: prometheus-user-rules
+    namespace: monitoring
+  
+---
+spring:
+  profiles: dev
+
+props:
+  appName: zcp-alertmanager-dev
+  alertManager:
+    baseUrl: http://alertmanager-service:9093
+    configMap: test-alertmanager
+    namespace: monitoring
+  prometheus:
+    baseUrl: http://prometheus-service:9090
+    configMap: prometheus-user-rules
+    namespace: monitoring
+  

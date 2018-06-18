@@ -15,6 +15,7 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.skcc.cloudz.zcp.common.vo.ChannelData;
@@ -36,6 +37,18 @@ public class KubeCoreManager {
 	@SuppressWarnings("unused")
 	private final Logger logger = (Logger) LoggerFactory.getLogger(KubeCoreManager.class);
 
+	@Value("${props.alertManager.configMap}")
+	private String alertConfigMap;
+
+	@Value("${props.alertManager.namespace}")
+	private String alertNamespace;
+
+	@Value("${props.prometheus.configMap}")
+	private String promConfigMap;
+
+	@Value("${props.prometheus.namespace}")
+	private String promNamespace;
+
 	@Autowired
 	Message message;
 
@@ -52,7 +65,7 @@ public class KubeCoreManager {
 			CoreV1Api api = new CoreV1Api();
 			V1ConfigMap configMap;
 
-			configMap = api.readNamespacedConfigMap("test-alertmanager", "monitoring", null, null, null);
+			configMap = api.readNamespacedConfigMap(alertConfigMap, alertNamespace, null, null, null);
 
 			File file = new File("channel.yaml");
 
@@ -98,7 +111,7 @@ public class KubeCoreManager {
 			CoreV1Api api = new CoreV1Api();
 			V1ConfigMap configMap = new V1ConfigMap();
 
-			configMap = api.readNamespacedConfigMap("test-alertmanager", "monitoring", null, null, null);
+			configMap = api.readNamespacedConfigMap(alertConfigMap, alertNamespace, null, null, null);
 			File file = new File("channel.yaml");
 
 			writer = new FileWriter(file, false);
@@ -153,7 +166,7 @@ public class KubeCoreManager {
 			data.put("config.yml", yamlString);
 
 			configMap.setData(data);
-			V1ConfigMap replacedConfigmap = api.replaceNamespacedConfigMap("test-alertmanager", "monitoring", configMap,
+			V1ConfigMap replacedConfigmap = api.replaceNamespacedConfigMap(alertConfigMap, alertNamespace, configMap,
 					null);
 
 		} catch (Exception e) {
@@ -176,7 +189,7 @@ public class KubeCoreManager {
 			CoreV1Api api = new CoreV1Api();
 			V1ConfigMap configMap;
 
-			configMap = api.readNamespacedConfigMap("test-alertmanager", "monitoring", null, null, null);
+			configMap = api.readNamespacedConfigMap(alertConfigMap, alertNamespace, null, null, null);
 
 			File file = new File("channel.yaml");
 
@@ -281,7 +294,7 @@ public class KubeCoreManager {
 			data.put("config.yml", yamlString);
 
 			configMap.setData(data);
-			V1ConfigMap replacedConfigmap = api.replaceNamespacedConfigMap("test-alertmanager", "monitoring", configMap,
+			V1ConfigMap replacedConfigmap = api.replaceNamespacedConfigMap(alertConfigMap, alertNamespace, configMap,
 					null);
 
 		} catch (Exception e) {
@@ -313,7 +326,7 @@ public class KubeCoreManager {
 			CoreV1Api api = new CoreV1Api();
 			V1ConfigMap configMap;
 
-			configMap = api.readNamespacedConfigMap("test-alertmanager", "monitoring", null, null, null);
+			configMap = api.readNamespacedConfigMap(alertConfigMap, alertNamespace, null, null, null);
 
 			File file = new File("channel.yaml");
 
@@ -353,7 +366,7 @@ public class KubeCoreManager {
 			data.put("config.yml", yamlString);
 
 			configMap.setData(data);
-			V1ConfigMap replacedConfigmap = api.replaceNamespacedConfigMap("test-alertmanager", "monitoring", configMap,
+			V1ConfigMap replacedConfigmap = api.replaceNamespacedConfigMap(alertConfigMap, alertNamespace, configMap,
 					null);
 
 		} catch (Exception e) {
@@ -381,7 +394,7 @@ public class KubeCoreManager {
 			CoreV1Api api = new CoreV1Api();
 			V1ConfigMap configMap;
 
-			configMap = api.readNamespacedConfigMap("prometheus-user-rules", "monitoring", null, null, null);
+			configMap = api.readNamespacedConfigMap(promConfigMap, promNamespace, null, null, null);
 			File file = new File("rule.yaml");
 
 			writer = new FileWriter(file, false);
@@ -429,7 +442,7 @@ public class KubeCoreManager {
 			CoreV1Api api = new CoreV1Api();
 			V1ConfigMap configMap = new V1ConfigMap();
 
-			configMap = api.readNamespacedConfigMap("prometheus-user-rules", "monitoring", null, null, null);
+			configMap = api.readNamespacedConfigMap(promConfigMap, promNamespace, null, null, null);
 			String rules = configMap.getData().get("users-rules.rules");
 
 			File file = new File("rule.yaml");
@@ -493,8 +506,8 @@ public class KubeCoreManager {
 			data.put("users-rules.rules", yamlString);
 
 			configMap.setData(data);
-			V1ConfigMap replacedConfigmap = api.replaceNamespacedConfigMap("prometheus-user-rules", "monitoring",
-					configMap, null);
+			V1ConfigMap replacedConfigmap = api.replaceNamespacedConfigMap(promConfigMap, promNamespace, configMap,
+					null);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -514,7 +527,7 @@ public class KubeCoreManager {
 			CoreV1Api api = new CoreV1Api();
 			V1ConfigMap configMap;
 
-			configMap = api.readNamespacedConfigMap("prometheus-user-rules", "monitoring", null, null, null);
+			configMap = api.readNamespacedConfigMap(promConfigMap, promNamespace, null, null, null);
 
 			File file = new File("rule.yaml");
 
@@ -566,8 +579,8 @@ public class KubeCoreManager {
 			data.put("users-rules.rules", yamlString);
 
 			configMap.setData(data);
-			V1ConfigMap replacedConfigmap = api.replaceNamespacedConfigMap("prometheus-user-rules", "monitoring",
-					configMap, null);
+			V1ConfigMap replacedConfigmap = api.replaceNamespacedConfigMap(promConfigMap, promNamespace, configMap,
+					null);
 
 		} catch (Exception e) {
 			e.printStackTrace();

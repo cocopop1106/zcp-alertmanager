@@ -11,19 +11,23 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AlertManager {
 	private static Logger logger = Logger.getLogger(AlertManager.class);
 	private String str, receiveMsg;
+	
+	@Value("${props.alertManager.baseUrl}")
+    private String baseUrl;
 
 	@SuppressWarnings("static-access")
 	public JSONObject getAlertList() {
 		JSONObject jsonObj = new JSONObject();
 
 		try {
-			String addr = "http://alertmanager.zcp-dev.jp-tok.containers.mybluemix.net/api/v1/alerts";
+			String addr = baseUrl+"/api/v1/alerts";
 			URL url = new URL(addr);
 
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();

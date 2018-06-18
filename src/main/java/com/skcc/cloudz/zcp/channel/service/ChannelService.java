@@ -14,6 +14,7 @@ import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.skcc.cloudz.zcp.common.vo.ChannelData;
@@ -29,6 +30,9 @@ public class ChannelService {
 
 	@Autowired
 	private KubeCoreManager kubeCoreManager;
+	
+	@Value("${props.alertManager.baseUrl}")
+	private String baseUrl;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List<ChannelListVo> getChannelList() {
@@ -193,7 +197,7 @@ public class ChannelService {
 					StringBuffer response = new StringBuffer();
 
 					try {
-						String url = "http://alertmanager.zcp-dev.jp-tok.containers.mybluemix.net/-/reload";
+						String url = baseUrl+"/-/reload";
 						URL obj = new URL(url);
 						URLConnection conn = obj.openConnection();
 
@@ -232,7 +236,7 @@ public class ChannelService {
 					StringBuffer response = new StringBuffer();
 
 					try {
-						String url = "http://alertmanager.zcp-dev.jp-tok.containers.mybluemix.net/-/reload";
+						String url = baseUrl+"/-/reload";
 						URL obj = new URL(url);
 						URLConnection conn = obj.openConnection();
 
@@ -271,7 +275,7 @@ public class ChannelService {
 					StringBuffer response = new StringBuffer();
 
 					try {
-						String url = "http://alertmanager.zcp-dev.jp-tok.containers.mybluemix.net/-/reload";
+						String url = baseUrl+"/-/reload";
 						URL obj = new URL(url);
 						URLConnection conn = obj.openConnection();
 
