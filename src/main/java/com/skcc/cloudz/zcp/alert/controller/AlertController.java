@@ -65,6 +65,7 @@ public class AlertController {
 
 	@RequestMapping(value = "alertHistory", method = RequestMethod.GET)
 	public ResponseEntity<List<AlertHistoryVo>> getHistoryList() throws IOException {
+		alertService.getAlertHistoryList();
 		return new ResponseEntity<List<AlertHistoryVo>>(HttpStatus.OK);
 	}
 

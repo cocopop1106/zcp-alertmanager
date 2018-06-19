@@ -16,6 +16,7 @@ import com.skcc.cloudz.zcp.common.vo.NodeDownVo;
 import com.skcc.cloudz.zcp.common.vo.NodeNotReadyVo;
 import com.skcc.cloudz.zcp.manager.AlertManager;
 import com.skcc.cloudz.zcp.manager.PrometheusManager;
+import com.skcc.cloudz.zcp.manager.RedisManager;
 
 @Service
 public class AlertService {
@@ -27,6 +28,10 @@ public class AlertService {
 
 	@Autowired
 	private PrometheusManager prometheusManager;
+	
+	@Autowired
+	private RedisManager redisManager;
+	
 
 	public AlertCountVo getAlertCount() {
 		JSONObject resultObj = prometheusManager.getAlertCount();
@@ -189,6 +194,11 @@ public class AlertService {
 			}
 		}
 		return resultList;
+	}
+	
+	public List<AlertVo> getAlertHistoryList() {
+		redisManager.getAlertHistoryList();
+		return null;
 	}
 
 }

@@ -14,12 +14,6 @@ spring:
   session:
     store-type: none
 
-#redis:
-#  database: 0
-#  host: 169.56.100.62
-#  password: ''
-#  port: 32000
-
 ---
 spring:
   profiles: local
@@ -34,6 +28,10 @@ props:
     baseUrl: http://prometheus.zcp-dev.jp-tok.containers.mybluemix.net
     configMap: prometheus-user-rules
     namespace: monitoring
+  redis:
+    database: 0
+    host: 169.56.100.62
+    port: 32000
   
 ---
 spring:
@@ -49,4 +47,7 @@ props:
     baseUrl: http://prometheus-service:9090
     configMap: prometheus-user-rules
     namespace: monitoring
-  
+  redis:
+    database: 0
+    host: 169.56.100.62
+    port: 32000
