@@ -29,6 +29,8 @@
 package com.skcc.cloudz.zcp.common.util;
 
 import com.google.gson.Gson;
+
+import redis.clients.jedis.Client;
 import redis.clients.jedis.Jedis;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +42,8 @@ import java.util.List;
 public class JReJSON {
 
 	private static Gson gson = new Gson();
-
+	protected Client client = null;
+	
 	private enum Command implements ProtocolCommand {
 		DEL("JSON.DEL"), GET("JSON.GET"), SET("JSON.SET"), TYPE("JSON.TYPE");
 		private final byte[] raw;
@@ -149,14 +152,16 @@ public class JReJSON {
 	 * @return the requested object
 	 */
 	public static Object get(Jedis conn, String key, Path... paths) {
-
+		
 		List<byte[]> args = new ArrayList(2);
 
 		args.add(SafeEncoder.encode(key));
 		for (Path p : paths) {
 			args.add(SafeEncoder.encode(p.toString()));
 		}
+		
 		String rep = "";
+		
 //		String rep = conn.getClient().sendCommand(Command.GET, args.toArray(new byte[args.size()][])).getBulkReply();
 //		conn.getClient().sendCommand(Command.GET, args.toArray(new byte[args.size()][]));
 //		String rep = args.toArray(new byte[args.size()][]).toString();

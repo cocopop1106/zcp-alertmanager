@@ -65,9 +65,9 @@ public class AlertService {
 
 				apiServerVo.setStatus(valueArr.get(1).toString());
 				if ("1".equals(valueArr.get(1).toString())) {
-					apiServerVo.setStatus("normal");
+					apiServerVo.setStatus("OK");
 				} else {
-					apiServerVo.setStatus("down");
+					apiServerVo.setStatus("Downed");
 				}
 			}
 		}
