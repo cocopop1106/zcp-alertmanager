@@ -1,14 +1,19 @@
 package com.skcc.cloudz.zcp.alert.service;
 
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.skcc.cloudz.zcp.common.util.TimestampUtil;
 import com.skcc.cloudz.zcp.common.vo.AlertCountVo;
 import com.skcc.cloudz.zcp.common.vo.AlertVo;
 import com.skcc.cloudz.zcp.common.vo.ApiServerVo;
@@ -169,7 +174,8 @@ public class AlertService {
 				AlertVo alertVo = new AlertVo();
 
 				if (alertObj.get("startsAt") != null) {
-					alertVo.setTime(alertObj.get("startsAt").toString());
+					Object startsAt = TimestampUtil.ISO8601ToDate(alertObj.get("startsAt"));
+					alertVo.setTime(startsAt.toString());
 				}
 
 				JSONObject labelsObj = (JSONObject) alertObj.get("labels");
