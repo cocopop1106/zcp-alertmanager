@@ -28,11 +28,11 @@ props:
     baseUrl: http://prometheus.zcp-dev.jp-tok.containers.mybluemix.net
     configMap: prometheus-user-rules
     namespace: monitoring
-  redis:
-    database: 0
-    host: 169.56.100.62
-    port: 32000
-  
+  mariaDB:
+    url: jdbc:mariadb://169.56.100.62:30000/alertmanager
+    id: root
+    password: admin
+    
 ---
 spring:
   profiles: dev
@@ -47,7 +47,7 @@ props:
     baseUrl: http://prometheus-service:9090
     configMap: prometheus-user-rules
     namespace: monitoring
-  redis:
-    database: 0
-    host: 169.56.100.62
-    port: 32000
+  mariaDB:
+    url: jdbc:mariadb://webhook-mariadb:3306/alertmanager
+    id: root
+    password: admin    

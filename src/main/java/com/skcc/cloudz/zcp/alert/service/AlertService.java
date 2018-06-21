@@ -1,13 +1,9 @@
 package com.skcc.cloudz.zcp.alert.service;
 
-import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +16,8 @@ import com.skcc.cloudz.zcp.common.vo.ApiServerVo;
 import com.skcc.cloudz.zcp.common.vo.NodeDownVo;
 import com.skcc.cloudz.zcp.common.vo.NodeNotReadyVo;
 import com.skcc.cloudz.zcp.manager.AlertManager;
+import com.skcc.cloudz.zcp.manager.MariaManager;
 import com.skcc.cloudz.zcp.manager.PrometheusManager;
-import com.skcc.cloudz.zcp.manager.RedisManager;
 
 @Service
 public class AlertService {
@@ -35,9 +31,8 @@ public class AlertService {
 	private PrometheusManager prometheusManager;
 	
 	@Autowired
-	private RedisManager redisManager;
+	private MariaManager mariaManager;
 	
-
 	public AlertCountVo getAlertCount() {
 		JSONObject resultObj = prometheusManager.getAlertCount();
 		AlertCountVo alertCountVo = new AlertCountVo();
@@ -203,7 +198,7 @@ public class AlertService {
 	}
 	
 	public List<AlertVo> getAlertHistoryList() {
-		redisManager.getAlertHistoryList();
+		mariaManager.getAlertHistoryList();
 		return null;
 	}
 
