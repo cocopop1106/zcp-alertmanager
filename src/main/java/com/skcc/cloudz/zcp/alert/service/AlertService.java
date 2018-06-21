@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.skcc.cloudz.zcp.common.util.TimestampUtil;
 import com.skcc.cloudz.zcp.common.vo.AlertCountVo;
+import com.skcc.cloudz.zcp.common.vo.AlertHistoryVo;
 import com.skcc.cloudz.zcp.common.vo.AlertVo;
 import com.skcc.cloudz.zcp.common.vo.ApiServerVo;
 import com.skcc.cloudz.zcp.common.vo.NodeDownVo;
@@ -197,9 +198,11 @@ public class AlertService {
 		return resultList;
 	}
 	
-	public List<AlertVo> getAlertHistoryList() {
-		mariaManager.getAlertHistoryList();
-		return null;
+	public List<AlertHistoryVo> getAlertHistoryList() {
+		List<AlertHistoryVo> resultList = new ArrayList<AlertHistoryVo>();
+		JSONObject resultObj = mariaManager.getAlertHistoryList();
+		
+		return resultList;
 	}
 
 }

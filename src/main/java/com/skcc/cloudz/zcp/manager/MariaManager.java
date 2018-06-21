@@ -1,11 +1,5 @@
 package com.skcc.cloudz.zcp.manager;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -15,14 +9,13 @@ import java.sql.SQLException;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MariaManager {
+	@SuppressWarnings("unused")
 	private static Logger logger = Logger.getLogger(MariaManager.class);
-	private String str, receiveMsg;
 	
 	@Value("${props.mariaDB.url}") private String url;
 	@Value("${props.mariaDB.id}") private String id;
@@ -41,14 +34,17 @@ public class MariaManager {
             con = DriverManager.getConnection(url, id, password);
             if( con != null ){ System.out.println("database connected!"); }
             
-            String sql = "select seq, alert, datetime from history";
+            String sql = "SELECT seq, alert, datetime FROM history WHERE datetime >= date_format(curdate( ), '%Y-%m-%d %H:%i:%s')";
             pstmt = con.prepareStatement(sql);
             rs = pstmt.executeQuery();
             
+            JSONObject jsonAlert = new JSONObject();
+            
             while(rs.next()) {
-            	System.out.println(rs.getString("seq"));
-            	System.out.println(rs.getString("alert"));
-            	System.out.println(rs.getString("datetime"));
+            	
+            	JSONParser jsonParser = new JSONParser();
+            	jsonAlert = (JSONObject) jsonParser.parse(rs.getString("alert"));
+            	System.out.println(jsonAlert);
             }
         } catch(Exception e) {
             e.printStackTrace();
