@@ -28,7 +28,7 @@ public class MariaManager {
 	@SuppressWarnings("unchecked")
 	public JSONArray getAlertHistoryList(String time) {
 		JSONArray jsonArr = new JSONArray();
-
+		
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
