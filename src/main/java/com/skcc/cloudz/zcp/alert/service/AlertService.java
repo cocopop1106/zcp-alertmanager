@@ -198,9 +198,9 @@ public class AlertService {
 		return resultList;
 	}
 
-	public List<AlertHistoryVo> getAlertHistoryList() {
+	public List<AlertHistoryVo> getAlertHistoryList(String time) {
 		List<AlertHistoryVo> resultList = new ArrayList<AlertHistoryVo>();
-		JSONArray resultArr = mariaManager.getAlertHistoryList();
+		JSONArray resultArr = mariaManager.getAlertHistoryList(time);
 
 		if (resultArr != null) {
 			for (int resultCnt = 0; resultCnt < resultArr.size(); resultCnt++) {

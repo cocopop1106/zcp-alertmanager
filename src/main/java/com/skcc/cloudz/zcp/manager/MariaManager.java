@@ -26,19 +26,37 @@ public class MariaManager {
 	private String password;
 
 	@SuppressWarnings("unchecked")
-	public JSONArray getAlertHistoryList() {
+	public JSONArray getAlertHistoryList(String time) {
 		JSONArray jsonArr = new JSONArray();
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
+		String sql = "SELECT seq, alert, datetime FROM history WHERE datetime >= date_add(now(), interval -1 hour)";
 
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
 			con = DriverManager.getConnection(url, id, password);
 
 			if (con != null) {
-				String sql = "SELECT seq, alert, datetime FROM history WHERE datetime >= date_add(now(), interval -1 hour) ORDER BY seq DESC";
+				if ("time1".equals(time)) {
+					sql = "SELECT seq, alert, datetime FROM history WHERE datetime >= date_add(now(), interval -1 hour)";
+				} else if ("time2".equals(time)) {
+					sql = "SELECT seq, alert, datetime FROM history WHERE date_format(datetime, '%Y-%m-%d') = current_date ";
+				} else if ("time3".equals(time)) {
+					sql = "SELECT seq, alert, datetime FROM history WHERE date_format(datetime, '%Y-%m-%d') = CURDATE()-INTERVAL 1 DAY";
+				} else if ("time4".equals(time)) {
+					sql = "SELECT seq, alert, datetime FROM history WHERE datetime >= date_add(now(), interval -2 day)";
+				} else if ("time5".equals(time)) {
+					sql = "SELECT seq, alert, datetime FROM history WHERE YEARWEEK(datetime) = YEARWEEK(now())";
+				} else if ("time6".equals(time)) {
+					sql = "SELECT seq, alert, datetime FROM history WHERE datetime >= curdate()-INTERVAL DAYOFWEEK(curdate())+6 DAY AND datetime < curdate()-INTERVAL DAYOFWEEK(curdate())-1 DAY";
+				} else if ("time7".equals(time)) {
+					sql = "SELECT seq, alert, datetime FROM history WHERE date_format(datetime, '%Y-%m-%d') >= LAST_DAY(NOW() - INTERVAL 1 MONTH) AND date_format(datetime, '%Y-%m-%d') <= last_day(now())";
+				} else if ("time8".equals(time)) {
+					sql = "SELECT seq, alert, datetime FROM history WHERE date_format(datetime, '%Y-%m-%d') >= last_day(now() - INTERVAL 2 MONTH) AND date_format(datetime, '%Y-%m-%d') <= last_day(now() - INTERVAL 1 MONTH)";
+				}
+
 				pstmt = con.prepareStatement(sql);
 				rs = pstmt.executeQuery();
 

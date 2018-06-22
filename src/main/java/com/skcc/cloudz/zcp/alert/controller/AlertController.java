@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,9 +64,9 @@ public class AlertController {
 		return new ResponseEntity<List<AlertVo>>(result, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "alertHistory", method = RequestMethod.GET)
-	public ResponseEntity<List<AlertHistoryVo>> getHistoryList() throws IOException {
-		List<AlertHistoryVo> result = alertService.getAlertHistoryList();
+	@RequestMapping(value = "alertHistory/{time}", method = RequestMethod.GET)
+	public ResponseEntity<List<AlertHistoryVo>> getHistoryList(@PathVariable("time") final String time) throws IOException {
+		List<AlertHistoryVo> result = alertService.getAlertHistoryList(time);
 		if (result == null) {
 			return new ResponseEntity<List<AlertHistoryVo>>(HttpStatus.NOT_FOUND);
 		}
