@@ -38,7 +38,7 @@ public class MariaManager {
 			con = DriverManager.getConnection(url, id, password);
 
 			if (con != null) {
-				String sql = "SELECT seq, alert, datetime FROM history ORDER BY seq DESC LIMIT 10";
+				String sql = "SELECT seq, alert, datetime FROM history WHERE datetime >= date_add(now(), interval -1 hour) ORDER BY seq DESC";
 				pstmt = con.prepareStatement(sql);
 				rs = pstmt.executeQuery();
 
