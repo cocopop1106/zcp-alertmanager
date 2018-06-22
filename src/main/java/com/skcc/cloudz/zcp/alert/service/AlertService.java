@@ -30,10 +30,10 @@ public class AlertService {
 
 	@Autowired
 	private PrometheusManager prometheusManager;
-	
+
 	@Autowired
 	private MariaManager mariaManager;
-	
+
 	public AlertCountVo getAlertCount() {
 		JSONObject resultObj = prometheusManager.getAlertCount();
 		AlertCountVo alertCountVo = new AlertCountVo();
@@ -197,11 +197,49 @@ public class AlertService {
 		}
 		return resultList;
 	}
-	
+
 	public List<AlertHistoryVo> getAlertHistoryList() {
 		List<AlertHistoryVo> resultList = new ArrayList<AlertHistoryVo>();
-		JSONObject resultObj = mariaManager.getAlertHistoryList();
-		
+		JSONArray resultArr = mariaManager.getAlertHistoryList();
+
+		if (resultArr != null) {
+			for (int resultCnt = 0; resultCnt < resultArr.size(); resultCnt++) {
+
+				JSONArray alertArr = (JSONArray) resultArr.get(resultCnt);
+				for (int alertCnt = 0; alertCnt < alertArr.size(); alertCnt++) {
+					JSONObject alertObj = (JSONObject) alertArr.get(alertCnt);
+					AlertHistoryVo alertHistoryVo = new AlertHistoryVo();
+
+					if (alertObj.get("status") != null) {
+						alertHistoryVo.setStatus(alertObj.get("status").toString());
+					}
+
+					if (alertObj.get("startsAt") != null) {
+						Object startsAt = TimestampUtil.ISO8601ToDate(alertObj.get("startsAt"));
+						alertHistoryVo.setTime(startsAt.toString());
+					}
+
+					JSONObject labelsObj = (JSONObject) alertObj.get("labels");
+					if (labelsObj.get("severity") != null) {
+						alertHistoryVo.setSeverity(labelsObj.get("severity").toString());
+					}
+
+					if (labelsObj.get("alertname") != null) {
+						alertHistoryVo.setType(labelsObj.get("alertname").toString());
+					}
+
+					if (labelsObj.get("channel") != null) {
+						alertHistoryVo.setReceiver(labelsObj.get("channel").toString());
+					}
+
+					JSONObject annotationsObj = (JSONObject) alertObj.get("annotations");
+					if (annotationsObj.get("description") != null) {
+						alertHistoryVo.setDescription(annotationsObj.get("description").toString());
+					}
+					resultList.add(alertHistoryVo);
+				}
+			}
+		}
 		return resultList;
 	}
 

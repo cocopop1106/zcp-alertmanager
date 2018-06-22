@@ -69,7 +69,7 @@ public class AlertController {
 		if (result == null) {
 			return new ResponseEntity<List<AlertHistoryVo>>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<List<AlertHistoryVo>>(HttpStatus.OK);
+		return new ResponseEntity<List<AlertHistoryVo>>(result, HttpStatus.OK);
 	}
 
 }
