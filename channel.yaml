@@ -69,7 +69,7 @@ receivers:
       require_tls: false
       send_resolved: true
 -  name: test-alert
--  name: test2_receiver
+-  name: test21_receiver
    email_configs: 
    -  to: mjsjinsu@gmail.com
       from: Alertmanager <alertmanager@zcp.test.com>

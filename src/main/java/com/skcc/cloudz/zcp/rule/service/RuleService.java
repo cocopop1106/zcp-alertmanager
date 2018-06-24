@@ -73,7 +73,8 @@ public class RuleService {
 
 			rule.setValue1(gb[0]);
 			rule.setValue2(gb[1]);
-			rule.setDuration(maplistRules.get("for").toString());	
+			if(maplistRules.get("for") != null)
+				rule.setDuration(maplistRules.get("for").toString());	
 			rule.setChannel(maplistLabels.get("channel").toString());
 
 			ruleViewList.add(count, rule);
@@ -125,7 +126,8 @@ public class RuleService {
 
 			rule.setValue1(gb[0]);
 			rule.setValue2(gb[1]);
-			rule.setDuration(maplistRules.get("for").toString());
+			if(maplistRules.get("for") != null)
+				rule.setDuration(maplistRules.get("for").toString());
 			rule.setChannel(maplistLabels.get("channel").toString());
 
 			ruleViewList.add(count, rule);
