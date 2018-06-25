@@ -33,7 +33,7 @@ public class ChannelService {
 	
 //	@Value("${props.alertManager.baseUrl}")
 //	private String baseUrl;
-	private String baseUrl = "http://alertmanager.cloudzcp.io";
+	private String baseUrl = "http://alertmanager-service:9093";
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List<ChannelListVo> getChannelList() {

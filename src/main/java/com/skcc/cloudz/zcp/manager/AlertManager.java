@@ -21,7 +21,7 @@ public class AlertManager {
 	
 //	@Value("${props.alertManager.baseUrl}")
 //    private String baseUrl;
-	private String baseUrl = "http://alertmanager.cloudzcp.io";
+	private String baseUrl = "http://alertmanager-service:9093";
 
 	@SuppressWarnings("static-access")
 	public JSONObject getAlertList() {

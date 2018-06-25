@@ -21,7 +21,7 @@ public class PrometheusManager {
 	
 //	@Value("${props.prometheus.baseUrl}")
 //	private String baseUrl;
-	private String baseUrl = "http://prometheus.cloudzcp.io";
+	private String baseUrl = "http://prometheus-service:9090";
 
 	@SuppressWarnings("static-access")
 	public JSONObject getAlertCount() {
