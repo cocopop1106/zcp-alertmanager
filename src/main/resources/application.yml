@@ -10,7 +10,7 @@ spring:
     ansi:
       enabled: always
   profiles:
-    active: dev
+    active: stg
   session:
     store-type: none
 
@@ -51,3 +51,23 @@ props:
     url: jdbc:mariadb://webhook-mariadb:3306/alertmanager
     id: root
     password: admin    
+
+---
+spring:
+  profiles: stg
+
+props:
+  appName: zcp-alertmanager-dev
+  alertManager:
+    baseUrl: http://alertmanager.cloudzcp.io
+    configMap: alertmanager
+    namespace: zcp-system
+  prometheus:
+    baseUrl: http://prometheus.cloudzcp.io
+    configMap: prometheus-user-rules
+    namespace: zcp-system
+  mariaDB:
+    url: jdbc:mariadb://webhook-mariadb:3306/alertmanager
+    id: root
+    password: admin    
+    
