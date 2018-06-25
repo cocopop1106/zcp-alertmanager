@@ -19,8 +19,9 @@ public class AlertManager {
 	private static Logger logger = Logger.getLogger(AlertManager.class);
 	private String str, receiveMsg;
 	
-	@Value("${props.alertManager.baseUrl}")
-    private String baseUrl;
+//	@Value("${props.alertManager.baseUrl}")
+//    private String baseUrl;
+	private String baseUrl = "http://alertmanager.cloudzcp.io";
 
 	@SuppressWarnings("static-access")
 	public JSONObject getAlertList() {
