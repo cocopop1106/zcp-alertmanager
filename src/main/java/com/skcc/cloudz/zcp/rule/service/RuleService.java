@@ -29,8 +29,9 @@ public class RuleService {
 	@Autowired
 	private KubeCoreManager kubeCoreManager;
 	
-	@Value("${props.prometheus.baseUrl}")
-	private String baseUrl;
+//	@Value("${props.prometheus.baseUrl}")
+//	private String baseUrl;
+	private String baseUrl = "http://prometheus.cloudzcp.io";
 
 	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
 	public List<RuleVo> getRuleList() {
