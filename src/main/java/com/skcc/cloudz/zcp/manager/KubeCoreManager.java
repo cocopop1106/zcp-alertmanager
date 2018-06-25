@@ -37,17 +37,17 @@ public class KubeCoreManager {
 	@SuppressWarnings("unused")
 	private final Logger logger = (Logger) LoggerFactory.getLogger(KubeCoreManager.class);
 
-	@Value("${props.alertManager.configMap}")
-	private String alertConfigMap;
+//	@Value("${props.alertManager.configMap}")
+	private String alertConfigMap = "alertmanager";
 
-	@Value("${props.alertManager.namespace}")
-	private String alertNamespace;
+//	@Value("${props.alertManager.namespace}")
+	private String alertNamespace = "zcp-system";
 
-	@Value("${props.prometheus.configMap}")
-	private String promConfigMap;
+//	@Value("${props.prometheus.configMap}")
+	private String promConfigMap = "prometheus-user-rules";
 
-	@Value("${props.prometheus.namespace}")
-	private String promNamespace;
+//	@Value("${props.prometheus.namespace}")
+	private String promNamespace = "zcp-system";
 
 	@Autowired
 	Message message;

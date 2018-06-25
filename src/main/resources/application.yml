@@ -56,7 +56,7 @@ props:
 spring:
   profiles: stg
 
-props:
+props: 
   appName: zcp-alertmanager-stg
   alertManager:
     baseUrl: http://alertmanager.cloudzcp.io
@@ -69,5 +69,5 @@ props:
   mariaDB:
     url: jdbc:mariadb://webhook-mariadb:3306/alertmanager
     id: root
-    password: admin    
+    password: admin   
     
