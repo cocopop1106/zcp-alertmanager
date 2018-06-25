@@ -10,7 +10,7 @@ spring:
     ansi:
       enabled: always
   profiles:
-    active: local
+    active: dev
   session:
     store-type: none
 
