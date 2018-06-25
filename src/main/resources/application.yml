@@ -57,7 +57,7 @@ spring:
   profiles: stg
 
 props:
-  appName: zcp-alertmanager-dev
+  appName: zcp-alertmanager-stg
   alertManager:
     baseUrl: http://alertmanager.cloudzcp.io
     configMap: alertmanager
