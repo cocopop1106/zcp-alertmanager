@@ -28,9 +28,9 @@ public class RuleService {
 
 	@Autowired
 	private KubeCoreManager kubeCoreManager;
-	
-//	@Value("${props.prometheus.baseUrl}")
-//	private String baseUrl;
+
+//	 @Value("${props.prometheus.baseUrl}")
+//	 private String baseUrl;
 	private String baseUrl = "http://prometheus-service:9090";
 
 	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
@@ -74,9 +74,11 @@ public class RuleService {
 
 			rule.setValue1(gb[0]);
 			rule.setValue2(gb[1]);
-			if(maplistRules.get("for") != null)
-				rule.setDuration(maplistRules.get("for").toString());	
+			if (maplistRules.get("for") != null)
+				rule.setDuration(maplistRules.get("for").toString());
 			rule.setChannel(maplistLabels.get("channel").toString());
+
+			rule.setValue(rule.getCondition() + rule.getValue2());
 
 			ruleViewList.add(count, rule);
 			count++;
@@ -127,7 +129,7 @@ public class RuleService {
 
 			rule.setValue1(gb[0]);
 			rule.setValue2(gb[1]);
-			if(maplistRules.get("for") != null)
+			if (maplistRules.get("for") != null)
 				rule.setDuration(maplistRules.get("for").toString());
 			rule.setChannel(maplistLabels.get("channel").toString());
 
@@ -163,7 +165,7 @@ public class RuleService {
 					StringBuffer response = new StringBuffer();
 
 					try {
-						String url = baseUrl+"/-/reload";
+						String url = baseUrl + "/-/reload";
 						URL obj = new URL(url);
 						URLConnection conn = obj.openConnection();
 
@@ -245,7 +247,7 @@ public class RuleService {
 					StringBuffer response = new StringBuffer();
 
 					try {
-						String url = baseUrl+"/-/reload";
+						String url = baseUrl + "/-/reload";
 						URL obj = new URL(url);
 						URLConnection conn = obj.openConnection();
 
@@ -284,7 +286,7 @@ public class RuleService {
 					StringBuffer response = new StringBuffer();
 
 					try {
-						String url = baseUrl+"/-/reload";
+						String url = baseUrl + "/-/reload";
 						URL obj = new URL(url);
 						URLConnection conn = obj.openConnection();
 

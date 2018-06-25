@@ -36,11 +36,3 @@ groups:
          channel: first_receiver
       annotations: 
          description: '{{$labels.instance}}: CPU usage (current value is: {{ $value }})'
-   -  alert: TestALERTS
-      expr: count(kube_pod_info{namespace="monitoring"})  >  17
-      for: 2m
-      labels: 
-         severity: warning
-         channel: second_receiver
-      annotations: 
-         description: '{{$labels.instance}}: CPU usage (current value is: {{ $value }})'
