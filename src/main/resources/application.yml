@@ -41,12 +41,12 @@ props:
   appName: zcp-alertmanager-dev
   alertManager:
     baseUrl: http://alertmanager-service:9093
-    configMap: test-alertmanager
-    namespace: monitoring
+    configMap: alertmanager
+    namespace: zcp-system
   prometheus:
     baseUrl: http://prometheus-service:9090
     configMap: prometheus-user-rules
-    namespace: monitoring
+    namespace: zcp-system
   mariaDB:
     url: jdbc:mariadb://webhook-mariadb:3306/alertmanager
     id: root
