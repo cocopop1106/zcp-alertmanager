@@ -4,7 +4,7 @@ metadata:
   name: zcp-alertmanager-config
   namespace: zcp-system
 data:
-  SPRING_ACTIVE_PROFILE: stage 
+  SPRING_ACTIVE_PROFILE: dev
   MARIADB_HOST: bk-mariadb-mariadb.bk-service
   MARIADB_USER: zcp-user
   REDIS_HOST: bk-redis-redis.bk-service

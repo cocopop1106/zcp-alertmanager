@@ -28,6 +28,7 @@ public class AlertManager {
 		JSONObject jsonObj = new JSONObject();
 
 		try {
+			System.out.println("# URL: "+baseUrl);
 			String addr = baseUrl+"/api/v1/alerts";
 			URL url = new URL(addr);
 

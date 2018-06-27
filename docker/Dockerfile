@@ -1,5 +1,5 @@
 FROM java:8
-ENV SPRING_ACTIVE_PROFILE default
+ENV SPRING_ACTIVE_PROFILE dev
 ADD dist/zcp-alertmanager-0.0.1-SNAPSHOT.jar app.jar
 VOLUME /tmp
 VOLUME /target
