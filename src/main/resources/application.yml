@@ -17,7 +17,7 @@ spring:
   profiles: dev
 
 props: 
-  appName: zcp-alertmanager-stage
+  appName: zcp-alertmanager-dev
   alertManager:
     baseUrl: http://alertmanager.cloudzcp.io
     configMap: alertmanager
@@ -36,7 +36,7 @@ spring:
   profiles: stage
 
 props:
-  appName: zcp-alertmanager-dev
+  appName: zcp-alertmanager-stage
   alertManager:
     baseUrl: http://alertmanager-service:9093
     configMap: alertmanager
