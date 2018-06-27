@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -37,21 +38,21 @@ public class KubeCoreManager {
 	@SuppressWarnings("unused")
 	private final Logger logger = (Logger) LoggerFactory.getLogger(KubeCoreManager.class);
 
-//	@Value("${props.alertManager.configMap}")
-//	private String alertConfigMap;
-	private String alertConfigMap = "alertmanager";
+	@Value("${props.alertManager.configMap}")
+	private String alertConfigMap;
+	// private String alertConfigMap = "alertmanager";
 
-//	@Value("${props.alertManager.namespace}")
-//	private String alertNamespace;
-	private String alertNamespace = "zcp-system";
+	@Value("${props.alertManager.namespace}")
+	private String alertNamespace;
+	// private String alertNamespace = "zcp-system";
 
-//	@Value("${props.prometheus.configMap}")
-//	private String promConfigMap;
-	private String promConfigMap = "prometheus-user-rules";
+	@Value("${props.prometheus.configMap}")
+	private String promConfigMap;
+	// private String promConfigMap = "prometheus-user-rules";
 
-//	@Value("${props.prometheus.namespace}")
-//	private String promNamespace;
-	private String promNamespace = "zcp-system";
+	@Value("${props.prometheus.namespace}")
+	private String promNamespace;
+	// private String promNamespace = "zcp-system";
 
 	@Autowired
 	Message message;
@@ -402,24 +403,33 @@ public class KubeCoreManager {
 			File file = new File("rule.yaml");
 
 			writer = new FileWriter(file, false);
-			writer.write(configMap.getData().get("users-rules.rules"));
+
+			Iterator<String> iter = configMap.getData().keySet().iterator();
+			List keyList = new LinkedList();
+
+			while (iter.hasNext()) {
+				String keys = iter.next();
+				keyList.add(keys);
+			}
+			writer.write(configMap.getData().get(keyList.get(0)));
 			writer.flush();
 
 			YamlReader reader = new YamlReader(new FileReader("rule.yaml"));
 			Object object = reader.read();
 
 			Map<String, Map<String, Object>> mapGroups = (Map) object;
-
 			List listGroups = (List) mapGroups.get("groups");
 
-			Map<String, Object> maplistGroups;
-			Iterator iteratorData = listGroups.iterator();
+			if (listGroups != null) {
+				Map<String, Object> maplistGroups;
+				Iterator iteratorData = listGroups.iterator();
 
-			RuleData ruleData = new RuleData();
-			maplistGroups = (Map) iteratorData.next();
+				RuleData ruleData = new RuleData();
+				maplistGroups = (Map) iteratorData.next();
 
-			Map<String, Object> maplistRules;
-			listRules = (List) maplistGroups.get("rules");
+				Map<String, Object> maplistRules;
+				listRules = (List) maplistGroups.get("rules");
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -447,12 +457,19 @@ public class KubeCoreManager {
 			V1ConfigMap configMap = new V1ConfigMap();
 
 			configMap = api.readNamespacedConfigMap(promConfigMap, promNamespace, null, null, null);
-			String rules = configMap.getData().get("users-rules.rules");
+			
+			Iterator<String> iter = configMap.getData().keySet().iterator();
+			List keyList = new LinkedList();
 
+			while (iter.hasNext()) {
+				String keys = iter.next();
+				keyList.add(keys);
+			}
+			
 			File file = new File("rule.yaml");
 
 			writer = new FileWriter(file, false);
-			writer.write(configMap.getData().get("users-rules.rules"));
+			writer.write(configMap.getData().get(keyList.get(0)));
 			writer.flush();
 
 			HashMap<String, String> labels = new HashMap<String, String>();
@@ -460,6 +477,7 @@ public class KubeCoreManager {
 			labels.put("channel", createRuleVo.getRuleChannel());
 
 			HashMap<String, String> annotations = new HashMap<String, String>();
+			
 			createRuleVo.setRuleDescription(message.get("NodeCPUUsage"));
 			annotations.put("description", createRuleVo.getRuleDescription());
 
@@ -490,7 +508,7 @@ public class KubeCoreManager {
 
 			Map<String, Object> groups = new HashMap<String, Object>();
 
-			groups.put("name", "users-rules.rules");
+			groups.put("name", keyList.get(0));
 			groups.put("rules", listRules);
 
 			List groupList = new ArrayList();
@@ -507,7 +525,7 @@ public class KubeCoreManager {
 			String yamlString = FileUtils.readFileToString(new File("rule.yaml"), "utf8");
 
 			Map<String, String> data = new HashMap<String, String>();
-			data.put("users-rules.rules", yamlString);
+			data.put(keyList.get(0).toString(), yamlString);
 
 			configMap.setData(data);
 			V1ConfigMap replacedConfigmap = api.replaceNamespacedConfigMap(promConfigMap, promNamespace, configMap,

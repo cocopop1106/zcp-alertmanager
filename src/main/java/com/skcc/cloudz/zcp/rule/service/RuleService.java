@@ -29,9 +29,9 @@ public class RuleService {
 	@Autowired
 	private KubeCoreManager kubeCoreManager;
 
-//	 @Value("${props.prometheus.baseUrl}")
-//	 private String baseUrl;
-	private String baseUrl = "http://prometheus-service:9090";
+	@Value("${props.prometheus.baseUrl}")
+	private String baseUrl;
+	// private String baseUrl = "http://prometheus.cloudzcp.io";
 
 	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
 	public List<RuleVo> getRuleList() {
@@ -42,46 +42,48 @@ public class RuleService {
 		int count = 0;
 		String condition = "";
 
-		Iterator iteratorRules = listRules.iterator();
+		if (listRules != null) {
+			Iterator iteratorRules = listRules.iterator();
 
-		while (iteratorRules.hasNext()) {
-			maplistRules = (Map) iteratorRules.next();
+			while (iteratorRules.hasNext()) {
+				maplistRules = (Map) iteratorRules.next();
 
-			RuleVo rule = new RuleVo();
+				RuleVo rule = new RuleVo();
 
-			Map<String, Object> maplistLabels;
-			maplistLabels = (Map<String, Object>) maplistRules.get("labels");
+				Map<String, Object> maplistLabels;
+				maplistLabels = (Map<String, Object>) maplistRules.get("labels");
 
-			Map<String, Object> maplistAnnotations;
-			maplistAnnotations = (Map<String, Object>) maplistRules.get("annotations");
+				Map<String, Object> maplistAnnotations;
+				maplistAnnotations = (Map<String, Object>) maplistRules.get("annotations");
 
-			rule.setId(count);
-			rule.setType(maplistRules.get("alert").toString());
-			rule.setSeverity(maplistLabels.get("severity").toString());
+				rule.setId(count);
+				rule.setType(maplistRules.get("alert").toString());
+				rule.setSeverity(maplistLabels.get("severity").toString());
 
-			if (maplistRules.get("expr").toString().indexOf(">") >= 0) {
-				condition = maplistRules.get("expr").toString().substring(
-						maplistRules.get("expr").toString().indexOf(">"),
-						maplistRules.get("expr").toString().indexOf(">") + 1);
-			} else {
-				condition = maplistRules.get("expr").toString().substring(
-						maplistRules.get("expr").toString().indexOf("<"),
-						maplistRules.get("expr").toString().indexOf("<") + 1);
+				if (maplistRules.get("expr").toString().indexOf(">") >= 0) {
+					condition = maplistRules.get("expr").toString().substring(
+							maplistRules.get("expr").toString().indexOf(">"),
+							maplistRules.get("expr").toString().indexOf(">") + 1);
+				} else {
+					condition = maplistRules.get("expr").toString().substring(
+							maplistRules.get("expr").toString().indexOf("<"),
+							maplistRules.get("expr").toString().indexOf("<") + 1);
+				}
+
+				rule.setCondition(condition);
+				String[] gb = maplistRules.get("expr").toString().split(">|<");
+
+				rule.setValue1(gb[0]);
+				rule.setValue2(gb[1]);
+				if (maplistRules.get("for") != null)
+					rule.setDuration(maplistRules.get("for").toString());
+				rule.setChannel(maplistLabels.get("channel").toString());
+
+				rule.setValue(rule.getCondition() + rule.getValue2());
+
+				ruleViewList.add(count, rule);
+				count++;
 			}
-
-			rule.setCondition(condition);
-			String[] gb = maplistRules.get("expr").toString().split(">|<");
-
-			rule.setValue1(gb[0]);
-			rule.setValue2(gb[1]);
-			if (maplistRules.get("for") != null)
-				rule.setDuration(maplistRules.get("for").toString());
-			rule.setChannel(maplistLabels.get("channel").toString());
-
-			rule.setValue(rule.getCondition() + rule.getValue2());
-
-			ruleViewList.add(count, rule);
-			count++;
 		}
 
 		return ruleViewList;

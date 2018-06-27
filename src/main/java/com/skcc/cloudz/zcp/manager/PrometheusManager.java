@@ -19,9 +19,9 @@ public class PrometheusManager {
 	private static Logger logger = Logger.getLogger(PrometheusManager.class);
 	private String str, receiveMsg;
 	
-//	@Value("${props.prometheus.baseUrl}")
-//	private String baseUrl;
-	private String baseUrl = "http://prometheus-service:9090";
+	@Value("${props.prometheus.baseUrl}")
+	private String baseUrl;
+//	private String baseUrl = "http://prometheus.cloudzcp.io";
 
 	@SuppressWarnings("static-access")
 	public JSONObject getAlertCount() {

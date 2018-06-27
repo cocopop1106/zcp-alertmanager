@@ -31,9 +31,9 @@ public class ChannelService {
 	@Autowired
 	private KubeCoreManager kubeCoreManager;
 	
-//	@Value("${props.alertManager.baseUrl}")
-//	private String baseUrl;
-	private String baseUrl = "http://alertmanager-service:9093";
+	@Value("${props.alertManager.baseUrl}")
+	private String baseUrl;
+//	private String baseUrl = "http://alertmanager.cloudzcp.io";
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List<ChannelListVo> getChannelList() {

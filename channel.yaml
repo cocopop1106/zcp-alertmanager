@@ -1,92 +1,43 @@
 global: 
    resolve_timeout: 5m
-   smtp_smarthost: smtp-monitoring-mailhog.monitoring.svc.cluster.local:1025
-   smtp_from: alertmanager@zcp.com
-   smtp_require_tls: false
+   smtp_smarthost: smtp.gmail.com:587
+   smtp_from: foo@bar.com
+   smtp_auth_username: foo@bar.com
+   smtp_auth_password: barfoo
+   slack_api_url: https://global.slack_api_url
+   hipchat_auth_token: '1234556789'
+   hipchat_api_url: https://hipchat.foobar.org/
 templates: 
 - /etc/alertmanager-templates/*.tmpl
 route: 
    group_by: 
-   group_wait: 
-   group_interval: 
-   repeat_interval: 
-   receiver: 
+   - alertname
+   - severity
+   - receiver
+   group_wait: 30s
+   group_interval: 5m
+   repeat_interval: 15m
+   receiver: default
    routes: 
    -  match_re: 
          severity: .*
       receiver: zcp-webhook
       continue: true
    -  match_re: 
-         severity: .*
-      receiver: sk-cps-team
+         severity: critical
+      receiver: sk-cps-ops
+      continue: true
    -  match: 
-         channel: second_receiver
-      receiver: second_receiver
-   -  match: 
-         channel: test_receiver
-         receiver: test_receiver
+         channel: test_channel
+         receiver: test_channel
 receivers: 
--  name: sk-cps-team
-   slack_configs: 
-   -  api_url: https://hooks.slack.com/services/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
-      send_resolved: true
-   email_configs: 
-   -  to: mjsjinsu@gmail.com
--  name: zcp-webhook
-   webhook_configs: 
-   -  url: http://webhook-svc:5000/webhook
-      send_resolved: true
--  name: second_receiver
-   slack_configs: 
-   -  api_url: https://hooks.slack.com/services/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
-      send_resolved: true
-   webhook_configs: 
-   -  url: http://webhook-svc:5000/webhook
-      send_resolved: true
-   hipchat_configs: 
-   -  api_url: https://nexcore.hipchat.com/
-      room_id: '4603546'
-      auth_token: HSlJFvopWxhkiqg6YsqTjOxap59JhnndCwgmwK8N
-      notify: true
-      send_resolved: true
--  name: zcp-alert
+-  name: default
+-  name: sk-cps-ops
    slack_configs: 
    -  api_url: https://hooks.slack.com/services/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
       send_resolved: true
--  name: hipchat-alert
-   hipchat_configs: 
-   -  api_url: https://nexcore.hipchat.com/
-      room_id: '4603546'
-      auth_token: HSlJFvopWxhkiqg6YsqTjOxap59JhnndCwgmwK8N
-      send_resolved: true
--  name: email-alert
-   email_configs: 
-   -  to: mjsjinsu@gmail.com
-      from: Alertmanager <alertmanager@zcp.test.com>
-      smarthost: smtp.sendgrid.net:465
-      auth_username: zcp-sender-api-key
-      auth_password: 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
-      require_tls: false
-      send_resolved: true
--  name: test-alert
--  name: test21_receiver
-   email_configs: 
-   -  to: mjsjinsu@gmail.com
-      from: Alertmanager <alertmanager@zcp.test.com>
-      smarthost: smtp.sendgrid.net:465
-      auth_username: zcp-sender-api-key
-      auth_password: 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
-      require_tls: false
-      send_resolved: true
-   slack_configs: 
-   -  api_url: https://hooks.slack.com/services/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
-      send_resolved: true
-   hipchat_configs: 
-   -  api_url: https://nexcore.hipchat.com/
-      room_id: '4603546'
-      auth_token: HSlJFvopWxhkiqg6YsqTjOxap59JhnndCwgmwK8N
-      notify: true
-      send_resolved: true
+-  name: zcp-webhook
    webhook_configs: 
-   -  url: http://webhook-svc:5000/webhook
+   -  url: http://webhook-alertmanager-store-svc:5000/webhook
       send_resolved: true
+-  name: test_channel

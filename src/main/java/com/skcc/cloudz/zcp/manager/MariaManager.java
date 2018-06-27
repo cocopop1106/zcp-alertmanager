@@ -18,12 +18,15 @@ public class MariaManager {
 	@SuppressWarnings("unused")
 	private static Logger logger = Logger.getLogger(MariaManager.class);
 
-//	@Value("${props.mariaDB.url}")
-	private String url = "jdbc:mariadb://webhook-mariadb:3306/alertmanager";
-//	@Value("${props.mariaDB.id}")
-	private String id = "root";
-//	@Value("${props.mariaDB.password}")
-	private String password = "admin";
+	@Value("${props.mariaDB.url}")
+	private String url;
+//	private String url = "jdbc:mariadb://webhook-mariadb:3306/alertmanager";
+	@Value("${props.mariaDB.id}")
+	private String id;
+//	private String id = "root";
+	@Value("${props.mariaDB.password}")
+	private String password;
+//	private String password = "admin";
 
 	@SuppressWarnings("unchecked")
 	public JSONArray getAlertHistoryList(String time) {
