@@ -46,7 +46,8 @@ props:
     configMap: prometheus-user-rules
     namespace: zcp-system
   mariaDB:
-    url: jdbc:mariadb://webhook-mariadb:3306/alertmanager
+    url: jdbc:mariadb://169.56.100.62:30000/alertmanager
+#    url: jdbc:mariadb://webhook-mariadb:3306/alertmanager
     id: root
     password: admin   
     
