@@ -1,1 +1,20 @@
-groups:
+groups: 
+-  name: users-rules.rules
+   rules: 
+   -  alert: NodeCPUUsage
+      expr: (100 - (avg by (instance) (irate(node_cpu{component="node-exporter",mode="idle"}[5m])) * 100))
+         > 80
+      for: 10m
+      labels: 
+         severity: warning
+         channel: test-channel
+      annotations: 
+         description: '{{$labels.instance}}: CPU usage (current value is: {{ $value }})'
+   -  alert: NodeDown
+      expr: up{component="node-exporter",job="kubernetes-monitoring-endpoints"} = 0
+      for: 10m
+      labels: 
+         severity: warning
+         channel: test-channel
+      annotations: 
+         description: '{{ $labels.instance }}: Detect Node Down Status'

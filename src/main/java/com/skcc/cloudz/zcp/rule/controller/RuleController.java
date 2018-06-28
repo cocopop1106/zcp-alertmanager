@@ -50,7 +50,8 @@ public class RuleController {
 		RuleVo createRule = ruleService.createRule(ruleVo);
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(ucBuilder.path("rule/{id}").buildAndExpand(createRule.getId()).toUri());
+//		headers.setLocation(ucBuilder.path("rule/{id}").buildAndExpand(createRule.getId()).toUri());
+		headers.setLocation(ucBuilder.path("alert/rules").build().toUri());
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 

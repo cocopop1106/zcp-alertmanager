@@ -60,21 +60,33 @@ public class RuleService {
 				rule.setType(maplistRules.get("alert").toString());
 				rule.setSeverity(maplistLabels.get("severity").toString());
 
-				if (maplistRules.get("expr").toString().indexOf(">") >= 0) {
-					condition = maplistRules.get("expr").toString().substring(
-							maplistRules.get("expr").toString().indexOf(">"),
-							maplistRules.get("expr").toString().indexOf(">") + 1);
+				if ("NodeDown".equals(rule.getType())) {
+					condition = "=";
+
+					rule.setCondition("");
+					String[] gb = maplistRules.get("expr").toString().split("=");
+
+					rule.setValue1("");
+					rule.setValue2("");
+
 				} else {
-					condition = maplistRules.get("expr").toString().substring(
-							maplistRules.get("expr").toString().indexOf("<"),
-							maplistRules.get("expr").toString().indexOf("<") + 1);
+					if (maplistRules.get("expr").toString().indexOf(">") >= 0) {
+						condition = maplistRules.get("expr").toString().substring(
+								maplistRules.get("expr").toString().indexOf(">"),
+								maplistRules.get("expr").toString().indexOf(">") + 1);
+					} else {
+						condition = maplistRules.get("expr").toString().substring(
+								maplistRules.get("expr").toString().indexOf("<"),
+								maplistRules.get("expr").toString().indexOf("<") + 1);
+					}
+
+					rule.setCondition(condition);
+					String[] gb = maplistRules.get("expr").toString().split(">|<");
+
+					rule.setValue1(gb[0]);
+					rule.setValue2(gb[1]);
 				}
 
-				rule.setCondition(condition);
-				String[] gb = maplistRules.get("expr").toString().split(">|<");
-
-				rule.setValue1(gb[0]);
-				rule.setValue2(gb[1]);
 				if (maplistRules.get("for") != null)
 					rule.setDuration(maplistRules.get("for").toString());
 				rule.setChannel(maplistLabels.get("channel").toString());

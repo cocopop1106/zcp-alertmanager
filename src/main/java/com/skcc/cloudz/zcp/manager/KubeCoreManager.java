@@ -453,7 +453,7 @@ public class KubeCoreManager {
 			V1ConfigMap configMap = new V1ConfigMap();
 
 			configMap = api.readNamespacedConfigMap(promConfigMap, promNamespace, null, null, null);
-			
+
 			Iterator<String> iter = configMap.getData().keySet().iterator();
 			List keyList = new LinkedList();
 
@@ -461,7 +461,7 @@ public class KubeCoreManager {
 				String keys = iter.next();
 				keyList.add(keys);
 			}
-			
+
 			File file = new File("rule.yaml");
 
 			writer = new FileWriter(file, false);
@@ -473,8 +473,8 @@ public class KubeCoreManager {
 			labels.put("channel", createRuleVo.getRuleChannel());
 
 			HashMap<String, String> annotations = new HashMap<String, String>();
-			
-			createRuleVo.setRuleDescription(message.get("NodeCPUUsage"));
+
+			createRuleVo.setRuleDescription(message.get(createRuleVo.getRuleAlert()));
 			annotations.put("description", createRuleVo.getRuleDescription());
 
 			HashMap<String, Object> newRules = new LinkedHashMap<String, Object>();
@@ -491,27 +491,42 @@ public class KubeCoreManager {
 			Map<String, Map<String, Object>> mapGroups = (Map) object;
 			List listGroups = (List) mapGroups.get("groups");
 
-			Iterator iteratorData = listGroups.iterator();
+			Map<String, Object> groupMap = new HashMap<String, Object>();
+			Map<String, Object> groups = new HashMap<String, Object>();
 			Map<String, Object> maplistGroups = null;
 
-			while (iteratorData.hasNext()) {
-				maplistGroups = (Map) iteratorData.next();
-			}
-
-			Map<String, Object> maplistRules;
-			List listRules = (List) maplistGroups.get("rules");
-			listRules.add(newRules);
-
-			Map<String, Object> groups = new HashMap<String, Object>();
-
-			groups.put("name", keyList.get(0));
-			groups.put("rules", listRules);
-
 			List groupList = new ArrayList();
-			groupList.add(groups);
 
-			Map<String, Object> groupMap = new HashMap<String, Object>();
-			groupMap.put("groups", groupList);
+			if (listGroups != null) {
+				Iterator iteratorData = listGroups.iterator();
+
+				while (iteratorData.hasNext()) {
+					maplistGroups = (Map) iteratorData.next();
+				}
+
+				Map<String, Object> maplistRules;
+
+				List listRules = (List) maplistGroups.get("rules");
+				listRules.add(newRules);
+
+				groups.put("name", keyList.get(0));
+				groups.put("rules", listRules);
+
+				groupList.add(groups);
+
+				groupMap.put("groups", groupList);
+
+			} else {
+				List newListRules = new ArrayList();
+				newListRules.add(newRules);
+
+				groups.put("name", keyList.get(0));
+				groups.put("rules", newListRules);
+
+				groupList.add(groups);
+
+				groupMap.put("groups", groupList);
+			}
 
 			YamlConfig config = new YamlConfig();
 			YamlWriter ywriter = new YamlWriter(new FileWriter("rule.yaml"), config);
