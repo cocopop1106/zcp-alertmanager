@@ -13,6 +13,8 @@ import org.json.simple.parser.ParseException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
+
 
 @Component
 public class AlertManager {
@@ -21,15 +23,13 @@ public class AlertManager {
 	
 	@Value("${props.alertManager.baseUrl}")
     private String baseUrl;
-//	private String baseUrl = "http://alertmanager.cloudzcp.io";
 
 	@SuppressWarnings("static-access")
 	public JSONObject getAlertList() {
 		JSONObject jsonObj = new JSONObject();
 
 		try {
-			System.out.println("# URL: "+baseUrl);
-			String addr = baseUrl+"/api/v1/alerts";
+			String addr = UriComponentsBuilder.fromUriString(baseUrl).path("/api/v1/alerts").build().toString();
 			URL url = new URL(addr);
 
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -50,7 +50,7 @@ public class AlertManager {
 				reader.close();
 
 			} else {
-				logger.debug(conn.getResponseCode());
+				logger.info(conn.getResponseCode());
 			}
 		} catch (MalformedURLException e) {
 			e.printStackTrace();

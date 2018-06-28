@@ -40,19 +40,15 @@ public class KubeCoreManager {
 
 	@Value("${props.alertManager.configMap}")
 	private String alertConfigMap;
-	// private String alertConfigMap = "alertmanager";
 
 	@Value("${props.alertManager.namespace}")
 	private String alertNamespace;
-	// private String alertNamespace = "zcp-system";
 
 	@Value("${props.prometheus.configMap}")
 	private String promConfigMap;
-	// private String promConfigMap = "prometheus-user-rules";
 
 	@Value("${props.prometheus.namespace}")
 	private String promNamespace;
-	// private String promNamespace = "zcp-system";
 
 	@Autowired
 	Message message;

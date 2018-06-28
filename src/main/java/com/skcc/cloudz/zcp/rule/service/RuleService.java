@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.skcc.cloudz.zcp.common.vo.RuleData;
 import com.skcc.cloudz.zcp.common.vo.RuleVo;
@@ -31,7 +32,6 @@ public class RuleService {
 
 	@Value("${props.prometheus.baseUrl}")
 	private String baseUrl;
-	// private String baseUrl = "http://prometheus.cloudzcp.io";
 
 	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
 	public List<RuleVo> getRuleList() {
@@ -167,7 +167,7 @@ public class RuleService {
 					StringBuffer response = new StringBuffer();
 
 					try {
-						String url = baseUrl + "/-/reload";
+						String url = UriComponentsBuilder.fromUriString(baseUrl).path("/-/reload").build().toString();
 						URL obj = new URL(url);
 						URLConnection conn = obj.openConnection();
 
@@ -249,7 +249,7 @@ public class RuleService {
 					StringBuffer response = new StringBuffer();
 
 					try {
-						String url = baseUrl + "/-/reload";
+						String url = UriComponentsBuilder.fromUriString(baseUrl).path("/-/reload").build().toString();
 						URL obj = new URL(url);
 						URLConnection conn = obj.openConnection();
 
@@ -288,7 +288,7 @@ public class RuleService {
 					StringBuffer response = new StringBuffer();
 
 					try {
-						String url = baseUrl + "/-/reload";
+						String url = UriComponentsBuilder.fromUriString(baseUrl).path("/-/reload").build().toString();
 						URL obj = new URL(url);
 						URLConnection conn = obj.openConnection();
 

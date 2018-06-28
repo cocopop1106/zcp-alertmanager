@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.skcc.cloudz.zcp.common.vo.ChannelData;
 import com.skcc.cloudz.zcp.common.vo.ChannelDtlVo;
@@ -33,7 +34,6 @@ public class ChannelService {
 	
 	@Value("${props.alertManager.baseUrl}")
 	private String baseUrl;
-//	private String baseUrl = "http://alertmanager.cloudzcp.io";
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List<ChannelListVo> getChannelList() {
@@ -198,7 +198,7 @@ public class ChannelService {
 					StringBuffer response = new StringBuffer();
 
 					try {
-						String url = baseUrl+"/-/reload";
+						String url = UriComponentsBuilder.fromUriString(baseUrl).path("/-/reload").build().toString();
 						URL obj = new URL(url);
 						URLConnection conn = obj.openConnection();
 
@@ -237,7 +237,7 @@ public class ChannelService {
 					StringBuffer response = new StringBuffer();
 
 					try {
-						String url = baseUrl+"/-/reload";
+						String url = UriComponentsBuilder.fromUriString(baseUrl).path("/-/reload").build().toString();
 						URL obj = new URL(url);
 						URLConnection conn = obj.openConnection();
 
@@ -276,7 +276,7 @@ public class ChannelService {
 					StringBuffer response = new StringBuffer();
 
 					try {
-						String url = baseUrl+"/-/reload";
+						String url = UriComponentsBuilder.fromUriString(baseUrl).path("/-/reload").build().toString();
 						URL obj = new URL(url);
 						URLConnection conn = obj.openConnection();
 
