@@ -18,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.skcc.cloudz.zcp.common.vo.ChannelDtlVo;
 import com.skcc.cloudz.zcp.common.vo.ChannelListVo;
 import com.skcc.cloudz.zcp.common.vo.ChannelVo;
+import com.skcc.cloudz.zcp.common.vo.RepeatVo;
 import com.skcc.cloudz.zcp.channel.service.ChannelService;
 
 @RestController
@@ -78,4 +79,24 @@ public class ChannelController {
 		}
 
 	}
+
+	@RequestMapping(value = "repeat", method = RequestMethod.GET)
+	public ResponseEntity<RepeatVo> getRepeatInterval() {
+		RepeatVo repeatVo = channelService.getRepeatInterval();
+		if (repeatVo == null) {
+			return new ResponseEntity<RepeatVo>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<RepeatVo>(repeatVo, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "repeat", method = RequestMethod.PUT)
+	public ResponseEntity<RepeatVo> updateRepeatInterval(@RequestBody final RepeatVo repeatVo) {
+		RepeatVo updateRepeatInterval = channelService.updateRepeatInterval(repeatVo);
+
+		if (updateRepeatInterval == null) {
+			return new ResponseEntity<RepeatVo>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<RepeatVo>(HttpStatus.OK);
+	}
+
 }

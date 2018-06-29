@@ -30,6 +30,9 @@ route:
    -  match: 
          channel: test_channel
          receiver: test_channel
+   -  match: 
+         channel: test2_channel
+         receiver: test2_channel
 receivers: 
 -  name: default
 -  name: sk-cps-ops
@@ -41,3 +44,4 @@ receivers:
    -  url: http://webhook-alertmanager-store-svc:5000/webhook
       send_resolved: true
 -  name: test_channel
+-  name: test2_channel

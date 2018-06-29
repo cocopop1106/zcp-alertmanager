@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import com.skcc.cloudz.zcp.common.vo.ChannelData;
 import com.skcc.cloudz.zcp.common.vo.ChannelDtlVo;
+import com.skcc.cloudz.zcp.common.vo.RepeatVo;
 import com.skcc.cloudz.zcp.common.vo.RuleData;
 import com.skcc.cloudz.zcp.common.util.Message;
 import com.skcc.cloudz.zcp.common.yamlbeans.YamlConfig;
@@ -209,7 +210,7 @@ public class KubeCoreManager {
 			HashMap<String, Object> newReceiver = new LinkedHashMap<String, Object>();
 
 			receiverList = (List) channelMap.get("receivers");
-			receiverList.remove(id + 2);
+			receiverList.remove(id);
 
 			if (!"".equals(channelDtlVo.getEmail_to())) {
 				Map<String, Object> emailMap = new LinkedHashMap<String, Object>();
@@ -342,13 +343,13 @@ public class KubeCoreManager {
 			routeMap = mapGlobal.get("route");
 
 			routesList = (List) routeMap.get("routes");
-			routesList.remove(id + 2);
+			routesList.remove(id);
 
 			Map<String, Object> newRouteMap = new HashMap<String, Object>();
 			newRouteMap.put("routes", routesList);
 
 			receiverList = (List) mapGlobal.get("receivers");
-			receiverList.remove(id + 2);
+			receiverList.remove(id);
 
 			Map<String, Object> channelMap = new LinkedHashMap<String, Object>();
 			channelMap.put("global", mapGlobal.get("global"));
@@ -626,6 +627,113 @@ public class KubeCoreManager {
 			}
 		}
 		return true;
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Map<String, Object> getRepeatInterval() {
+		
+		FileWriter writer = null;
+		Map<String, Object> routeMap = new HashMap<String, Object>();
+
+		try {
+			ApiClient client = Config.defaultClient();
+			Configuration.setDefaultApiClient(client);
+
+			CoreV1Api api = new CoreV1Api();
+			V1ConfigMap configMap = new V1ConfigMap();
+
+			configMap = api.readNamespacedConfigMap(alertConfigMap, alertNamespace, null, null, null);
+			File file = new File("channel.yaml");
+
+			writer = new FileWriter(file, false);
+			writer.write(configMap.getData().get("config.yml"));
+			writer.flush();
+
+			YamlReader reader = new YamlReader(new FileReader("channel.yaml"));
+			Object object = reader.read();
+
+			Map<String, Map<String, Object>> mapGlobal = (Map) object;
+
+			routeMap = mapGlobal.get("route");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return routeMap;
+		
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
+	public RepeatVo updateRepeatInterval(RepeatVo repeatVo) {
+		FileWriter writer = null;
+		
+		Map<String, Object> routeMap = new LinkedHashMap<String, Object>();
+		Map<String, Object> newChannelMap = new LinkedHashMap<String, Object>();
+
+		try {
+			ApiClient client = Config.defaultClient();
+			Configuration.setDefaultApiClient(client);
+
+			CoreV1Api api = new CoreV1Api();
+			V1ConfigMap configMap;
+
+			configMap = api.readNamespacedConfigMap(alertConfigMap, alertNamespace, null, null, null);
+
+			File file = new File("channel.yaml");
+
+			writer = new FileWriter(file, false);
+			writer.write(configMap.getData().get("config.yml"));
+			writer.flush();
+
+			YamlReader reader = new YamlReader(new FileReader("channel.yaml"));
+			Object object = reader.read();
+
+			List emailList = new ArrayList();
+			List slackList = new ArrayList();
+			List hipchatList = new ArrayList();
+			List webhookList = new ArrayList();
+			
+			Map<String, Map<String, Object>> channelMap = (Map) object;
+			HashMap<String, Object> newRoute = new LinkedHashMap<String, Object>();
+
+			routeMap = channelMap.get("route");
+			
+			if(repeatVo != null) {
+				routeMap.put("repeat_interval", repeatVo.getRepeat_interval());
+			}
+			
+			newChannelMap.put("global", channelMap.get("global"));
+			newChannelMap.put("templates", channelMap.get("templates"));
+			newChannelMap.put("route", channelMap.get("route"));
+			newChannelMap.put("receivers", channelMap.get("receivers"));
+
+			YamlConfig config = new YamlConfig();
+			YamlWriter ywriter = new YamlWriter(new FileWriter("channel.yaml"), config);
+			ywriter.write(newChannelMap);
+			ywriter.close();
+
+			String yamlString = FileUtils.readFileToString(new File("channel.yaml"), "utf8");
+
+			Map<String, String> data = new HashMap<String, String>();
+			data.put("config.yml", yamlString);
+
+			configMap.setData(data);
+			V1ConfigMap replacedConfigmap = api.replaceNamespacedConfigMap(alertConfigMap, alertNamespace, configMap,
+					null);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (writer != null)
+					writer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return repeatVo;
 	}
 
 }

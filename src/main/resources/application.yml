@@ -14,6 +14,25 @@ spring:
 
 ---
 spring:
+  profiles: local
+
+props:
+  appName: zcp-alertmanager-local
+  alertManager:
+    baseUrl: http://alertmanager.zcp-dev.jp-tok.containers.mybluemix.net
+    configMap: test-alertmanager
+    namespace: monitoring
+  prometheus:
+    baseUrl: http://prometheus.zcp-dev.jp-tok.containers.mybluemix.net
+    configMap: prometheus-user-rules
+    namespace: monitoring
+  mariaDB:
+    url: jdbc:mariadb://169.56.100.62:30000/alertmanager
+    id: root
+    password: admin
+    
+---
+spring:
   profiles: dev
 
 props: 
