@@ -32,6 +32,9 @@ import io.kubernetes.client.ApiClient;
 import io.kubernetes.client.Configuration;
 import io.kubernetes.client.apis.CoreV1Api;
 import io.kubernetes.client.models.V1ConfigMap;
+import io.kubernetes.client.models.V1Namespace;
+import io.kubernetes.client.models.V1NamespaceList;
+import io.kubernetes.client.models.V1PodList;
 import io.kubernetes.client.util.Config;
 
 @Component
@@ -628,10 +631,10 @@ public class KubeCoreManager {
 		}
 		return true;
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Map<String, Object> getRepeatInterval() {
-		
+
 		FileWriter writer = null;
 		Map<String, Object> routeMap = new HashMap<String, Object>();
 
@@ -659,15 +662,15 @@ public class KubeCoreManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return routeMap;
-		
+
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
 	public RepeatVo updateRepeatInterval(RepeatVo repeatVo) {
 		FileWriter writer = null;
-		
+
 		Map<String, Object> routeMap = new LinkedHashMap<String, Object>();
 		Map<String, Object> newChannelMap = new LinkedHashMap<String, Object>();
 
@@ -693,16 +696,16 @@ public class KubeCoreManager {
 			List slackList = new ArrayList();
 			List hipchatList = new ArrayList();
 			List webhookList = new ArrayList();
-			
+
 			Map<String, Map<String, Object>> channelMap = (Map) object;
 			HashMap<String, Object> newRoute = new LinkedHashMap<String, Object>();
 
 			routeMap = channelMap.get("route");
-			
-			if(repeatVo != null) {
+
+			if (repeatVo != null) {
 				routeMap.put("repeat_interval", repeatVo.getRepeat_interval());
 			}
-			
+
 			newChannelMap.put("global", channelMap.get("global"));
 			newChannelMap.put("templates", channelMap.get("templates"));
 			newChannelMap.put("route", channelMap.get("route"));
@@ -734,6 +737,40 @@ public class KubeCoreManager {
 		}
 
 		return repeatVo;
+	}
+
+	public V1NamespaceList getNamespaceList() {
+		V1NamespaceList namespaceList = null;
+
+		try {
+			ApiClient client = Config.defaultClient();
+			Configuration.setDefaultApiClient(client);
+
+			CoreV1Api api = new CoreV1Api();
+			namespaceList = api.listNamespace(null, null, null, null, null, null, null, null, null);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return namespaceList;
+	}
+
+	public V1PodList getPodList(String namespace) {
+		V1PodList podList = null;
+
+		try {
+			ApiClient client = Config.defaultClient();
+			Configuration.setDefaultApiClient(client);
+
+			CoreV1Api api = new CoreV1Api();
+			podList = api.listNamespacedPod(namespace, null, null, null, null, null, null, null, null, null);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return podList;
 	}
 
 }

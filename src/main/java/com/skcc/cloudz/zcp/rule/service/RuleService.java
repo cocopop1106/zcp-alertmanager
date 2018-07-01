@@ -22,6 +22,9 @@ import com.skcc.cloudz.zcp.common.vo.RuleData;
 import com.skcc.cloudz.zcp.common.vo.RuleVo;
 import com.skcc.cloudz.zcp.manager.KubeCoreManager;
 
+import io.kubernetes.client.models.V1Namespace;
+import io.kubernetes.client.models.V1NamespaceList;
+
 @Service
 public class RuleService {
 	@SuppressWarnings("unused")
@@ -349,6 +352,18 @@ public class RuleService {
 		}
 
 		return result;
+	}
+	
+	public List<String> getNamespaceList() {
+		List<String> returnList = new ArrayList<String>();
+		V1NamespaceList namespaceList = kubeCoreManager.getNamespaceList();
+		
+		for(V1Namespace item : namespaceList.getItems()) {
+			returnList.add(item.getMetadata().getName());
+			System.out.println(item.getMetadata().getName());
+		}
+
+		return returnList;
 	}
 
 }

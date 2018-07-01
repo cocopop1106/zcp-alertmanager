@@ -10,11 +10,53 @@ groups:
          channel: test-channel
       annotations: 
          description: '{{$labels.instance}}: CPU usage (current value is: {{ $value }})'
-   -  alert: NodeDown
-      expr: up{component="node-exporter",job="kubernetes-monitoring-endpoints"} = 0
+   -  alert: NodeLoadAverage5
+      expr: (node_load5 / count without (cpu, mode) (node_cpu{mode="system"})) > 80
       for: 10m
       labels: 
          severity: warning
          channel: test-channel
       annotations: 
+         description: '{{$labels.instance}}: LoadAverage5 (current value is: {{ $value }})'
+   -  alert: NodeMemoryUsage
+      expr: (((node_memory_MemTotal-node_memory_MemFree-node_memory_Cached)/(node_memory_MemTotal)*100))
+         > 90
+      for: 10m
+      labels: 
+         severity: critical
+         channel: test-channel
+      annotations: 
+         description: '{{$labels.instance}}: Memory usage (current value is: {{ $value }})'
+   -  alert: NodeLowRootDisk
+      expr: ((node_filesystem_size{mountpoint="/"} - node_filesystem_free{mountpoint="/"} ) / node_filesystem_size{mountpoint="/"}
+         * 100) > 75
+      for: 5m
+      labels: 
+         severity: warning
+         channel: test-channel
+      annotations: 
+         description: '{{$labels.instance}}: Root Disk usage (current value is: {{ $value }})'
+   -  alert: ApiserverDown
+      expr: up{job="kubernetes-apiservers"} = 0
+      for: 5m
+      labels: 
+         severity: critical
+         channel: test-channel
+      annotations: 
+         description: ""
+   -  alert: NodeDown
+      expr: up{component="node-exporter",job="kubernetes-monitoring-endpoints"} = 0
+      for: 2m
+      labels: 
+         severity: critical
+         channel: test-channel
+      annotations: 
          description: '{{ $labels.instance }}: Detect Node Down Status'
+   -  alert: K8SNodeNotReady
+      expr: kube_node_status_condition{condition="Ready",status="true"} = 0
+      for: 5m
+      labels: 
+         severity: warning
+         channel: test-channel
+      annotations: 
+         description: '{{ $labels.node }}: has not checked in with the API, or has set itself to NotReady'

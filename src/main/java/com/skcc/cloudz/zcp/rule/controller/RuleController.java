@@ -76,5 +76,15 @@ public class RuleController {
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		}
 	}
+	
+	@RequestMapping(value = "namespaceList", method = RequestMethod.GET)
+	public ResponseEntity<List<String>> getNamespaceList() throws IOException {
+
+		List<String> namespaceList = ruleService.getNamespaceList();
+		if (namespaceList.isEmpty()) {
+			return new ResponseEntity<List<String>>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<String>>(namespaceList, HttpStatus.OK);
+	}
 
 }
