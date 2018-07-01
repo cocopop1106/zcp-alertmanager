@@ -60,3 +60,11 @@ groups:
          channel: test-channel
       annotations: 
          description: '{{ $labels.node }}: has not checked in with the API, or has set itself to NotReady'
+   -  alert: PodFrequentlyRestarting
+      expr: 'increase(kube_pod_container_status_restarts_total{pod=~"zcp-alertmanager.*"}[1h])  '
+      for: 10m
+      labels: 
+         severity: warning
+         channel: test-channel
+      annotations: 
+         description: ""

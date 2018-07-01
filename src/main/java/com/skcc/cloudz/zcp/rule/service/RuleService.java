@@ -89,6 +89,11 @@ public class RuleService {
 
 					rule.setValue1("");
 					rule.setValue2("");
+					
+				} else if ("PodFrequentlyRestarting".equals(rule.getType())) {
+					rule.setCondition("");
+					rule.setValue1("");
+					rule.setValue2("");
 
 				} else {
 					if (maplistRules.get("expr").toString().indexOf(">") >= 0) {
@@ -148,8 +153,6 @@ public class RuleService {
 			rule.setId(count);
 			rule.setType(maplistRules.get("alert").toString());
 			rule.setSeverity(maplistLabels.get("severity").toString());
-
-			System.out.println(maplistRules.get("expr").toString());
 
 			if (maplistRules.get("expr").toString().indexOf(">") >= 0) {
 				condition = maplistRules.get("expr").toString().substring(
@@ -360,7 +363,6 @@ public class RuleService {
 		
 		for(V1Namespace item : namespaceList.getItems()) {
 			returnList.add(item.getMetadata().getName());
-			System.out.println(item.getMetadata().getName());
 		}
 
 		return returnList;
