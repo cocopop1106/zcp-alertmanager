@@ -69,6 +69,24 @@ public class RuleService {
 					rule.setValue1("");
 					rule.setValue2("");
 
+				} else if ("ApiserverDown".equals(rule.getType())) {
+					condition = "=";
+
+					rule.setCondition("");
+					String[] gb = maplistRules.get("expr").toString().split("=");
+
+					rule.setValue1("");
+					rule.setValue2("");
+
+				} else if ("K8SNodeNotReady".equals(rule.getType())) {
+					condition = "=";
+
+					rule.setCondition("");
+					String[] gb = maplistRules.get("expr").toString().split("=");
+
+					rule.setValue1("");
+					rule.setValue2("");
+
 				} else {
 					if (maplistRules.get("expr").toString().indexOf(">") >= 0) {
 						condition = maplistRules.get("expr").toString().substring(
@@ -128,18 +146,24 @@ public class RuleService {
 			rule.setType(maplistRules.get("alert").toString());
 			rule.setSeverity(maplistLabels.get("severity").toString());
 
+			System.out.println(maplistRules.get("expr").toString());
+
 			if (maplistRules.get("expr").toString().indexOf(">") >= 0) {
 				condition = maplistRules.get("expr").toString().substring(
 						maplistRules.get("expr").toString().indexOf(">"),
 						maplistRules.get("expr").toString().indexOf(">") + 1);
-			} else {
+			} else if (maplistRules.get("expr").toString().indexOf("<") >= 0) {
 				condition = maplistRules.get("expr").toString().substring(
 						maplistRules.get("expr").toString().indexOf("<"),
 						maplistRules.get("expr").toString().indexOf("<") + 1);
+			} else {
+				condition = maplistRules.get("expr").toString().substring(
+						maplistRules.get("expr").toString().indexOf("="),
+						maplistRules.get("expr").toString().indexOf("=") + 1);
 			}
 
 			rule.setCondition(condition);
-			String[] gb = maplistRules.get("expr").toString().split(">|<");
+			String[] gb = maplistRules.get("expr").toString().split(">|<|=");
 
 			rule.setValue1(gb[0]);
 			rule.setValue2(gb[1]);
