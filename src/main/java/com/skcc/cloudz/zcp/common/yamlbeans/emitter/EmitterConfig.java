@@ -60,3 +60,4 @@ public class EmitterConfig {
 		this.escapeUnicode = escapeUnicode;
 	}
 }
+

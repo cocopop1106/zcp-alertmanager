@@ -386,3 +386,4 @@ class EmitterWriter {
 		writer.close();
 	}
 }
+

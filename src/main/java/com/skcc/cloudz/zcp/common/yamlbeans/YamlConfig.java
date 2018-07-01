@@ -294,3 +294,4 @@ public class YamlConfig {
 		ALWAYS, NEVER, AUTO
 	}
 }
+

@@ -6,7 +6,6 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -306,20 +305,20 @@ public class ChannelService {
 
 		return channelDtlVo;
 	}
-	
+
 	public RepeatVo getRepeatInterval() {
 		Map<String, Object> routeMap = kubeCoreManager.getRepeatInterval();
-		
+
 		RepeatVo repeatVo = new RepeatVo();
 		repeatVo.setRepeat_interval(routeMap.get("repeat_interval").toString());
 
 		return repeatVo;
 	}
-	
+
 	public RepeatVo updateRepeatInterval(RepeatVo repeatVo) {
 		RepeatVo result = new RepeatVo();
 		result = kubeCoreManager.updateRepeatInterval(repeatVo);
-		
+
 		if (result != null) {
 			Timer timer = new Timer();
 			TimerTask task = new TimerTask() {
@@ -344,8 +343,8 @@ public class ChannelService {
 			};
 			timer.schedule(task, 120000);
 		}
-		
+
 		return result;
 	}
-	
+
 }

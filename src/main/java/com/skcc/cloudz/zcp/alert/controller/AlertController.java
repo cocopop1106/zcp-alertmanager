@@ -65,7 +65,8 @@ public class AlertController {
 	}
 
 	@RequestMapping(value = "alertHistory/{time}", method = RequestMethod.GET)
-	public ResponseEntity<List<AlertHistoryVo>> getHistoryList(@PathVariable("time") final String time) throws IOException {
+	public ResponseEntity<List<AlertHistoryVo>> getHistoryList(@PathVariable("time") final String time)
+			throws IOException {
 		List<AlertHistoryVo> result = alertService.getAlertHistoryList(time);
 		if (result == null) {
 			return new ResponseEntity<List<AlertHistoryVo>>(HttpStatus.NOT_FOUND);

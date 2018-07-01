@@ -194,3 +194,4 @@ class ScalarAnalysis {
 			allowBlock);
 	}
 }
+

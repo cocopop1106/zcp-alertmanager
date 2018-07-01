@@ -37,3 +37,4 @@ public class DateSerializer implements ScalarSerializer<Date> {
 		return dateParser.format(object);
 	}
 }
+
