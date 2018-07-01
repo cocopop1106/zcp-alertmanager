@@ -89,7 +89,7 @@ public class RuleService {
 
 					rule.setValue1("");
 					rule.setValue2("");
-					
+
 				} else if ("PodFrequentlyRestarting".equals(rule.getType())) {
 					rule.setCondition("");
 					rule.setValue1("");
@@ -154,25 +154,58 @@ public class RuleService {
 			rule.setType(maplistRules.get("alert").toString());
 			rule.setSeverity(maplistLabels.get("severity").toString());
 
-			if (maplistRules.get("expr").toString().indexOf(">") >= 0) {
-				condition = maplistRules.get("expr").toString().substring(
-						maplistRules.get("expr").toString().indexOf(">"),
-						maplistRules.get("expr").toString().indexOf(">") + 1);
-			} else if (maplistRules.get("expr").toString().indexOf("<") >= 0) {
-				condition = maplistRules.get("expr").toString().substring(
-						maplistRules.get("expr").toString().indexOf("<"),
-						maplistRules.get("expr").toString().indexOf("<") + 1);
+			if ("NodeDown".equals(rule.getType())) {
+				rule.setCondition("");
+				rule.setValue1("");
+				rule.setValue2("");
+				
+				rule.setValue(maplistRules.get("expr").toString());
+
+			} else if ("ApiserverDown".equals(rule.getType())) {
+				rule.setCondition("");
+				rule.setValue1("");
+				rule.setValue2("");
+				
+				rule.setValue(maplistRules.get("expr").toString());
+
+			} else if ("K8SNodeNotReady".equals(rule.getType())) {
+				rule.setCondition("");
+				rule.setValue1("");
+				rule.setValue2("");
+				
+				rule.setValue(maplistRules.get("expr").toString());
+
+			} else if ("PodFrequentlyRestarting".equals(rule.getType())) {
+				rule.setCondition("");
+				rule.setValue1("");
+				rule.setValue2("");
+				
+				String expr = maplistRules.get("expr").toString();
+				int idx = expr.indexOf('\"');
+				String exprSub = expr.substring(idx+1);
+				int lastIdx = exprSub.lastIndexOf(".");
+				String pod = exprSub.substring(0, lastIdx);
+				
+				rule.setValue(pod);
+
 			} else {
-				condition = maplistRules.get("expr").toString().substring(
-						maplistRules.get("expr").toString().indexOf("="),
-						maplistRules.get("expr").toString().indexOf("=") + 1);
+				if (maplistRules.get("expr").toString().indexOf(">") >= 0) {
+					condition = maplistRules.get("expr").toString().substring(
+							maplistRules.get("expr").toString().indexOf(">"),
+							maplistRules.get("expr").toString().indexOf(">") + 1);
+				} else {
+					condition = maplistRules.get("expr").toString().substring(
+							maplistRules.get("expr").toString().indexOf("<"),
+							maplistRules.get("expr").toString().indexOf("<") + 1);
+				}
+
+				rule.setCondition(condition);
+				String[] gb = maplistRules.get("expr").toString().split(">|<");
+
+				rule.setValue1(gb[0]);
+				rule.setValue2(gb[1]);
 			}
 
-			rule.setCondition(condition);
-			String[] gb = maplistRules.get("expr").toString().split(">|<|=");
-
-			rule.setValue1(gb[0]);
-			rule.setValue2(gb[1]);
 			if (maplistRules.get("for") != null)
 				rule.setDuration(maplistRules.get("for").toString());
 			rule.setChannel(maplistLabels.get("channel").toString());
@@ -240,6 +273,7 @@ public class RuleService {
 		return null;
 	}
 
+	@SuppressWarnings("unused")
 	public RuleVo updateRule(int ruleId, RuleVo ruleVo) {
 		Boolean result = kubeCoreManager.deleteRule(ruleId);
 
@@ -256,31 +290,6 @@ public class RuleService {
 		ruleData.setRuleChannel(ruleVo.getChannel());
 
 		RuleData ruleResult = kubeCoreManager.createRule(ruleData);
-
-		RuleVo resultVo = new RuleVo();
-
-		resultVo.setId(ruleVo.getId());
-		resultVo.setType(ruleResult.getRuleAlert());
-		resultVo.setSeverity(ruleResult.getRuleSeverity());
-
-		String condition = "";
-
-		if (ruleResult.getRuleExpr().toString().indexOf(">") >= 0) {
-			condition = ruleResult.getRuleExpr().toString().substring(ruleResult.getRuleExpr().toString().indexOf(">"),
-					ruleResult.getRuleExpr().toString().indexOf(">") + 1);
-		} else {
-			condition = ruleResult.getRuleExpr().toString().substring(ruleResult.getRuleExpr().toString().indexOf("<"),
-					ruleResult.getRuleExpr().toString().indexOf("<") + 1);
-		}
-
-		resultVo.setCondition(condition);
-		String[] gb = ruleResult.getRuleExpr().toString().split(">|<");
-
-		resultVo.setValue1(gb[0]);
-		resultVo.setValue2(gb[1]);
-
-		resultVo.setDuration(ruleResult.getRuleFor());
-		resultVo.setChannel(ruleResult.getRuleChannel());
 
 		if (ruleResult != null) {
 			Timer timer = new Timer();
@@ -315,7 +324,7 @@ public class RuleService {
 			timer.schedule(task, 120000);
 		}
 
-		return resultVo;
+		return ruleVo;
 	}
 
 	public Boolean deleteRule(int id) {
@@ -356,12 +365,12 @@ public class RuleService {
 
 		return result;
 	}
-	
+
 	public List<String> getNamespaceList() {
 		List<String> returnList = new ArrayList<String>();
 		V1NamespaceList namespaceList = kubeCoreManager.getNamespaceList();
-		
-		for(V1Namespace item : namespaceList.getItems()) {
+
+		for (V1Namespace item : namespaceList.getItems()) {
 			returnList.add(item.getMetadata().getName());
 		}
 

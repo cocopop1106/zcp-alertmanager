@@ -45,6 +45,7 @@ public class RuleController {
 		return new ResponseEntity<RuleVo>(ruleDtl, HttpStatus.OK);
 	}
 
+	@SuppressWarnings("unused")
 	@RequestMapping(value = "rule", method = RequestMethod.POST)
 	public ResponseEntity<Void> createRule(@RequestBody final RuleVo ruleVo, final UriComponentsBuilder ucBuilder) {
 		RuleVo createRule = ruleService.createRule(ruleVo);
