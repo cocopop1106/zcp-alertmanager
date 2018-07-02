@@ -158,34 +158,34 @@ public class RuleService {
 				rule.setCondition("");
 				rule.setValue1("");
 				rule.setValue2("");
-				
+
 				rule.setValue(maplistRules.get("expr").toString());
 
 			} else if ("ApiserverDown".equals(rule.getType())) {
 				rule.setCondition("");
 				rule.setValue1("");
 				rule.setValue2("");
-				
+
 				rule.setValue(maplistRules.get("expr").toString());
 
 			} else if ("K8SNodeNotReady".equals(rule.getType())) {
 				rule.setCondition("");
 				rule.setValue1("");
 				rule.setValue2("");
-				
+
 				rule.setValue(maplistRules.get("expr").toString());
 
 			} else if ("PodFrequentlyRestarting".equals(rule.getType())) {
 				rule.setCondition("");
 				rule.setValue1("");
 				rule.setValue2("");
-				
+
 				String expr = maplistRules.get("expr").toString();
 				int idx = expr.indexOf('\"');
-				String exprSub = expr.substring(idx+1);
+				String exprSub = expr.substring(idx + 1);
 				int lastIdx = exprSub.lastIndexOf(".");
 				String pod = exprSub.substring(0, lastIdx);
-				
+
 				rule.setValue(pod);
 
 			} else {

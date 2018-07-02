@@ -51,7 +51,7 @@ public class RuleController {
 		RuleVo createRule = ruleService.createRule(ruleVo);
 
 		HttpHeaders headers = new HttpHeaders();
-//		headers.setLocation(ucBuilder.path("rule/{id}").buildAndExpand(createRule.getId()).toUri());
+		// headers.setLocation(ucBuilder.path("rule/{id}").buildAndExpand(createRule.getId()).toUri());
 		headers.setLocation(ucBuilder.path("alert/rules").build().toUri());
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
@@ -77,7 +77,7 @@ public class RuleController {
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		}
 	}
-	
+
 	@RequestMapping(value = "namespaceList", method = RequestMethod.GET)
 	public ResponseEntity<List<String>> getNamespaceList() throws IOException {
 

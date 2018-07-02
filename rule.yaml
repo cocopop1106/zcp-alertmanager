@@ -3,24 +3,59 @@ groups:
    rules: 
    -  alert: NodeCPUUsage
       expr: (100 - (avg by (instance) (irate(node_cpu{component="node-exporter",mode="idle"}[5m])) * 100))
-         > 80
-      for: 10m
+         > 90
+      for: 5m
       labels: 
-         severity: warning
+         severity: critical
          channel: test-channel
       annotations: 
          description: '{{$labels.instance}}: CPU usage (current value is: {{ $value }})'
    -  alert: NodeLoadAverage5
-      expr: (node_load5 / count without (cpu, mode) (node_cpu{mode="system"})) > 80
+      expr: (node_load5 / count without (cpu, mode) (node_cpu{mode="system"})) >   75
       for: 10m
       labels: 
          severity: warning
          channel: test-channel
       annotations: 
          description: '{{$labels.instance}}: LoadAverage5 (current value is: {{ $value }})'
+   -  alert: NodeCPUUsage
+      expr: (100 - (avg by (instance) (irate(node_cpu{component="node-exporter",mode="idle"}[5m])) * 100))
+         >   75
+      for: 10m
+      labels: 
+         severity: warning
+         channel: test-channel
+      annotations: 
+         description: '{{$labels.instance}}: CPU usage (current value is: {{ $value }})'
+   -  alert: NodeCPUUsage
+      expr: (100 - (avg by (instance) (irate(node_cpu{component="node-exporter",mode="idle"}[5m])) * 100))
+         >  90
+      for: 5m
+      labels: 
+         severity: critical
+         channel: test-channel
+      annotations: 
+         description: '{{$labels.instance}}: CPU usage (current value is: {{ $value }})'
+   -  alert: NodeMemoryUsage
+      expr: (((node_memory_MemTotal-node_memory_MemFree-node_memory_Cached)/(node_memory_MemTotal)*100))
+         >   90
+      for: 10m
+      labels: 
+         severity: critical
+         channel: test-channel
+      annotations: 
+         description: '{{$labels.instance}}: Memory usage (current value is: {{ $value }})'
+   -  alert: PodFrequentlyRestarting
+      expr: 'increase(kube_pod_container_status_restarts_total{pod=~"alertmanager.*"}[1h])  '
+      for: 5m
+      labels: 
+         severity: warning
+         channel: test-channel
+      annotations: 
+         description: ""
    -  alert: NodeLowRootDisk
       expr: ((node_filesystem_size{mountpoint="/"} - node_filesystem_free{mountpoint="/"} ) / node_filesystem_size{mountpoint="/"}
-         * 100) > 75
+         * 100) >  75
       for: 5m
       labels: 
          severity: warning
@@ -35,15 +70,6 @@ groups:
          channel: test-channel
       annotations: 
          description: ""
-   -  alert: NodeMemoryUsage
-      expr: (((node_memory_MemTotal-node_memory_MemFree-node_memory_Cached)/(node_memory_MemTotal)*100))
-         > 85
-      for: 10m
-      labels: 
-         severity: critical
-         channel: test-channel
-      annotations: 
-         description: '{{$labels.instance}}: Memory usage (current value is: {{ $value }})'
    -  alert: NodeDown
       expr: up{component="node-exporter",job="kubernetes-monitoring-endpoints"} = 0
       for: 2m
