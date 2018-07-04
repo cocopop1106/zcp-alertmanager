@@ -117,53 +117,54 @@ public class KubeCoreManager {
 			V1ConfigMap configMap = new V1ConfigMap();
 
 			configMap = api.readNamespacedConfigMap(alertConfigMap, alertNamespace, null, null, null);
-			File file = new File("channel.yaml");
 
-			writer = new FileWriter(file, false);
-			writer.write(configMap.getData().get("config.yml"));
-			writer.flush();
-
-			YamlReader reader = new YamlReader(new FileReader("channel.yaml"));
-			Object object = reader.read();
-
-			Map<String, Map<String, Object>> mapGlobal = (Map) object;
-
-			routeMap = mapGlobal.get("route");
-			routesList = (List) routeMap.get("routes");
-
-			HashMap<String, Object> matchMap = new LinkedHashMap<String, Object>();
-			matchMap.put("channel", channel.getChannel());
-			matchMap.put("receiver", channel.getChannel());
-
-			HashMap<String, Object> routesMap = new HashMap<String, Object>();
-			routesMap.put("match", matchMap);
-
-			routesList.add(routesMap);
-
-			newRouteMap.put("group_by", routeMap.get("group_by"));
-			newRouteMap.put("group_wait", routeMap.get("group_wait"));
-			newRouteMap.put("group_interval", routeMap.get("group_interval"));
-			newRouteMap.put("repeat_interval", routeMap.get("repeat_interval"));
-			newRouteMap.put("receiver", routeMap.get("receiver"));
-			newRouteMap.put("routes", routesList);
-
-			receiverList = (List) mapGlobal.get("receivers");
-
-			HashMap<String, Object> newReceiver = new LinkedHashMap<String, Object>();
-			newReceiver.put("name", channel.getChannel());
-
-			receiverList.add(newReceiver);
-
-			Map<String, Object> channelMap = new LinkedHashMap<String, Object>();
-			channelMap.put("global", mapGlobal.get("global"));
-			channelMap.put("templates", mapGlobal.get("templates"));
-			channelMap.put("route", newRouteMap);
-			channelMap.put("receivers", receiverList);
-
-			YamlConfig config = new YamlConfig();
-			YamlWriter ywriter = new YamlWriter(new FileWriter("channel.yaml"), config);
-			ywriter.write(channelMap);
-			ywriter.close();
+			 File file = new File("channel.yaml");
+			
+			 writer = new FileWriter(file, false);
+			 writer.write(configMap.getData().get("config.yml"));
+			 writer.flush();
+			
+			 YamlReader reader = new YamlReader(new FileReader("channel.yaml"));
+			 Object object = reader.read();
+			
+			 Map<String, Map<String, Object>> mapGlobal = (Map) object;
+			
+			 routeMap = mapGlobal.get("route");
+			 routesList = (List) routeMap.get("routes");
+			
+			 HashMap<String, Object> matchMap = new LinkedHashMap<String, Object>();
+			 matchMap.put("channel", channel.getChannel());
+			 matchMap.put("receiver", channel.getChannel());
+			
+			 HashMap<String, Object> routesMap = new HashMap<String, Object>();
+			 routesMap.put("match", matchMap);
+			
+			 routesList.add(routesMap);
+			
+			 newRouteMap.put("group_by", routeMap.get("group_by"));
+			 newRouteMap.put("group_wait", routeMap.get("group_wait"));
+			 newRouteMap.put("group_interval", routeMap.get("group_interval"));
+			 newRouteMap.put("repeat_interval", routeMap.get("repeat_interval"));
+			 newRouteMap.put("receiver", routeMap.get("receiver"));
+			 newRouteMap.put("routes", routesList);
+			
+			 receiverList = (List) mapGlobal.get("receivers");
+			
+			 HashMap<String, Object> newReceiver = new LinkedHashMap<String, Object>();
+			 newReceiver.put("name", channel.getChannel());
+			
+			 receiverList.add(newReceiver);
+			
+			 Map<String, Object> channelMap = new LinkedHashMap<String, Object>();
+			 channelMap.put("global", mapGlobal.get("global"));
+			 channelMap.put("templates", mapGlobal.get("templates"));
+			 channelMap.put("route", newRouteMap);
+			 channelMap.put("receivers", receiverList);
+			
+			 YamlConfig config = new YamlConfig();
+			 YamlWriter ywriter = new YamlWriter(new FileWriter("channel.yaml"), config);
+			 ywriter.write(channelMap);
+			 ywriter.close();
 
 			String yamlString = FileUtils.readFileToString(new File("channel.yaml"), "utf8");
 
@@ -346,15 +347,42 @@ public class KubeCoreManager {
 			routeMap = mapGlobal.get("route");
 
 			routesList = (List) routeMap.get("routes");
-			routesList.remove(id);
 
-			Map<String, Object> newRouteMap = new HashMap<String, Object>();
+			Map<String, Object> maplistGroups;
+			Iterator iteratorData = routesList.iterator();
+
+			int count = 0;
+			int removeId = 0;
+
+			Map<String, Object> matchMap = new HashMap<String, Object>();
+
+			while (iteratorData.hasNext()) {
+				maplistGroups = (Map) iteratorData.next();
+				matchMap = (Map<String, Object>) maplistGroups.get("match");
+
+				if (matchMap != null) {
+					if (channel.equals(matchMap.get("channel"))) {
+						removeId = count;
+					}
+				}
+				count++;
+			}
+			routesList.remove(removeId);
+
+			Map<String, Object> newRouteMap = new LinkedHashMap<String, Object>();
+
+			newRouteMap.put("group_by", routeMap.get("group_by"));
+			newRouteMap.put("group_wait", routeMap.get("group_wait"));
+			newRouteMap.put("group_interval", routeMap.get("group_interval"));
+			newRouteMap.put("repeat_interval", routeMap.get("repeat_interval"));
+			newRouteMap.put("receiver", routeMap.get("receiver"));
 			newRouteMap.put("routes", routesList);
 
 			receiverList = (List) mapGlobal.get("receivers");
 			receiverList.remove(id);
 
 			Map<String, Object> channelMap = new LinkedHashMap<String, Object>();
+
 			channelMap.put("global", mapGlobal.get("global"));
 			channelMap.put("templates", mapGlobal.get("templates"));
 			channelMap.put("route", newRouteMap);
