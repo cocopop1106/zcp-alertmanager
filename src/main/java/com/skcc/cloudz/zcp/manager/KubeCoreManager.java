@@ -118,53 +118,53 @@ public class KubeCoreManager {
 
 			configMap = api.readNamespacedConfigMap(alertConfigMap, alertNamespace, null, null, null);
 
-			 File file = new File("channel.yaml");
-			
-			 writer = new FileWriter(file, false);
-			 writer.write(configMap.getData().get("config.yml"));
-			 writer.flush();
-			
-			 YamlReader reader = new YamlReader(new FileReader("channel.yaml"));
-			 Object object = reader.read();
-			
-			 Map<String, Map<String, Object>> mapGlobal = (Map) object;
-			
-			 routeMap = mapGlobal.get("route");
-			 routesList = (List) routeMap.get("routes");
-			
-			 HashMap<String, Object> matchMap = new LinkedHashMap<String, Object>();
-			 matchMap.put("channel", channel.getChannel());
-			 matchMap.put("receiver", channel.getChannel());
-			
-			 HashMap<String, Object> routesMap = new HashMap<String, Object>();
-			 routesMap.put("match", matchMap);
-			
-			 routesList.add(routesMap);
-			
-			 newRouteMap.put("group_by", routeMap.get("group_by"));
-			 newRouteMap.put("group_wait", routeMap.get("group_wait"));
-			 newRouteMap.put("group_interval", routeMap.get("group_interval"));
-			 newRouteMap.put("repeat_interval", routeMap.get("repeat_interval"));
-			 newRouteMap.put("receiver", routeMap.get("receiver"));
-			 newRouteMap.put("routes", routesList);
-			
-			 receiverList = (List) mapGlobal.get("receivers");
-			
-			 HashMap<String, Object> newReceiver = new LinkedHashMap<String, Object>();
-			 newReceiver.put("name", channel.getChannel());
-			
-			 receiverList.add(newReceiver);
-			
-			 Map<String, Object> channelMap = new LinkedHashMap<String, Object>();
-			 channelMap.put("global", mapGlobal.get("global"));
-			 channelMap.put("templates", mapGlobal.get("templates"));
-			 channelMap.put("route", newRouteMap);
-			 channelMap.put("receivers", receiverList);
-			
-			 YamlConfig config = new YamlConfig();
-			 YamlWriter ywriter = new YamlWriter(new FileWriter("channel.yaml"), config);
-			 ywriter.write(channelMap);
-			 ywriter.close();
+			File file = new File("channel.yaml");
+
+			writer = new FileWriter(file, false);
+			writer.write(configMap.getData().get("config.yml"));
+			writer.flush();
+
+			YamlReader reader = new YamlReader(new FileReader("channel.yaml"));
+			Object object = reader.read();
+
+			Map<String, Map<String, Object>> mapGlobal = (Map) object;
+
+			routeMap = mapGlobal.get("route");
+			routesList = (List) routeMap.get("routes");
+
+			HashMap<String, Object> matchMap = new LinkedHashMap<String, Object>();
+			matchMap.put("channel", channel.getChannel());
+			matchMap.put("receiver", channel.getChannel());
+
+			HashMap<String, Object> routesMap = new HashMap<String, Object>();
+			routesMap.put("match", matchMap);
+
+			routesList.add(routesMap);
+
+			newRouteMap.put("group_by", routeMap.get("group_by"));
+			newRouteMap.put("group_wait", routeMap.get("group_wait"));
+			newRouteMap.put("group_interval", routeMap.get("group_interval"));
+			newRouteMap.put("repeat_interval", routeMap.get("repeat_interval"));
+			newRouteMap.put("receiver", routeMap.get("receiver"));
+			newRouteMap.put("routes", routesList);
+
+			receiverList = (List) mapGlobal.get("receivers");
+
+			HashMap<String, Object> newReceiver = new LinkedHashMap<String, Object>();
+			newReceiver.put("name", channel.getChannel());
+
+			receiverList.add(newReceiver);
+
+			Map<String, Object> channelMap = new LinkedHashMap<String, Object>();
+			channelMap.put("global", mapGlobal.get("global"));
+			channelMap.put("templates", mapGlobal.get("templates"));
+			channelMap.put("route", newRouteMap);
+			channelMap.put("receivers", receiverList);
+
+			YamlConfig config = new YamlConfig();
+			YamlWriter ywriter = new YamlWriter(new FileWriter("channel.yaml"), config);
+			ywriter.write(channelMap);
+			ywriter.close();
 
 			String yamlString = FileUtils.readFileToString(new File("channel.yaml"), "utf8");
 
@@ -216,52 +216,106 @@ public class KubeCoreManager {
 			receiverList = (List) channelMap.get("receivers");
 			receiverList.remove(id);
 
-			if (!"".equals(channelDtlVo.getEmail_to())) {
+			if (channelDtlVo.getEmail_to() != null && !"".equals(channelDtlVo.getEmail_to())) {
 				Map<String, Object> emailMap = new LinkedHashMap<String, Object>();
 
 				emailMap.put("to", channelDtlVo.getEmail_to());
-				if (!"".equals(channelDtlVo.getEmail_from()))
+
+				if (channelDtlVo.getEmail_from() != null && !"".equals(channelDtlVo.getEmail_from())) {
 					emailMap.put("from", channelDtlVo.getEmail_from());
-				if (!"".equals(channelDtlVo.getEmail_smarthost()))
+				} else {
+					emailMap.put("from", "'Alertmanager <alertmanager@zcp.test.com>'");
+				}
+
+				if (channelDtlVo.getEmail_smarthost() != null && !"".equals(channelDtlVo.getEmail_smarthost())) {
 					emailMap.put("smarthost", channelDtlVo.getEmail_smarthost());
-				if (!"".equals(channelDtlVo.getEmail_auth_username()))
+				} else {
+					emailMap.put("smarthost", "smtp.sendgrid.net:465");
+				}
+
+				if (channelDtlVo.getEmail_auth_username() != null
+						&& !"".equals(channelDtlVo.getEmail_auth_username())) {
 					emailMap.put("auth_username", channelDtlVo.getEmail_auth_username());
-				if (!"".equals(channelDtlVo.getEmail_auth_password()))
+				} else {
+					emailMap.put("auth_username", "zcp-sender-api-key");
+				}
+
+				if (channelDtlVo.getEmail_auth_password() != null
+						&& !"".equals(channelDtlVo.getEmail_auth_password())) {
 					emailMap.put("auth_password", channelDtlVo.getEmail_auth_password());
-				if (!"".equals(channelDtlVo.getEmail_require_tls()))
+				} else {
+					emailMap.put("auth_password",
+							"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");
+				}
+
+				if (channelDtlVo.getEmail_require_tls() != null && !"".equals(channelDtlVo.getEmail_require_tls())) {
 					emailMap.put("require_tls", channelDtlVo.getEmail_require_tls());
-				if (!"".equals(channelDtlVo.getEmail_send_resolved()))
+				} else {
+					emailMap.put("require_tls", "false");
+				}
+
+				if (channelDtlVo.getEmail_send_resolved() != null
+						&& !"".equals(channelDtlVo.getEmail_send_resolved())) {
 					emailMap.put("send_resolved", channelDtlVo.getEmail_send_resolved());
+				} else {
+					emailMap.put("send_resolved", "true");
+				}
+
 				emailList.add(emailMap);
 
 				newReceiver.put("name", channelDtlVo.getChannel());
 				newReceiver.put("email_configs", emailList);
+			} else {
+				
 			}
 
-			if (!"".equals(channelDtlVo.getSlack_api_url())) {
+			if (channelDtlVo.getSlack_api_url() != null && !"".equals(channelDtlVo.getSlack_api_url())) {
 				Map<String, Object> slackMap = new LinkedHashMap<String, Object>();
 
 				slackMap.put("api_url", channelDtlVo.getSlack_api_url());
-				if (!"".equals(channelDtlVo.getSlack_send_resolved()))
+
+				if (channelDtlVo.getSlack_send_resolved() != null
+						&& !"".equals(channelDtlVo.getSlack_send_resolved())) {
 					slackMap.put("send_resolved", channelDtlVo.getSlack_send_resolved());
+				} else {
+					slackMap.put("send_resolved", "true");
+				}
+
 				slackList.add(slackMap);
 
 				newReceiver.put("name", channelDtlVo.getChannel());
 				newReceiver.put("slack_configs", slackList);
 			}
 
-			if (!"".equals(channelDtlVo.getHipchat_api_url())) {
+			if (channelDtlVo.getHipchat_api_url() != null && !"".equals(channelDtlVo.getHipchat_api_url())) {
 				Map<String, Object> hipchatMap = new LinkedHashMap<String, Object>();
 
 				hipchatMap.put("api_url", channelDtlVo.getHipchat_api_url());
-				if (!"".equals(channelDtlVo.getHipchat_room_id()))
+
+				if (channelDtlVo.getHipchat_room_id() != null && !"".equals(channelDtlVo.getHipchat_room_id())) {
 					hipchatMap.put("room_id", channelDtlVo.getHipchat_room_id());
-				if (!"".equals(channelDtlVo.getHipchat_auth_token()))
+				} else {
+					hipchatMap.put("room_id", "4603546");
+				}
+
+				if (channelDtlVo.getHipchat_auth_token() != null && !"".equals(channelDtlVo.getHipchat_auth_token())) {
 					hipchatMap.put("auth_token", channelDtlVo.getHipchat_auth_token());
-				if (!"".equals(channelDtlVo.getHipchat_notify()))
+				} else {
+					hipchatMap.put("auth_token", "HSlJFvopWxhkiqg6YsqTjOxap59JhnndCwgmwK8N");
+				}
+
+				if (channelDtlVo.getHipchat_notify() != null && !"".equals(channelDtlVo.getHipchat_notify())) {
 					hipchatMap.put("notify", channelDtlVo.getHipchat_notify());
-				if (!"".equals(channelDtlVo.getHipchat_send_resolved()))
+				} else {
+					hipchatMap.put("notify", "true");
+				}
+
+				if (channelDtlVo.getHipchat_send_resolved() != null
+						&& !"".equals(channelDtlVo.getHipchat_send_resolved())) {
 					hipchatMap.put("send_resolved", channelDtlVo.getHipchat_send_resolved());
+				} else {
+					hipchatMap.put("send_resolved", "true");
+				}
 
 				hipchatList.add(hipchatMap);
 
@@ -269,12 +323,16 @@ public class KubeCoreManager {
 				newReceiver.put("hipchat_configs", hipchatList);
 			}
 
-			if (!"".equals(channelDtlVo.getWebhook_url())) {
+			if (channelDtlVo.getWebhook_url() != null && !"".equals(channelDtlVo.getWebhook_url())) {
 				Map<String, Object> webhookMap = new LinkedHashMap<String, Object>();
 
 				webhookMap.put("url", channelDtlVo.getWebhook_url());
-				if (!"".equals(channelDtlVo.getWebhook_send_resolved()))
+				
+				if (channelDtlVo.getWebhook_send_resolved() != null && !"".equals(channelDtlVo.getWebhook_send_resolved())) {
 					webhookMap.put("send_resolved", channelDtlVo.getWebhook_send_resolved());
+				} else {
+					webhookMap.put("send_resolved", "true");
+				}
 
 				webhookList.add(webhookMap);
 

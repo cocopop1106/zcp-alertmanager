@@ -3,6 +3,7 @@ package com.skcc.cloudz.zcp.channel.service;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -329,13 +330,13 @@ public class ChannelService {
 					try {
 						String url = UriComponentsBuilder.fromUriString(baseUrl).path("/-/reload").build().toString();
 						URL obj = new URL(url);
-						URLConnection conn = obj.openConnection();
+						HttpURLConnection conn = (HttpURLConnection) obj.openConnection();
 
 						conn.setDoOutput(true);
 						OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
 
 						wr.flush();
-
+						System.out.println(conn.getResponseCode());
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
