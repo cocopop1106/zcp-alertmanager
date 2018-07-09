@@ -32,7 +32,6 @@ import io.kubernetes.client.ApiClient;
 import io.kubernetes.client.Configuration;
 import io.kubernetes.client.apis.CoreV1Api;
 import io.kubernetes.client.models.V1ConfigMap;
-import io.kubernetes.client.models.V1Namespace;
 import io.kubernetes.client.models.V1NamespaceList;
 import io.kubernetes.client.models.V1PodList;
 import io.kubernetes.client.util.Config;
@@ -214,7 +213,7 @@ public class KubeCoreManager {
 			HashMap<String, Object> newReceiver = new LinkedHashMap<String, Object>();
 
 			receiverList = (List) channelMap.get("receivers");
-			
+
 			Map<String, Object> maplistGroups;
 			Iterator iteratorData = receiverList.iterator();
 
@@ -225,26 +224,27 @@ public class KubeCoreManager {
 			Map<String, Object> slack_configs = new HashMap<String, Object>();
 			Map<String, Object> hipchat_configs = new HashMap<String, Object>();
 			Map<String, Object> webhook_configs = new HashMap<String, Object>();
-			
+
+			int mapCount = 0;
+
 			while (iteratorData.hasNext()) {
 				maplistGroups = (Map) iteratorData.next();
-				
-				if(maplistGroups.get("email_configs")!=null) {
-					System.out.println("email_configs: "+maplistGroups.get("email_configs"));
-					email_configs.put("email_configs", maplistGroups.get("email_configs"));
+
+				if (mapCount == id) {
+					if (maplistGroups.get("email_configs") != null) {
+						email_configs.put("email_configs", maplistGroups.get("email_configs"));
+					}
+					if (maplistGroups.get("slack_configs") != null) {
+						slack_configs.put("slack_configs", maplistGroups.get("slack_configs"));
+					}
+					if (maplistGroups.get("hipchat_configs") != null) {
+						hipchat_configs.put("hipchat_configs", maplistGroups.get("hipchat_configs"));
+					}
+					if (maplistGroups.get("webhook_configs") != null) {
+						webhook_configs.put("webhook_configs", maplistGroups.get("webhook_configs"));
+					}
 				}
-				if(maplistGroups.get("slack_configs")!=null) {
-					System.out.println("slack_configs: "+ maplistGroups.get("slack_configs"));
-					slack_configs.put("slack_configs", maplistGroups.get("slack_configs"));
-				}
-				if(maplistGroups.get("hipchat_configs")!=null) {
-					System.out.println("hipchat_configs: "+maplistGroups.get("hipchat_configs"));
-					hipchat_configs.put("hipchat_configs", maplistGroups.get("hipchat_configs"));
-				}
-				if(maplistGroups.get("webhook_configs")!=null) {
-					System.out.println("webhook_configs: "+maplistGroups.get("webhook_configs"));
-					webhook_configs.put("webhook_configs", maplistGroups.get("webhook_configs"));
-				}
+				mapCount++;
 			}
 			receiverList.remove(id);
 
@@ -298,8 +298,10 @@ public class KubeCoreManager {
 				newReceiver.put("name", channelDtlVo.getChannel());
 				newReceiver.put("email_configs", emailList);
 			} else {
-				newReceiver.put("name", channelDtlVo.getChannel());
-				newReceiver.put("email_configs", email_configs.get("email_configs"));
+				if (email_configs.get("email_configs") != null) {
+					newReceiver.put("name", channelDtlVo.getChannel());
+					newReceiver.put("email_configs", email_configs.get("email_configs"));
+				}
 			}
 
 			if (channelDtlVo.getSlack_api_url() != null && !"".equals(channelDtlVo.getSlack_api_url())) {
@@ -319,8 +321,10 @@ public class KubeCoreManager {
 				newReceiver.put("name", channelDtlVo.getChannel());
 				newReceiver.put("slack_configs", slackList);
 			} else {
-				newReceiver.put("name", channelDtlVo.getChannel());
-				newReceiver.put("slack_configs", slack_configs.get("slack_configs"));
+				if (slack_configs.get("slack_configs") != null) {
+					newReceiver.put("name", channelDtlVo.getChannel());
+					newReceiver.put("slack_configs", slack_configs.get("slack_configs"));
+				}
 			}
 
 			if (channelDtlVo.getHipchat_api_url() != null && !"".equals(channelDtlVo.getHipchat_api_url())) {
@@ -358,16 +362,19 @@ public class KubeCoreManager {
 				newReceiver.put("name", channelDtlVo.getChannel());
 				newReceiver.put("hipchat_configs", hipchatList);
 			} else {
-				newReceiver.put("name", channelDtlVo.getChannel());
-				newReceiver.put("hipchat_configs", hipchat_configs.get("hipchat_configs"));
+				if (hipchat_configs.get("hipchat_configs") != null) {
+					newReceiver.put("name", channelDtlVo.getChannel());
+					newReceiver.put("hipchat_configs", hipchat_configs.get("hipchat_configs"));
+				}
 			}
 
 			if (channelDtlVo.getWebhook_url() != null && !"".equals(channelDtlVo.getWebhook_url())) {
 				Map<String, Object> webhookMap = new LinkedHashMap<String, Object>();
 
 				webhookMap.put("url", channelDtlVo.getWebhook_url());
-				
-				if (channelDtlVo.getWebhook_send_resolved() != null && !"".equals(channelDtlVo.getWebhook_send_resolved())) {
+
+				if (channelDtlVo.getWebhook_send_resolved() != null
+						&& !"".equals(channelDtlVo.getWebhook_send_resolved())) {
 					webhookMap.put("send_resolved", channelDtlVo.getWebhook_send_resolved());
 				} else {
 					webhookMap.put("send_resolved", "true");
@@ -378,8 +385,10 @@ public class KubeCoreManager {
 				newReceiver.put("name", channelDtlVo.getChannel());
 				newReceiver.put("webhook_configs", webhookList);
 			} else {
-				newReceiver.put("name", channelDtlVo.getChannel());
-				newReceiver.put("webhook_configs", webhook_configs.get("webhook_configs"));
+				if (webhook_configs.get("webhook_configs") != null) {
+					newReceiver.put("name", channelDtlVo.getChannel());
+					newReceiver.put("webhook_configs", webhook_configs.get("webhook_configs"));
+				}
 			}
 
 			receiverList.add(newReceiver);
