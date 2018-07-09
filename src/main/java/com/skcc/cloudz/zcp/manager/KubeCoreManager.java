@@ -909,5 +909,4 @@ public class KubeCoreManager {
 
 		return podList;
 	}
-
 }
