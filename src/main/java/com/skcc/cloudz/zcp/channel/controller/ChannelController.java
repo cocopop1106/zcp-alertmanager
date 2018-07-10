@@ -98,5 +98,15 @@ public class ChannelController {
 		}
 		return new ResponseEntity<RepeatVo>(HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "channelName/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<ChannelVo> updateChannelName(@PathVariable("id") final int id, @RequestBody final ChannelVo channelVo) {
+		ChannelVo updateChannelName = channelService.updateChannelName(id, channelVo);
+
+		if (updateChannelName == null) {
+			return new ResponseEntity<ChannelVo>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<ChannelVo>(HttpStatus.OK);
+	}
 
 }

@@ -336,7 +336,39 @@ public class ChannelService {
 						OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
 
 						wr.flush();
-						System.out.println(conn.getResponseCode());
+						logger.debug(conn.getResponseCode());
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			};
+			timer.schedule(task, 120000);
+		}
+
+		return result;
+	}
+	
+	public ChannelVo updateChannelName(int id, ChannelVo channelVo) {
+		ChannelVo result = new ChannelVo();
+		result = kubeCoreManager.updateChannelName(id, channelVo);
+
+		if (result != null) {
+			Timer timer = new Timer();
+			TimerTask task = new TimerTask() {
+
+				@Override
+				public void run() {
+
+					try {
+						String url = UriComponentsBuilder.fromUriString(baseUrl).path("/-/reload").build().toString();
+						URL obj = new URL(url);
+						HttpURLConnection conn = (HttpURLConnection) obj.openConnection();
+
+						conn.setDoOutput(true);
+						OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+
+						wr.flush();
+						logger.debug(conn.getResponseCode());
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

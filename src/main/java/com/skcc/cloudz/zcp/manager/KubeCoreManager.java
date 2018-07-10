@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import com.skcc.cloudz.zcp.common.vo.ChannelData;
 import com.skcc.cloudz.zcp.common.vo.ChannelDtlVo;
+import com.skcc.cloudz.zcp.common.vo.ChannelVo;
 import com.skcc.cloudz.zcp.common.vo.RepeatVo;
 import com.skcc.cloudz.zcp.common.vo.RuleData;
 import com.skcc.cloudz.zcp.common.util.Message;
@@ -453,8 +454,8 @@ public class KubeCoreManager {
 			Object object = reader.read();
 
 			Map<String, Map<String, Object>> mapGlobal = (Map) object;
+			
 			routeMap = mapGlobal.get("route");
-
 			routesList = (List) routeMap.get("routes");
 
 			Map<String, Object> maplistGroups;
@@ -909,4 +910,147 @@ public class KubeCoreManager {
 
 		return podList;
 	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
+	public ChannelVo updateChannelName(int id, ChannelVo channelVo) {
+		FileWriter writer = null;
+		List receiverList = null;
+		Map<String, Object> newChannelMap = new LinkedHashMap<String, Object>();
+		
+		Map<String, Object> routeMap = new HashMap<String, Object>();
+		Map<String, Object> newRouteMap = new LinkedHashMap<String, Object>();
+		List routesList = null;
+
+		try {
+			ApiClient client = Config.defaultClient();
+			Configuration.setDefaultApiClient(client);
+
+			CoreV1Api api = new CoreV1Api();
+			V1ConfigMap configMap;
+
+			configMap = api.readNamespacedConfigMap(alertConfigMap, alertNamespace, null, null, null);
+
+			File file = new File("channel.yaml");
+
+			writer = new FileWriter(file, false);
+			writer.write(configMap.getData().get("config.yml"));
+			writer.flush();
+
+			YamlReader reader = new YamlReader(new FileReader("channel.yaml"));
+			Object object = reader.read();
+
+			Map<String, Map<String, Object>> channelMap = (Map) object;
+			HashMap<String, Object> newReceiver = new LinkedHashMap<String, Object>();
+			
+			routeMap = channelMap.get("route");
+			routesList = (List) routeMap.get("routes");
+
+
+			receiverList = (List) channelMap.get("receivers");
+
+			Map<String, Object> maplistGroups;
+			Iterator iteratorData = receiverList.iterator();
+
+			int mapCount = 0;
+			String beforeName = "";
+
+			while (iteratorData.hasNext()) {
+				maplistGroups = (Map) iteratorData.next();
+				
+				if (mapCount == id) {
+					beforeName = maplistGroups.get("name").toString();
+					
+					newReceiver.put("name", channelVo.getChannel());
+					
+					if (maplistGroups.get("email_configs") != null) {
+						newReceiver.put("email_configs", maplistGroups.get("email_configs"));
+					}
+					if (maplistGroups.get("slack_configs") != null) {
+						newReceiver.put("slack_configs", maplistGroups.get("slack_configs"));
+					}
+					if (maplistGroups.get("hipchat_configs") != null) {
+						newReceiver.put("hipchat_configs", maplistGroups.get("hipchat_configs"));
+					}
+					if (maplistGroups.get("webhook_configs") != null) {
+						newReceiver.put("webhook_configs", maplistGroups.get("webhook_configs"));
+					}
+				}
+				mapCount++;
+			}
+			receiverList.remove(id);
+			receiverList.add(newReceiver);
+			
+			
+			Map<String, Object> maplistRoute;
+			Iterator iteratorRoute = routesList.iterator();
+
+			int count = 0;
+			int removeId = 0;
+
+			Map<String, Object> matchMap = new HashMap<String, Object>();
+			
+			while (iteratorRoute.hasNext()) {
+				maplistRoute = (Map) iteratorRoute.next();
+				matchMap = (Map<String, Object>) maplistRoute.get("match");
+
+				if (matchMap != null) {
+					if (beforeName.equals(matchMap.get("channel"))) {
+						removeId = count;
+					}
+				}
+				count++;
+			}
+			routesList.remove(removeId);
+			
+			HashMap<String, Object> newMatchMap = new LinkedHashMap<String, Object>();
+			newMatchMap.put("channel", channelVo.getChannel());
+			newMatchMap.put("receiver", channelVo.getChannel());
+
+			HashMap<String, Object> routesMap = new HashMap<String, Object>();
+			routesMap.put("match", newMatchMap);
+
+			routesList.add(routesMap);
+
+			newRouteMap.put("group_by", routeMap.get("group_by"));
+			newRouteMap.put("group_wait", routeMap.get("group_wait"));
+			newRouteMap.put("group_interval", routeMap.get("group_interval"));
+			newRouteMap.put("repeat_interval", routeMap.get("repeat_interval"));
+			newRouteMap.put("receiver", routeMap.get("receiver"));
+			newRouteMap.put("routes", routesList);
+			
+
+			newChannelMap.put("global", channelMap.get("global"));
+			newChannelMap.put("templates", channelMap.get("templates"));
+			newChannelMap.put("route", newRouteMap);
+			newChannelMap.put("receivers", receiverList);
+
+			YamlConfig config = new YamlConfig();
+			YamlWriter ywriter = new YamlWriter(new FileWriter("channel.yaml"), config);
+			ywriter.write(newChannelMap);
+			ywriter.close();
+
+			String yamlString = FileUtils.readFileToString(new File("channel.yaml"), "utf8");
+
+			Map<String, String> data = new HashMap<String, String>();
+			data.put("config.yml", yamlString);
+
+			configMap.setData(data);
+			V1ConfigMap replacedConfigmap = api.replaceNamespacedConfigMap(alertConfigMap, alertNamespace, configMap,
+					null);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (writer != null)
+					writer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return channelVo;
+	}
+	
+	
 }
