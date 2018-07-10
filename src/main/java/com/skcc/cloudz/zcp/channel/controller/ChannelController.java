@@ -77,7 +77,6 @@ public class ChannelController {
 			channelService.deleteChannel(id, channelResult.getChannel());
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		}
-
 	}
 
 	@RequestMapping(value = "repeat", method = RequestMethod.GET)
@@ -107,6 +106,19 @@ public class ChannelController {
 			return new ResponseEntity<ChannelVo>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<ChannelVo>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "notification/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Void> deleteNotification(@PathVariable("id") final int id, @RequestBody final ChannelDtlVo channelDtlVo) {
+		System.out.println(channelDtlVo.getEmail_to());
+		
+		ChannelDtlVo channelResult = channelService.findById(id);
+		if (channelResult == null) {
+			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+		} else {
+//			channelService.deleteNotification(id, channelResult.getChannel());
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		}
 	}
 
 }

@@ -1052,5 +1052,107 @@ public class KubeCoreManager {
 		return channelVo;
 	}
 	
+	@SuppressWarnings({ "unused", "unchecked", "rawtypes" })
+	public Boolean deleteNotification(int id, String channel) {
+		List<RuleData> ruleList = new ArrayList<RuleData>();
+		FileWriter writer = null;
+		List receiverList = null;
+		Map<String, Object> routeMap = new HashMap<String, Object>();
+		List routesList = null;
+
+		try {
+			ApiClient client = Config.defaultClient();
+			Configuration.setDefaultApiClient(client);
+
+			CoreV1Api api = new CoreV1Api();
+			V1ConfigMap configMap;
+
+			configMap = api.readNamespacedConfigMap(alertConfigMap, alertNamespace, null, null, null);
+
+			File file = new File("channel.yaml");
+
+			writer = new FileWriter(file, false);
+			writer.write(configMap.getData().get("config.yml"));
+			writer.flush();
+
+			YamlReader reader = new YamlReader(new FileReader("channel.yaml"));
+			Object object = reader.read();
+
+			Map<String, Map<String, Object>> mapGlobal = (Map) object;
+			
+			receiverList = (List) mapGlobal.get("receivers");
+			
+
+			
+			
+			HashMap<String, Object> newReceiver = new LinkedHashMap<String, Object>();
+			
+			Map<String, Object> maplistGroups;
+			Iterator iteratorData = receiverList.iterator();
+
+			int mapCount = 0;
+
+			while (iteratorData.hasNext()) {
+				maplistGroups = (Map) iteratorData.next();
+				
+				if (mapCount == id) {
+					newReceiver.put("name", channel);
+					
+					if (maplistGroups.get("email_configs") != null) {
+						newReceiver.put("email_configs", maplistGroups.get("email_configs"));
+					}
+					if (maplistGroups.get("slack_configs") != null) {
+						newReceiver.put("slack_configs", maplistGroups.get("slack_configs"));
+					}
+					if (maplistGroups.get("hipchat_configs") != null) {
+						newReceiver.put("hipchat_configs", maplistGroups.get("hipchat_configs"));
+					}
+					if (maplistGroups.get("webhook_configs") != null) {
+						newReceiver.put("webhook_configs", maplistGroups.get("webhook_configs"));
+					}
+				}
+				mapCount++;
+			}
+			receiverList.remove(id);
+			receiverList.add(newReceiver);
+			
+			
+
+//			receiverList.remove(id);
+
+			Map<String, Object> channelMap = new LinkedHashMap<String, Object>();
+
+			channelMap.put("global", mapGlobal.get("global"));
+			channelMap.put("templates", mapGlobal.get("templates"));
+			channelMap.put("route", mapGlobal.get("route"));
+			channelMap.put("receivers", receiverList);
+
+			YamlConfig config = new YamlConfig();
+			YamlWriter ywriter = new YamlWriter(new FileWriter("channel.yaml"), config);
+			ywriter.write(channelMap);
+			ywriter.close();
+
+//			String yamlString = FileUtils.readFileToString(new File("channel.yaml"), "utf8");
+//
+//			Map<String, String> data = new HashMap<String, String>();
+//			data.put("config.yml", yamlString);
+//
+//			configMap.setData(data);
+//			V1ConfigMap replacedConfigmap = api.replaceNamespacedConfigMap(alertConfigMap, alertNamespace, configMap,
+//					null);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (writer != null)
+					writer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return true;
+	}
+	
 	
 }
