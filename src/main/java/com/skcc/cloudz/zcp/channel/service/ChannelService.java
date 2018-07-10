@@ -347,7 +347,7 @@ public class ChannelService {
 
 		return result;
 	}
-	
+
 	public ChannelVo updateChannelName(int id, ChannelVo channelVo) {
 		ChannelVo result = new ChannelVo();
 		result = kubeCoreManager.updateChannelName(id, channelVo);
@@ -379,42 +379,42 @@ public class ChannelService {
 
 		return result;
 	}
-	
-	public Boolean deleteNotification(int id, String channel) {
-		Boolean result = kubeCoreManager.deleteNotification(id, channel);
 
-//		if (result != null) {
-//			Timer timer = new Timer();
-//			TimerTask task = new TimerTask() {
-//
-//				@Override
-//				public void run() {
-//					StringBuffer response = new StringBuffer();
-//
-//					try {
-//						String url = UriComponentsBuilder.fromUriString(baseUrl).path("/-/reload").build().toString();
-//						URL obj = new URL(url);
-//						URLConnection conn = obj.openConnection();
-//
-//						conn.setDoOutput(true);
-//						OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-//
-//						wr.flush();
-//
-//						BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-//						String inputLine;
-//
-//						while ((inputLine = in.readLine()) != null) {
-//							response.append(inputLine);
-//						}
-//
-//					} catch (Exception e) {
-//						e.printStackTrace();
-//					}
-//				}
-//			};
-//			timer.schedule(task, 120000);
-//		}
+	public Boolean deleteNotification(int id, String channel, ChannelDtlVo channelDtlVo) {
+		Boolean result = kubeCoreManager.deleteNotification(id, channel, channelDtlVo);
+
+		if (result != null) {
+			Timer timer = new Timer();
+			TimerTask task = new TimerTask() {
+
+				@Override
+				public void run() {
+					StringBuffer response = new StringBuffer();
+
+					try {
+						String url = UriComponentsBuilder.fromUriString(baseUrl).path("/-/reload").build().toString();
+						URL obj = new URL(url);
+						URLConnection conn = obj.openConnection();
+
+						conn.setDoOutput(true);
+						OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+
+						wr.flush();
+
+						BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+						String inputLine;
+
+						while ((inputLine = in.readLine()) != null) {
+							response.append(inputLine);
+						}
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			};
+			timer.schedule(task, 120000);
+		}
 
 		return result;
 	}

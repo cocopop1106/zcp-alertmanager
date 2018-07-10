@@ -110,13 +110,12 @@ public class ChannelController {
 	
 	@RequestMapping(value = "notification/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> deleteNotification(@PathVariable("id") final int id, @RequestBody final ChannelDtlVo channelDtlVo) {
-		System.out.println(channelDtlVo.getEmail_to());
 		
 		ChannelDtlVo channelResult = channelService.findById(id);
 		if (channelResult == null) {
 			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
 		} else {
-//			channelService.deleteNotification(id, channelResult.getChannel());
+			channelService.deleteNotification(id, channelResult.getChannel(), channelDtlVo);
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		}
 	}

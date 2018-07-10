@@ -454,7 +454,7 @@ public class KubeCoreManager {
 			Object object = reader.read();
 
 			Map<String, Map<String, Object>> mapGlobal = (Map) object;
-			
+
 			routeMap = mapGlobal.get("route");
 			routesList = (List) routeMap.get("routes");
 
@@ -910,13 +910,13 @@ public class KubeCoreManager {
 
 		return podList;
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
 	public ChannelVo updateChannelName(int id, ChannelVo channelVo) {
 		FileWriter writer = null;
 		List receiverList = null;
 		Map<String, Object> newChannelMap = new LinkedHashMap<String, Object>();
-		
+
 		Map<String, Object> routeMap = new HashMap<String, Object>();
 		Map<String, Object> newRouteMap = new LinkedHashMap<String, Object>();
 		List routesList = null;
@@ -941,10 +941,9 @@ public class KubeCoreManager {
 
 			Map<String, Map<String, Object>> channelMap = (Map) object;
 			HashMap<String, Object> newReceiver = new LinkedHashMap<String, Object>();
-			
+
 			routeMap = channelMap.get("route");
 			routesList = (List) routeMap.get("routes");
-
 
 			receiverList = (List) channelMap.get("receivers");
 
@@ -956,12 +955,12 @@ public class KubeCoreManager {
 
 			while (iteratorData.hasNext()) {
 				maplistGroups = (Map) iteratorData.next();
-				
+
 				if (mapCount == id) {
 					beforeName = maplistGroups.get("name").toString();
-					
+
 					newReceiver.put("name", channelVo.getChannel());
-					
+
 					if (maplistGroups.get("email_configs") != null) {
 						newReceiver.put("email_configs", maplistGroups.get("email_configs"));
 					}
@@ -979,8 +978,7 @@ public class KubeCoreManager {
 			}
 			receiverList.remove(id);
 			receiverList.add(newReceiver);
-			
-			
+
 			Map<String, Object> maplistRoute;
 			Iterator iteratorRoute = routesList.iterator();
 
@@ -988,7 +986,7 @@ public class KubeCoreManager {
 			int removeId = 0;
 
 			Map<String, Object> matchMap = new HashMap<String, Object>();
-			
+
 			while (iteratorRoute.hasNext()) {
 				maplistRoute = (Map) iteratorRoute.next();
 				matchMap = (Map<String, Object>) maplistRoute.get("match");
@@ -1001,7 +999,7 @@ public class KubeCoreManager {
 				count++;
 			}
 			routesList.remove(removeId);
-			
+
 			HashMap<String, Object> newMatchMap = new LinkedHashMap<String, Object>();
 			newMatchMap.put("channel", channelVo.getChannel());
 			newMatchMap.put("receiver", channelVo.getChannel());
@@ -1017,7 +1015,6 @@ public class KubeCoreManager {
 			newRouteMap.put("repeat_interval", routeMap.get("repeat_interval"));
 			newRouteMap.put("receiver", routeMap.get("receiver"));
 			newRouteMap.put("routes", routesList);
-			
 
 			newChannelMap.put("global", channelMap.get("global"));
 			newChannelMap.put("templates", channelMap.get("templates"));
@@ -1051,9 +1048,9 @@ public class KubeCoreManager {
 
 		return channelVo;
 	}
-	
+
 	@SuppressWarnings({ "unused", "unchecked", "rawtypes" })
-	public Boolean deleteNotification(int id, String channel) {
+	public Boolean deleteNotification(int id, String channel, ChannelDtlVo channelDtlVo) {
 		List<RuleData> ruleList = new ArrayList<RuleData>();
 		FileWriter writer = null;
 		List receiverList = null;
@@ -1079,14 +1076,11 @@ public class KubeCoreManager {
 			Object object = reader.read();
 
 			Map<String, Map<String, Object>> mapGlobal = (Map) object;
-			
-			receiverList = (List) mapGlobal.get("receivers");
-			
 
-			
-			
+			receiverList = (List) mapGlobal.get("receivers");
+
 			HashMap<String, Object> newReceiver = new LinkedHashMap<String, Object>();
-			
+
 			Map<String, Object> maplistGroups;
 			Iterator iteratorData = receiverList.iterator();
 
@@ -1094,31 +1088,39 @@ public class KubeCoreManager {
 
 			while (iteratorData.hasNext()) {
 				maplistGroups = (Map) iteratorData.next();
-				
+
 				if (mapCount == id) {
 					newReceiver.put("name", channel);
-					
-					if (maplistGroups.get("email_configs") != null) {
-						newReceiver.put("email_configs", maplistGroups.get("email_configs"));
+
+					if (channelDtlVo.getEmail_to() == null) {
+						if (maplistGroups.get("email_configs") != null) {
+							newReceiver.put("email_configs", maplistGroups.get("email_configs"));
+						}
 					}
-					if (maplistGroups.get("slack_configs") != null) {
-						newReceiver.put("slack_configs", maplistGroups.get("slack_configs"));
+
+					if (channelDtlVo.getSlack_api_url() == null) {
+						if (maplistGroups.get("slack_configs") != null) {
+							newReceiver.put("slack_configs", maplistGroups.get("slack_configs"));
+						}
 					}
-					if (maplistGroups.get("hipchat_configs") != null) {
-						newReceiver.put("hipchat_configs", maplistGroups.get("hipchat_configs"));
+
+					if (channelDtlVo.getHipchat_api_url() == null) {
+						if (maplistGroups.get("hipchat_configs") != null) {
+							newReceiver.put("hipchat_configs", maplistGroups.get("hipchat_configs"));
+						}
 					}
-					if (maplistGroups.get("webhook_configs") != null) {
-						newReceiver.put("webhook_configs", maplistGroups.get("webhook_configs"));
+
+					if (channelDtlVo.getWebhook_url() == null) {
+						if (maplistGroups.get("webhook_configs") != null) {
+							newReceiver.put("webhook_configs", maplistGroups.get("webhook_configs"));
+						}
 					}
+
 				}
 				mapCount++;
 			}
 			receiverList.remove(id);
 			receiverList.add(newReceiver);
-			
-			
-
-//			receiverList.remove(id);
 
 			Map<String, Object> channelMap = new LinkedHashMap<String, Object>();
 
@@ -1132,14 +1134,14 @@ public class KubeCoreManager {
 			ywriter.write(channelMap);
 			ywriter.close();
 
-//			String yamlString = FileUtils.readFileToString(new File("channel.yaml"), "utf8");
-//
-//			Map<String, String> data = new HashMap<String, String>();
-//			data.put("config.yml", yamlString);
-//
-//			configMap.setData(data);
-//			V1ConfigMap replacedConfigmap = api.replaceNamespacedConfigMap(alertConfigMap, alertNamespace, configMap,
-//					null);
+			String yamlString = FileUtils.readFileToString(new File("channel.yaml"), "utf8");
+
+			Map<String, String> data = new HashMap<String, String>();
+			data.put("config.yml", yamlString);
+
+			configMap.setData(data);
+			V1ConfigMap replacedConfigmap = api.replaceNamespacedConfigMap(alertConfigMap, alertNamespace, configMap,
+					null);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1153,6 +1155,5 @@ public class KubeCoreManager {
 		}
 		return true;
 	}
-	
-	
+
 }
