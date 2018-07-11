@@ -983,7 +983,7 @@ public class KubeCoreManager {
 			Map<String, Object> maplistRoute;
 			Iterator iteratorRoute = routesList.iterator();
 
-			List routesList_bak = null;
+			List routesList_bak = new ArrayList();
 
 			int count = 0;
 			int removeId = 0;
