@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 import com.skcc.cloudz.zcp.common.vo.ChannelData;
 import com.skcc.cloudz.zcp.common.vo.ChannelDtlVo;
 import com.skcc.cloudz.zcp.common.vo.ChannelVo;
+import com.skcc.cloudz.zcp.common.vo.ConfigMapVo;
 import com.skcc.cloudz.zcp.common.vo.RepeatVo;
 import com.skcc.cloudz.zcp.common.vo.RuleData;
 import com.skcc.cloudz.zcp.common.util.Message;
@@ -911,7 +912,7 @@ public class KubeCoreManager {
 		return podList;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
+	@SuppressWarnings({ "unchecked", "rawtypes", "unused", "null" })
 	public ChannelVo updateChannelName(int id, ChannelVo channelVo) {
 		FileWriter writer = null;
 		List receiverList = null;
@@ -982,14 +983,22 @@ public class KubeCoreManager {
 			Map<String, Object> maplistRoute;
 			Iterator iteratorRoute = routesList.iterator();
 
+			List routesList_bak = null;
+
 			int count = 0;
 			int removeId = 0;
 
 			Map<String, Object> matchMap = new HashMap<String, Object>();
+			Map<String, Object> matchReMap = new HashMap<String, Object>();
 
 			while (iteratorRoute.hasNext()) {
 				maplistRoute = (Map) iteratorRoute.next();
 				matchMap = (Map<String, Object>) maplistRoute.get("match");
+
+				matchReMap = (Map<String, Object>) maplistRoute.get("match_re");
+				if (matchReMap != null) {
+					routesList_bak.add(matchReMap);
+				}
 
 				if (matchMap != null) {
 					if (beforeName.equals(matchMap.get("channel"))) {
@@ -1005,6 +1014,17 @@ public class KubeCoreManager {
 			newMatchMap.put("receiver", channelVo.getChannel());
 
 			HashMap<String, Object> routesMap = new HashMap<String, Object>();
+
+			Map<String, Object> maplistRouteRe;
+			
+			if(routesList_bak !=null) {
+				Iterator iteratorRoute_bak = routesList_bak.iterator();
+				while (iteratorRoute_bak.hasNext()) {
+					maplistRouteRe = (Map) iteratorRoute_bak.next();
+					routesMap.put("match_re", maplistRouteRe);
+				}	
+			}
+
 			routesMap.put("match", newMatchMap);
 
 			routesList.add(routesMap);
@@ -1154,6 +1174,78 @@ public class KubeCoreManager {
 			}
 		}
 		return true;
+	}
+	
+	public ConfigMapVo getAlertConfig() {
+		FileWriter writer = null;
+		ConfigMapVo configmap = new ConfigMapVo();
+		try {
+			ApiClient client = Config.defaultClient();
+			Configuration.setDefaultApiClient(client);
+
+			CoreV1Api api = new CoreV1Api();
+			V1ConfigMap configMap;
+
+			configMap = api.readNamespacedConfigMap(alertConfigMap, alertNamespace, null, null, null);
+
+			File file = new File("configMap.yaml");
+
+			writer = new FileWriter(file, false);
+			writer.write(configMap.getData().get("config.yml"));
+			writer.flush();
+
+			String yamlString = FileUtils.readFileToString(new File("configMap.yaml"), "utf8");
+			configmap.setConfigMap(yamlString);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (writer != null)
+					writer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return configmap;
+	}
+	
+	@SuppressWarnings("unused")
+	public ConfigMapVo updateAlertConfig() {
+		FileWriter writer = null;
+		ConfigMapVo configmap = new ConfigMapVo();
+
+		try {
+			ApiClient client = Config.defaultClient();
+			Configuration.setDefaultApiClient(client);
+
+			CoreV1Api api = new CoreV1Api();
+			V1ConfigMap configMap;
+
+			configMap = api.readNamespacedConfigMap(alertConfigMap, alertNamespace, null, null, null);
+
+			String yamlString = FileUtils.readFileToString(new File("configMap.yaml"), "utf8");
+			configmap.setConfigMap(yamlString);
+
+			Map<String, String> data = new HashMap<String, String>();
+			data.put("config.yml", yamlString);
+
+			configMap.setData(data);
+			V1ConfigMap replacedConfigmap = api.replaceNamespacedConfigMap(alertConfigMap, alertNamespace, configMap,
+					null);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (writer != null)
+					writer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return configmap;
 	}
 
 }

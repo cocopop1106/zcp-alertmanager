@@ -18,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.skcc.cloudz.zcp.common.vo.ChannelDtlVo;
 import com.skcc.cloudz.zcp.common.vo.ChannelListVo;
 import com.skcc.cloudz.zcp.common.vo.ChannelVo;
+import com.skcc.cloudz.zcp.common.vo.ConfigMapVo;
 import com.skcc.cloudz.zcp.common.vo.RepeatVo;
 import com.skcc.cloudz.zcp.channel.service.ChannelService;
 
@@ -118,6 +119,24 @@ public class ChannelController {
 			channelService.deleteNotification(id, channelResult.getChannel(), channelDtlVo);
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		}
+	}
+	
+	@RequestMapping(value = "configMap", method = RequestMethod.GET)
+	public ResponseEntity<ConfigMapVo> getAlertConfig() {
+		ConfigMapVo configMap = channelService.getAlertConfig();
+		if (configMap == null) {
+			return new ResponseEntity<ConfigMapVo>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<ConfigMapVo>(configMap, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "updateConfigMap", method = RequestMethod.GET)
+	public ResponseEntity<ConfigMapVo> updateAlertConfig() {
+		ConfigMapVo configMap = channelService.updateAlertConfig();
+		if (configMap == null) {
+			return new ResponseEntity<ConfigMapVo>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<ConfigMapVo>(configMap, HttpStatus.OK);
 	}
 
 }

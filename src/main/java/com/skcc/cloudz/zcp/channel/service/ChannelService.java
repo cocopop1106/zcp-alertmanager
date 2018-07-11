@@ -23,6 +23,7 @@ import com.skcc.cloudz.zcp.common.vo.ChannelData;
 import com.skcc.cloudz.zcp.common.vo.ChannelDtlVo;
 import com.skcc.cloudz.zcp.common.vo.ChannelListVo;
 import com.skcc.cloudz.zcp.common.vo.ChannelVo;
+import com.skcc.cloudz.zcp.common.vo.ConfigMapVo;
 import com.skcc.cloudz.zcp.common.vo.RepeatVo;
 import com.skcc.cloudz.zcp.manager.KubeCoreManager;
 
@@ -417,6 +418,20 @@ public class ChannelService {
 		}
 
 		return result;
+	}
+	
+	public ConfigMapVo getAlertConfig() {
+		ConfigMapVo configMapVo = new ConfigMapVo();
+		configMapVo = kubeCoreManager.getAlertConfig();
+
+		return configMapVo;
+	}
+	
+	public ConfigMapVo updateAlertConfig() {
+		ConfigMapVo configMapVo = new ConfigMapVo();
+		configMapVo = kubeCoreManager.updateAlertConfig();
+
+		return configMapVo;
 	}
 
 }
