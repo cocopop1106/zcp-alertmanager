@@ -54,24 +54,22 @@ public class ChannelService {
 			count = 0;
 			ChannelListVo channel = new ChannelListVo();
 
-			// if (!"default".equals(maplistReceivers.get("name")) &&
-			// !"sk-cps-ops".equals(maplistReceivers.get("name"))
-			// && !"zcp-webhook".equals(maplistReceivers.get("name"))) {
-			channel.setChannel(maplistReceivers.get("name").toString());
-			if (maplistReceivers.get("email_configs") != null)
-				count++;
-			if (maplistReceivers.get("hipchat_configs") != null)
-				count++;
-			if (maplistReceivers.get("slack_configs") != null)
-				count++;
-			if (maplistReceivers.get("webhook_configs") != null)
-				count++;
-			channel.setId(id + "");
-			channel.setNotifications(count + "");
-			channelViewList.add(channel);
-
+			if (!"default".equals(maplistReceivers.get("name")) && !"sk-cps-ops".equals(maplistReceivers.get("name"))
+					&& !"zcp-webhook".equals(maplistReceivers.get("name"))) {
+				channel.setChannel(maplistReceivers.get("name").toString());
+				if (maplistReceivers.get("email_configs") != null)
+					count++;
+				if (maplistReceivers.get("hipchat_configs") != null)
+					count++;
+				if (maplistReceivers.get("slack_configs") != null)
+					count++;
+				if (maplistReceivers.get("webhook_configs") != null)
+					count++;
+				channel.setId(id + "");
+				channel.setNotifications(count + "");
+				channelViewList.add(channel);
+			}
 			id++;
-			// }
 		}
 
 		return channelViewList;
@@ -96,9 +94,6 @@ public class ChannelService {
 			count = 0;
 			ChannelDtlVo channel = new ChannelDtlVo();
 
-			// if (!"default".equals(maplistReceivers.get("name")) &&
-			// !"sk-cps-ops".equals(maplistReceivers.get("name"))
-			// && !"zcp-webhook".equals(maplistReceivers.get("name"))) {
 			channel.setChannel(maplistReceivers.get("name").toString());
 			if (maplistReceivers.get("email_configs") != null) {
 				count++;
@@ -180,7 +175,6 @@ public class ChannelService {
 			channelViewList.add(channel);
 
 			id++;
-			// }
 		}
 
 		channelDtlVo = channelViewList.get(channelId);
@@ -419,14 +413,14 @@ public class ChannelService {
 
 		return result;
 	}
-	
+
 	public ConfigMapVo getAlertConfig() {
 		ConfigMapVo configMapVo = new ConfigMapVo();
 		configMapVo = kubeCoreManager.getAlertConfig();
 
 		return configMapVo;
 	}
-	
+
 	public ConfigMapVo updateAlertConfig() {
 		ConfigMapVo configMapVo = new ConfigMapVo();
 		configMapVo = kubeCoreManager.updateAlertConfig();

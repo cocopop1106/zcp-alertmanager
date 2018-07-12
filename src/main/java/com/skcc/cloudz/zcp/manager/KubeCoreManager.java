@@ -135,10 +135,13 @@ public class KubeCoreManager {
 
 			HashMap<String, Object> matchMap = new LinkedHashMap<String, Object>();
 			matchMap.put("channel", channel.getChannel());
-			matchMap.put("receiver", channel.getChannel());
+			
+			HashMap<String, Object> receiverMap = new LinkedHashMap<String, Object>();
+			receiverMap.put("receiver", channel.getChannel());
 
 			HashMap<String, Object> routesMap = new HashMap<String, Object>();
 			routesMap.put("match", matchMap);
+			routesMap.put("receiver", receiverMap.get("receiver"));
 
 			routesList.add(routesMap);
 
@@ -255,38 +258,38 @@ public class KubeCoreManager {
 
 				emailMap.put("to", channelDtlVo.getEmail_to());
 
-				if (channelDtlVo.getEmail_from() != null && !"".equals(channelDtlVo.getEmail_from())) {
-					emailMap.put("from", channelDtlVo.getEmail_from());
-				} else {
-					emailMap.put("from", "'Alertmanager <alertmanager@zcp.test.com>'");
-				}
-
-				if (channelDtlVo.getEmail_smarthost() != null && !"".equals(channelDtlVo.getEmail_smarthost())) {
-					emailMap.put("smarthost", channelDtlVo.getEmail_smarthost());
-				} else {
-					emailMap.put("smarthost", "smtp.sendgrid.net:465");
-				}
-
-				if (channelDtlVo.getEmail_auth_username() != null
-						&& !"".equals(channelDtlVo.getEmail_auth_username())) {
-					emailMap.put("auth_username", channelDtlVo.getEmail_auth_username());
-				} else {
-					emailMap.put("auth_username", "zcp-sender-api-key");
-				}
-
-				if (channelDtlVo.getEmail_auth_password() != null
-						&& !"".equals(channelDtlVo.getEmail_auth_password())) {
-					emailMap.put("auth_password", channelDtlVo.getEmail_auth_password());
-				} else {
-					emailMap.put("auth_password",
-							"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");
-				}
-
-				if (channelDtlVo.getEmail_require_tls() != null && !"".equals(channelDtlVo.getEmail_require_tls())) {
-					emailMap.put("require_tls", channelDtlVo.getEmail_require_tls());
-				} else {
-					emailMap.put("require_tls", "false");
-				}
+//				if (channelDtlVo.getEmail_from() != null && !"".equals(channelDtlVo.getEmail_from())) {
+//					emailMap.put("from", channelDtlVo.getEmail_from());
+//				} else {
+//					emailMap.put("from", "Alertmanager <alertmanager@zcp.test.com>");
+//				}
+//
+//				if (channelDtlVo.getEmail_smarthost() != null && !"".equals(channelDtlVo.getEmail_smarthost())) {
+//					emailMap.put("smarthost", channelDtlVo.getEmail_smarthost());
+//				} else {
+//					emailMap.put("smarthost", "smtp.sendgrid.net:465");
+//				}
+//
+//				if (channelDtlVo.getEmail_auth_username() != null
+//						&& !"".equals(channelDtlVo.getEmail_auth_username())) {
+//					emailMap.put("auth_username", channelDtlVo.getEmail_auth_username());
+//				} else {
+//					emailMap.put("auth_username", "zcp-sender-api-key");
+//				}
+//
+//				if (channelDtlVo.getEmail_auth_password() != null
+//						&& !"".equals(channelDtlVo.getEmail_auth_password())) {
+//					emailMap.put("auth_password", channelDtlVo.getEmail_auth_password());
+//				} else {
+//					emailMap.put("auth_password",
+//							"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");
+//				}
+//
+//				if (channelDtlVo.getEmail_require_tls() != null && !"".equals(channelDtlVo.getEmail_require_tls())) {
+//					emailMap.put("require_tls", channelDtlVo.getEmail_require_tls());
+//				} else {
+//					emailMap.put("require_tls", "false");
+//				}
 
 				if (channelDtlVo.getEmail_send_resolved() != null
 						&& !"".equals(channelDtlVo.getEmail_send_resolved())) {
@@ -912,7 +915,7 @@ public class KubeCoreManager {
 		return podList;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes", "unused", "null" })
+	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
 	public ChannelVo updateChannelName(int id, ChannelVo channelVo) {
 		FileWriter writer = null;
 		List receiverList = null;
@@ -993,9 +996,10 @@ public class KubeCoreManager {
 
 			while (iteratorRoute.hasNext()) {
 				maplistRoute = (Map) iteratorRoute.next();
+				
 				matchMap = (Map<String, Object>) maplistRoute.get("match");
-
 				matchReMap = (Map<String, Object>) maplistRoute.get("match_re");
+				
 				if (matchReMap != null) {
 					routesList_bak.add(matchReMap);
 				}
@@ -1011,24 +1015,18 @@ public class KubeCoreManager {
 
 			HashMap<String, Object> newMatchMap = new LinkedHashMap<String, Object>();
 			newMatchMap.put("channel", channelVo.getChannel());
-			newMatchMap.put("receiver", channelVo.getChannel());
+			
+			HashMap<String, Object> receiverMap = new LinkedHashMap<String, Object>();
+			receiverMap.put("receiver", channelVo.getChannel());
 
 			HashMap<String, Object> routesMap = new HashMap<String, Object>();
+			routesMap.put("match", newMatchMap);
+			routesMap.put("receiver", receiverMap.get("receiver"));
+			
+			routesList.add(routesMap);
 
 			Map<String, Object> maplistRouteRe;
 			
-			if(routesList_bak !=null) {
-				Iterator iteratorRoute_bak = routesList_bak.iterator();
-				while (iteratorRoute_bak.hasNext()) {
-					maplistRouteRe = (Map) iteratorRoute_bak.next();
-					routesMap.put("match_re", maplistRouteRe);
-				}	
-			}
-
-			routesMap.put("match", newMatchMap);
-
-			routesList.add(routesMap);
-
 			newRouteMap.put("group_by", routeMap.get("group_by"));
 			newRouteMap.put("group_wait", routeMap.get("group_wait"));
 			newRouteMap.put("group_interval", routeMap.get("group_interval"));
