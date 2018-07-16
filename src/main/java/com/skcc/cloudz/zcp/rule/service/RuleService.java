@@ -64,28 +64,28 @@ public class RuleService {
 				rule.setSeverity(maplistLabels.get("severity").toString());
 
 				if ("NodeDown".equals(rule.getType())) {
-					condition = "=";
+					condition = "==";
 
 					rule.setCondition("");
-					String[] gb = maplistRules.get("expr").toString().split("=");
+					String[] gb = maplistRules.get("expr").toString().split("==");
 
 					rule.setValue1("");
 					rule.setValue2("");
 
 				} else if ("ApiserverDown".equals(rule.getType())) {
-					condition = "=";
+					condition = "==";
 
 					rule.setCondition("");
-					String[] gb = maplistRules.get("expr").toString().split("=");
+					String[] gb = maplistRules.get("expr").toString().split("==");
 
 					rule.setValue1("");
 					rule.setValue2("");
 
 				} else if ("K8SNodeNotReady".equals(rule.getType())) {
-					condition = "=";
+					condition = "==";
 
 					rule.setCondition("");
-					String[] gb = maplistRules.get("expr").toString().split("=");
+					String[] gb = maplistRules.get("expr").toString().split("==");
 
 					rule.setValue1("");
 					rule.setValue2("");
