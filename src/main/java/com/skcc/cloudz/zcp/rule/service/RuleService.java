@@ -72,8 +72,7 @@ public class RuleService {
 					rule.setValue1("");
 					rule.setValue2("");
 
-				} 
-				else if ("ApiserverDown".equals(rule.getType())) {
+				} else if ("ApiserverDown".equals(rule.getType())) {
 					condition = "==";
 
 					rule.setCondition("");
@@ -82,8 +81,7 @@ public class RuleService {
 					rule.setValue1("");
 					rule.setValue2("");
 
-				} 
-				else if ("K8SNodeNotReady".equals(rule.getType())) {
+				} else if ("K8SNodeNotReady".equals(rule.getType())) {
 					condition = "==";
 
 					rule.setCondition("");
@@ -92,14 +90,7 @@ public class RuleService {
 					rule.setValue1("");
 					rule.setValue2("");
 
-				} 
-//				else if ("PodFrequentlyRestarting".equals(rule.getType())) {
-//					rule.setCondition("");
-//					rule.setValue1("");
-//					rule.setValue2("");
-//
-//				} 
-				else {
+				} else {
 					if (maplistRules.get("expr").toString().indexOf(">") >= 0) {
 						condition = maplistRules.get("expr").toString().substring(
 								maplistRules.get("expr").toString().indexOf(">"),
@@ -165,24 +156,21 @@ public class RuleService {
 
 				rule.setValue(maplistRules.get("expr").toString());
 
-			} 
-			else if ("ApiserverDown".equals(rule.getType())) {
+			} else if ("ApiserverDown".equals(rule.getType())) {
 				rule.setCondition("");
 				rule.setValue1("");
 				rule.setValue2("");
 
 				rule.setValue(maplistRules.get("expr").toString());
 
-			} 
-			else if ("K8SNodeNotReady".equals(rule.getType())) {
+			} else if ("K8SNodeNotReady".equals(rule.getType())) {
 				rule.setCondition("");
 				rule.setValue1("");
 				rule.setValue2("");
 
 				rule.setValue(maplistRules.get("expr").toString());
 
-			} 
-			else if ("PodFrequentlyRestarting".equals(rule.getType())) {
+			} else if ("PodFrequentlyRestarting".equals(rule.getType())) {
 				if (maplistRules.get("expr").toString().indexOf(">") >= 0) {
 					condition = maplistRules.get("expr").toString().substring(
 							maplistRules.get("expr").toString().indexOf(">"),
@@ -198,32 +186,24 @@ public class RuleService {
 
 				rule.setValue1(gb[0]);
 				rule.setValue2(gb[1]);
-				
-				
-				
-				String expr = maplistRules.get("expr").toString();
-				int idx = expr.indexOf('~');
-				String exprSub = expr.substring(idx + 2);
-				int lastIdx = exprSub.lastIndexOf(".");
-				String pod = exprSub.substring(0, lastIdx);
-				
-				System.out.println("######## "+pod);
-				rule.setPod(pod);
-				
-//				rule.setCondition("");
-//				rule.setValue1("");
-//				rule.setValue2("");
-//
-//				String expr = maplistRules.get("expr").toString();
-//				int idx = expr.indexOf('\"');
-//				String exprSub = expr.substring(idx + 1);
-//				int lastIdx = exprSub.lastIndexOf(".");
-//				String pod = exprSub.substring(0, lastIdx);
-//
-//				rule.setValue(pod);
 
-			} 
-			else {
+				String expr = maplistRules.get("expr").toString();
+
+				int pod_idx = expr.indexOf('~');
+				String pod_exprSub = expr.substring(pod_idx + 2);
+				int pod_lastIdx = pod_exprSub.lastIndexOf(".");
+				
+				String pod = pod_exprSub.substring(0, pod_lastIdx);
+				rule.setPod(pod);
+
+				int namespace_idx = expr.indexOf('\"');
+				String namespace_exprSub = expr.substring(namespace_idx + 1);
+				int namespace_lastIdx = namespace_exprSub.lastIndexOf(",");
+				
+				String namespace = namespace_exprSub.substring(0, namespace_lastIdx - 1);
+				rule.setNamespace(namespace);
+
+			} else {
 				if (maplistRules.get("expr").toString().indexOf(">") >= 0) {
 					condition = maplistRules.get("expr").toString().substring(
 							maplistRules.get("expr").toString().indexOf(">"),
