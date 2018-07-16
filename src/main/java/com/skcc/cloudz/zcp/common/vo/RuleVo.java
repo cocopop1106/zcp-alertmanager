@@ -11,6 +11,8 @@ public class RuleVo {
 	private String duration;
 	private String channel;
 	private String value;
+	private String namespace;
+	private String pod;
 
 	/**
 	 * @return the id
@@ -145,6 +147,34 @@ public class RuleVo {
 	 */
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+	/**
+	 * @return the namespace
+	 */
+	public String getNamespace() {
+		return namespace;
+	}
+
+	/**
+	 * @param namespace the namespace to set
+	 */
+	public void setNamespace(String namespace) {
+		this.namespace = namespace;
+	}
+
+	/**
+	 * @return the pod
+	 */
+	public String getPod() {
+		return pod;
+	}
+
+	/**
+	 * @param pod the pod to set
+	 */
+	public void setPod(String pod) {
+		this.pod = pod;
 	}
 
 }

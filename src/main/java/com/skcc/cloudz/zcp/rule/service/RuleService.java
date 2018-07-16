@@ -72,7 +72,8 @@ public class RuleService {
 					rule.setValue1("");
 					rule.setValue2("");
 
-				} else if ("ApiserverDown".equals(rule.getType())) {
+				} 
+				else if ("ApiserverDown".equals(rule.getType())) {
 					condition = "==";
 
 					rule.setCondition("");
@@ -81,7 +82,8 @@ public class RuleService {
 					rule.setValue1("");
 					rule.setValue2("");
 
-				} else if ("K8SNodeNotReady".equals(rule.getType())) {
+				} 
+				else if ("K8SNodeNotReady".equals(rule.getType())) {
 					condition = "==";
 
 					rule.setCondition("");
@@ -90,12 +92,14 @@ public class RuleService {
 					rule.setValue1("");
 					rule.setValue2("");
 
-				} else if ("PodFrequentlyRestarting".equals(rule.getType())) {
-					rule.setCondition("");
-					rule.setValue1("");
-					rule.setValue2("");
-
-				} else {
+				} 
+//				else if ("PodFrequentlyRestarting".equals(rule.getType())) {
+//					rule.setCondition("");
+//					rule.setValue1("");
+//					rule.setValue2("");
+//
+//				} 
+				else {
 					if (maplistRules.get("expr").toString().indexOf(">") >= 0) {
 						condition = maplistRules.get("expr").toString().substring(
 								maplistRules.get("expr").toString().indexOf(">"),
@@ -161,34 +165,65 @@ public class RuleService {
 
 				rule.setValue(maplistRules.get("expr").toString());
 
-			} else if ("ApiserverDown".equals(rule.getType())) {
+			} 
+			else if ("ApiserverDown".equals(rule.getType())) {
 				rule.setCondition("");
 				rule.setValue1("");
 				rule.setValue2("");
 
 				rule.setValue(maplistRules.get("expr").toString());
 
-			} else if ("K8SNodeNotReady".equals(rule.getType())) {
+			} 
+			else if ("K8SNodeNotReady".equals(rule.getType())) {
 				rule.setCondition("");
 				rule.setValue1("");
 				rule.setValue2("");
 
 				rule.setValue(maplistRules.get("expr").toString());
 
-			} else if ("PodFrequentlyRestarting".equals(rule.getType())) {
-				rule.setCondition("");
-				rule.setValue1("");
-				rule.setValue2("");
+			} 
+			else if ("PodFrequentlyRestarting".equals(rule.getType())) {
+				if (maplistRules.get("expr").toString().indexOf(">") >= 0) {
+					condition = maplistRules.get("expr").toString().substring(
+							maplistRules.get("expr").toString().indexOf(">"),
+							maplistRules.get("expr").toString().indexOf(">") + 1);
+				} else {
+					condition = maplistRules.get("expr").toString().substring(
+							maplistRules.get("expr").toString().indexOf("<"),
+							maplistRules.get("expr").toString().indexOf("<") + 1);
+				}
 
+				rule.setCondition(condition);
+				String[] gb = maplistRules.get("expr").toString().split(">|<");
+
+				rule.setValue1(gb[0]);
+				rule.setValue2(gb[1]);
+				
+				
+				
 				String expr = maplistRules.get("expr").toString();
-				int idx = expr.indexOf('\"');
-				String exprSub = expr.substring(idx + 1);
+				int idx = expr.indexOf('~');
+				String exprSub = expr.substring(idx + 2);
 				int lastIdx = exprSub.lastIndexOf(".");
 				String pod = exprSub.substring(0, lastIdx);
+				
+				System.out.println("######## "+pod);
+				rule.setPod(pod);
+				
+//				rule.setCondition("");
+//				rule.setValue1("");
+//				rule.setValue2("");
+//
+//				String expr = maplistRules.get("expr").toString();
+//				int idx = expr.indexOf('\"');
+//				String exprSub = expr.substring(idx + 1);
+//				int lastIdx = exprSub.lastIndexOf(".");
+//				String pod = exprSub.substring(0, lastIdx);
+//
+//				rule.setValue(pod);
 
-				rule.setValue(pod);
-
-			} else {
+			} 
+			else {
 				if (maplistRules.get("expr").toString().indexOf(">") >= 0) {
 					condition = maplistRules.get("expr").toString().substring(
 							maplistRules.get("expr").toString().indexOf(">"),
