@@ -13,6 +13,7 @@ public class RuleVo {
 	private String value;
 	private String namespace;
 	private String pod;
+	private String notification;
 
 	/**
 	 * @return the id
@@ -177,4 +178,19 @@ public class RuleVo {
 		this.pod = pod;
 	}
 
+	/**
+	 * @return the notification
+	 */
+	public String getNotification() {
+		return notification;
+	}
+
+	/**
+	 * @param notification the notification to set
+	 */
+	public void setNotification(String notification) {
+		this.notification = notification;
+	}
+
+	
 }

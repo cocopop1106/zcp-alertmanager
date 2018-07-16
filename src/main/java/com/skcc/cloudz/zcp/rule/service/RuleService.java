@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.skcc.cloudz.zcp.common.vo.ChannelListVo;
 import com.skcc.cloudz.zcp.common.vo.RuleData;
 import com.skcc.cloudz.zcp.common.vo.RuleVo;
 import com.skcc.cloudz.zcp.manager.KubeCoreManager;
@@ -110,8 +111,10 @@ public class RuleService {
 
 				if (maplistRules.get("for") != null)
 					rule.setDuration(maplistRules.get("for").toString());
+				
 				rule.setChannel(maplistLabels.get("channel").toString());
-
+//				rule.setNotification(getNotification(maplistLabels.get("channel").toString()));
+				
 				rule.setValue(rule.getCondition() + rule.getValue2());
 
 				ruleViewList.add(count, rule);
@@ -120,6 +123,39 @@ public class RuleService {
 		}
 
 		return ruleViewList;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public String getNotification(String name) {
+		List listChannels = kubeCoreManager.getChannelList();
+
+		Map<String, Object> maplistReceivers;
+		int count = 0;
+		String notification = "";
+
+		Iterator iterChannel = listChannels.iterator();
+
+		while (iterChannel.hasNext()) {
+			maplistReceivers = (Map) iterChannel.next();
+			count = 0;
+
+			if (!"default".equals(maplistReceivers.get("name")) && !"sk-cps-ops".equals(maplistReceivers.get("name"))
+					&& !"zcp-webhook".equals(maplistReceivers.get("name"))) {
+				if(name.equals(maplistReceivers.get("name").toString())) {
+					if (maplistReceivers.get("email_configs") != null)
+						count++;
+					if (maplistReceivers.get("hipchat_configs") != null)
+						count++;
+					if (maplistReceivers.get("slack_configs") != null)
+						count++;
+					if (maplistReceivers.get("webhook_configs") != null)
+						count++;
+				}
+			}
+		}
+		notification = count + "";
+
+		return notification;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
@@ -192,14 +228,14 @@ public class RuleService {
 				int pod_idx = expr.indexOf('~');
 				String pod_exprSub = expr.substring(pod_idx + 2);
 				int pod_lastIdx = pod_exprSub.lastIndexOf(".");
-				
+
 				String pod = pod_exprSub.substring(0, pod_lastIdx);
 				rule.setPod(pod);
 
 				int namespace_idx = expr.indexOf('\"');
 				String namespace_exprSub = expr.substring(namespace_idx + 1);
 				int namespace_lastIdx = namespace_exprSub.lastIndexOf(",");
-				
+
 				String namespace = namespace_exprSub.substring(0, namespace_lastIdx - 1);
 				rule.setNamespace(namespace);
 
