@@ -169,30 +169,35 @@ public class AlertService {
 				JSONObject alertObj = (JSONObject) resultArr.get(i);
 				AlertVo alertVo = new AlertVo();
 
-				if (alertObj.get("startsAt") != null) {
-					Object startsAt = TimestampUtil.ISO8601ToDate(alertObj.get("startsAt"));
-					alertVo.setTime(startsAt.toString());
-				}
-
 				JSONObject labelsObj = (JSONObject) alertObj.get("labels");
-				if (labelsObj.get("severity") != null) {
-					alertVo.setSeverity(labelsObj.get("severity").toString());
-				}
 
-				if (labelsObj.get("alertname") != null) {
-					alertVo.setType(labelsObj.get("alertname").toString());
-				}
+				if (!"sk-cps-ops".equals(labelsObj.get("channel")) && !"default".equals(labelsObj.get("channel"))
+						&& !"zcp-webhook".equals(labelsObj.get("channel"))) {
 
-				if (labelsObj.get("channel") != null) {
-					alertVo.setReceiver(labelsObj.get("channel").toString());
-				}
+					if (alertObj.get("startsAt") != null) {
+						Object startsAt = TimestampUtil.ISO8601ToDate(alertObj.get("startsAt"));
+						alertVo.setTime(startsAt.toString());
+					}
 
-				JSONObject annotationsObj = (JSONObject) alertObj.get("annotations");
-				if (annotationsObj.get("description") != null) {
-					alertVo.setDescription(annotationsObj.get("description").toString());
-				}
+					if (labelsObj.get("severity") != null) {
+						alertVo.setSeverity(labelsObj.get("severity").toString());
+					}
 
-				resultList.add(alertVo);
+					if (labelsObj.get("alertname") != null) {
+						alertVo.setType(labelsObj.get("alertname").toString());
+					}
+
+					if (labelsObj.get("channel") != null) {
+						alertVo.setReceiver(labelsObj.get("channel").toString());
+					}
+
+					JSONObject annotationsObj = (JSONObject) alertObj.get("annotations");
+					if (annotationsObj.get("description") != null) {
+						alertVo.setDescription(annotationsObj.get("description").toString());
+					}
+
+					resultList.add(alertVo);
+				}
 			}
 		}
 		return resultList;
