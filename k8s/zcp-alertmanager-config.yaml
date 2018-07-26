@@ -6,7 +6,7 @@ metadata:
 data:
   SPRING_ACTIVE_PROFILE: stage
   ALERT_BASE_URI: http://alertmanager-service:9093
-  ALERT_BASE_URI: alertmanager
+  ALERT_CONFIGMAP: alertmanager
   NAMESPACE: zcp-system
   PROMET_BASE_URI: http://prometheus-service:9090
   PROMET_CONFIGMAP: prometheus-user-rules
