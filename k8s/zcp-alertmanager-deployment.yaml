@@ -36,9 +36,9 @@ spec:
         ports:
         - name: cont-port
           containerPort: 8080
-#        envFrom:
-#        - configMapRef:
-#            name: cloud-movie-bk-config
+        envFrom:
+        - configMapRef:
+            name: zcp-alertmanager-config
 #        env:
 #          - name: REDIS_PASSWORD
 #            valueFrom:
