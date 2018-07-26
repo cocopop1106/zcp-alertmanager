@@ -1,0 +1,17 @@
+spring:
+  profiles: stage
+
+props:
+  appName: zcp-alertmanager-stage
+  alertManager:
+    baseUrl: ${ALERT_BASE_URI}
+    configMap: ${ALERT_CONFIGMAP}
+    namespace: ${NAMESPACE}
+  prometheus:
+    baseUrl: ${PROMET_BASE_URI}
+    configMap: ${PROMET_CONFIGMAP}
+    namespace: ${NAMESPACE}
+  mariaDB:
+    url: ${MARIADB_URI}
+    id: ${MARIADB_ID}
+    password: ${MARIADB_PWD}

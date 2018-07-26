@@ -1,0 +1,17 @@
+spring:
+  profiles: dev
+
+props: 
+  appName: zcp-alertmanager-dev
+  alertManager:
+    baseUrl: http://alertmanager.cloudzcp.io
+    configMap: alertmanager
+    namespace: zcp-system
+  prometheus:
+    baseUrl: http://prometheus.cloudzcp.io
+    configMap: prometheus-user-rules
+    namespace: zcp-system
+  mariaDB:
+    url: jdbc:mariadb://169.56.100.62:30000/alertmanager
+    id: root
+    password: admin  
