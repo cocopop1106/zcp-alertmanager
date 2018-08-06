@@ -2,16 +2,16 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   annotations:
-   ingress.bluemix.net/redirect-to-https: "True"
+    ingress.bluemix.net/redirect-to-https: "True"
   name: zcp-alertmanager-ingress
   namespace: zcp-system
 spec:
   tls:
   - hosts:
-    - alert.cloudzcp.io
-    secretName: cloudzcp-io-cert
+    - alert.cloudzcp.com
+    secretName: cloudzcp-com-cert
   rules:
-  - host: alert.cloudzcp.io
+  - host: alert.cloudzcp.com
     http:
       paths:
       - backend:
