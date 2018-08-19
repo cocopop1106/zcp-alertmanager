@@ -1,8 +1,10 @@
 # The zcp-alertmanager Installation Guide
 
-> zcp-alertmanager 는 zcp-portal-ui (Console)의 back-end api server 로서, Prometheus와 alertmanager의 Proxy 역할을 하는 API Server 이다.
-> zcp-alertmanager 을 설치하기 이전에 k8s cluster 가 설치되어 있어야 하고, cluster role 권한으로 `kubectl` 을 수행 할 수 있는 환경을 갖추어야 한다.
-> zcp-alertmanager-store 의 데이터를 사용하므로 설치가 미리 되어 있어야 한다.
+zcp-alertmanager 는 zcp-portal-ui (Console)의 back-end api server 로서, Prometheus와 alertmanager의 Proxy 역할을 하는 API Server 이다.
+
+zcp-alertmanager 을 설치하기 이전에 k8s cluster 가 설치되어 있어야 하고, cluster role 권한으로 `kubectl` 을 수행 할 수 있는 환경을 갖추어야 한다.
+
+:bangbang: zcp-alertmanager-store 의 데이터를 사용하므로 설치가 미리 되어 있어야 한다.
 
 ## Clone this project into the desktop
 ```
