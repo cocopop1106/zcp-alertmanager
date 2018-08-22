@@ -9,6 +9,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.skcc.cloudz.zcp.alertmanager.common.exception.ZcpException;
 import com.skcc.cloudz.zcp.alertmanager.common.util.TimestampUtil;
 import com.skcc.cloudz.zcp.alertmanager.common.vo.AlertCountVo;
 import com.skcc.cloudz.zcp.alertmanager.common.vo.AlertHistoryVo;
@@ -35,8 +36,14 @@ public class AlertService {
 	@Autowired
 	private MariaManager mariaManager;
 
-	public AlertCountVo getAlertCount() {
-		JSONObject resultObj = prometheusManager.getAlertCount();
+	public AlertCountVo getAlertCount() throws ZcpException {
+		JSONObject resultObj = new JSONObject();
+		try {
+			resultObj = prometheusManager.getAlertCount();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ZcpException("10001", "AlertCount exception: " + e.getMessage());
+		}
 		AlertCountVo alertCountVo = new AlertCountVo();
 
 		if (resultObj != null) {
@@ -53,10 +60,16 @@ public class AlertService {
 		return alertCountVo;
 	}
 
-	public ApiServerVo getApiServer() {
-		JSONObject resultObj = prometheusManager.getApiServer();
-		ApiServerVo apiServerVo = new ApiServerVo();
+	public ApiServerVo getApiServer() throws ZcpException {
+		JSONObject resultObj = new JSONObject();
+		try {
+			resultObj = prometheusManager.getApiServer();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ZcpException("10002", "ApiServer exception: " + e.getMessage());
+		}
 
+		ApiServerVo apiServerVo = new ApiServerVo();
 		if (resultObj != null) {
 			JSONObject dataObj = (JSONObject) resultObj.get("data");
 			JSONArray resultArr = (JSONArray) dataObj.get("result");
@@ -72,15 +85,31 @@ public class AlertService {
 					apiServerVo.setStatus("Downed");
 				}
 			}
+			if(resultArr.size() == 0) {
+				apiServerVo.setStatus("OK");
+			}
 		}
 		return apiServerVo;
 	}
 
-	public NodeNotReadyVo getNodeNotReady() {
+	public NodeNotReadyVo getNodeNotReady() throws ZcpException {
 		NodeNotReadyVo nodeNotReadyVo = new NodeNotReadyVo();
 
-		JSONObject resultObj = prometheusManager.getNodeNotReadyCnt();
-		JSONObject resultTotObj = prometheusManager.getNodeNotReadyTotCnt();
+		JSONObject resultObj = new JSONObject();
+		try {
+			resultObj = prometheusManager.getNodeNotReadyCnt();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ZcpException("10003", "NodeNotReadyCnt exception: " + e.getMessage());
+		}
+
+		JSONObject resultTotObj = new JSONObject();
+		try {
+			resultTotObj = prometheusManager.getNodeNotReadyTotCnt();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ZcpException("10004", "NodeNotReadyTotCnt exception: " + e.getMessage());
+		}
 
 		if (resultObj != null) {
 			JSONObject dataObj = (JSONObject) resultObj.get("data");
@@ -117,11 +146,24 @@ public class AlertService {
 		return nodeNotReadyVo;
 	}
 
-	public NodeDownVo getNodeDown() {
+	public NodeDownVo getNodeDown() throws ZcpException {
 		NodeDownVo nodeDownVo = new NodeDownVo();
 
-		JSONObject resultObj = prometheusManager.getNodeDownCnt();
-		JSONObject resultTotObj = prometheusManager.getNodeDownTotCnt();
+		JSONObject resultObj = new JSONObject();
+		try {
+			resultObj = prometheusManager.getNodeDownCnt();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ZcpException("10005", "NodeDownCnt exception: " + e.getMessage());
+		}
+
+		JSONObject resultTotObj = new JSONObject();
+		try {
+			resultTotObj = prometheusManager.getNodeDownTotCnt();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ZcpException("10006", "NodeDownTotCnt exception: " + e.getMessage());
+		}
 
 		if (resultObj != null) {
 			JSONObject dataObj = (JSONObject) resultObj.get("data");
@@ -159,9 +201,16 @@ public class AlertService {
 		return nodeDownVo;
 	}
 
-	public List<AlertVo> getAlertList() {
+	public List<AlertVo> getAlertList() throws ZcpException {
 		List<AlertVo> resultList = new ArrayList<AlertVo>();
-		JSONObject resultObj = alertManager.getAlertList();
+
+		JSONObject resultObj = new JSONObject();
+		try {
+			resultObj = alertManager.getAlertList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ZcpException("10007", "AlertList exception: " + e.getMessage());
+		}
 
 		if (resultObj != null) {
 			JSONArray resultArr = (JSONArray) resultObj.get("data");
@@ -204,9 +253,16 @@ public class AlertService {
 		return resultList;
 	}
 
-	public List<AlertHistoryVo> getAlertHistoryList(String time) {
+	public List<AlertHistoryVo> getAlertHistoryList(String time) throws ZcpException {
 		List<AlertHistoryVo> resultList = new ArrayList<AlertHistoryVo>();
-		JSONArray resultArr = mariaManager.getAlertHistoryList(time);
+
+		JSONArray resultArr = new JSONArray();
+		try {
+			resultArr = mariaManager.getAlertHistoryList(time);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ZcpException("10008", "AlertHistoryList exception: " + e.getMessage());
+		}
 
 		if (resultArr != null) {
 			for (int resultCnt = 0; resultCnt < resultArr.size(); resultCnt++) {

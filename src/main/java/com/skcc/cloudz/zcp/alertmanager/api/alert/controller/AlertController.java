@@ -30,7 +30,7 @@ public class AlertController {
 	private AlertService alertService;
 
 	@RequestMapping(value = "activeCount", method = RequestMethod.GET)
-	public ResponseEntity<AlertCountVo> getAlertCount() throws IOException {
+	public ResponseEntity<AlertCountVo> getAlertCount() throws Exception {
 		AlertCountVo result = alertService.getAlertCount();
 		if (result == null) {
 			return new ResponseEntity<AlertCountVo>(HttpStatus.NOT_FOUND);
@@ -39,25 +39,25 @@ public class AlertController {
 	}
 
 	@RequestMapping(value = "apiServer", method = RequestMethod.GET)
-	public ResponseEntity<ApiServerVo> getApiServer() throws IOException {
+	public ResponseEntity<ApiServerVo> getApiServer() throws Exception {
 		ApiServerVo result = alertService.getApiServer();
 		return new ResponseEntity<ApiServerVo>(result, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "nodeNotReady", method = RequestMethod.GET)
-	public ResponseEntity<NodeNotReadyVo> getNodeNotReady() throws IOException {
+	public ResponseEntity<NodeNotReadyVo> getNodeNotReady() throws Exception {
 		NodeNotReadyVo result = alertService.getNodeNotReady();
 		return new ResponseEntity<NodeNotReadyVo>(result, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "nodeDown", method = RequestMethod.GET)
-	public ResponseEntity<NodeDownVo> getNodeDown() throws IOException {
+	public ResponseEntity<NodeDownVo> getNodeDown() throws Exception {
 		NodeDownVo result = alertService.getNodeDown();
 		return new ResponseEntity<NodeDownVo>(result, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "alertList", method = RequestMethod.GET)
-	public ResponseEntity<List<AlertVo>> getAlertList() throws IOException {
+	public ResponseEntity<List<AlertVo>> getAlertList() throws Exception {
 		List<AlertVo> result = alertService.getAlertList();
 		if (result == null) {
 			return new ResponseEntity<List<AlertVo>>(HttpStatus.NOT_FOUND);
@@ -67,7 +67,7 @@ public class AlertController {
 
 	@RequestMapping(value = "alertHistory/{time}", method = RequestMethod.GET)
 	public ResponseEntity<List<AlertHistoryVo>> getHistoryList(@PathVariable("time") final String time)
-			throws IOException {
+			throws Exception {
 		List<AlertHistoryVo> result = alertService.getAlertHistoryList(time);
 		if (result == null) {
 			return new ResponseEntity<List<AlertHistoryVo>>(HttpStatus.NOT_FOUND);
