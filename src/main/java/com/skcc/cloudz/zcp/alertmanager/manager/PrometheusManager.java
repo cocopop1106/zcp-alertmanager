@@ -23,7 +23,7 @@ public class PrometheusManager {
 	private String baseUrl;
 
 	@SuppressWarnings("static-access")
-	public JSONObject getAlertCount() {
+	public JSONObject getAlertCount() throws Exception {
 		JSONObject jsonObj = new JSONObject();
 
 		try {
@@ -61,7 +61,7 @@ public class PrometheusManager {
 	}
 
 	@SuppressWarnings("static-access")
-	public JSONObject getApiServer() {
+	public JSONObject getApiServer() throws Exception {
 		JSONObject jsonObj = new JSONObject();
 
 		try {
@@ -100,7 +100,7 @@ public class PrometheusManager {
 	}
 
 	@SuppressWarnings("static-access")
-	public JSONObject getNodeNotReadyCnt() {
+	public JSONObject getNodeNotReadyCnt() throws Exception {
 		JSONObject jsonObj = new JSONObject();
 
 		try {
@@ -140,7 +140,7 @@ public class PrometheusManager {
 	}
 
 	@SuppressWarnings("static-access")
-	public JSONObject getNodeNotReadyTotCnt() {
+	public JSONObject getNodeNotReadyTotCnt() throws Exception {
 		JSONObject jsonObj = new JSONObject();
 
 		try {
@@ -180,7 +180,7 @@ public class PrometheusManager {
 	}
 
 	@SuppressWarnings("static-access")
-	public JSONObject getNodeDownCnt() {
+	public JSONObject getNodeDownCnt() throws Exception {
 		JSONObject jsonObj = new JSONObject();
 
 		try {
@@ -219,7 +219,7 @@ public class PrometheusManager {
 	}
 
 	@SuppressWarnings("static-access")
-	public JSONObject getNodeDownTotCnt() {
+	public JSONObject getNodeDownTotCnt() throws Exception {
 		JSONObject jsonObj = new JSONObject();
 
 		try {
