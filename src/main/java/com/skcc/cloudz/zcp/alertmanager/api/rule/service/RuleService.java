@@ -18,13 +18,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.skcc.cloudz.zcp.alertmanager.common.exception.ZcpException;
 import com.skcc.cloudz.zcp.alertmanager.common.vo.RuleData;
 import com.skcc.cloudz.zcp.alertmanager.common.vo.RuleVo;
 
 import com.skcc.cloudz.zcp.alertmanager.manager.KubeCoreManager;
 
-import io.kubernetes.client.models.V1Namespace;
-import io.kubernetes.client.models.V1NamespaceList;
 
 @Service
 public class RuleService {
@@ -38,9 +37,16 @@ public class RuleService {
 	private String baseUrl;
 
 	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
-	public List<RuleVo> getRuleList() {
-		List listRules = kubeCoreManager.getRuleList();
-
+	public List<RuleVo> getRuleList() throws ZcpException {
+		List listRules = new ArrayList();
+		
+		try {
+			listRules = kubeCoreManager.getRuleList();	
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw new ZcpException("30001", "getRuleList exception: " + e.getMessage());
+		}
+		
 		List<RuleVo> ruleViewList = new ArrayList<RuleVo>();
 		Map<String, Object> maplistRules;
 		int count = 0;
@@ -113,7 +119,7 @@ public class RuleService {
 					rule.setDuration(maplistRules.get("for").toString());
 				
 				rule.setChannel(maplistLabels.get("channel").toString());
-//				rule.setNotification(getNotification(maplistLabels.get("channel").toString()));
+				/*rule.setNotification(getNotification(maplistLabels.get("channel").toString()));*/
 				
 				rule.setValue(rule.getCondition() + rule.getValue2());
 
@@ -126,9 +132,16 @@ public class RuleService {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public String getNotification(String name) {
-		List listChannels = kubeCoreManager.getChannelList();
-
+	public String getNotification(String name) throws ZcpException {
+		List listChannels = new ArrayList();
+		
+		try {
+			listChannels = kubeCoreManager.getChannelList();	
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw new ZcpException("30002", "getNotification exception: " + e.getMessage());
+		}
+		
 		Map<String, Object> maplistReceivers;
 		int count = 0;
 		String notification = "";
@@ -159,8 +172,16 @@ public class RuleService {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
-	public RuleVo findById(int ruleId) {
-		List listRules = kubeCoreManager.getRuleList();
+	public RuleVo findById(int ruleId) throws ZcpException {
+		List listRules = new ArrayList();
+		
+		try {
+			listRules = kubeCoreManager.getRuleList();	
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw new ZcpException("30003", "findById exception: " + e.getMessage());
+		}
+		
 		List<RuleVo> ruleViewList = new ArrayList<RuleVo>();
 
 		Map<String, Object> maplistRules;
@@ -270,7 +291,7 @@ public class RuleService {
 		return ruleVo;
 	}
 
-	public RuleVo createRule(RuleVo ruleVo) {
+	public RuleVo createRule(RuleVo ruleVo) throws ZcpException {
 		RuleData ruleData = new RuleData();
 
 		String ruleExpr = "";
@@ -282,7 +303,14 @@ public class RuleService {
 		ruleData.setRuleSeverity(ruleVo.getSeverity());
 		ruleData.setRuleChannel(ruleVo.getChannel());
 
-		RuleData ruleResult = kubeCoreManager.createRule(ruleData);
+		RuleData ruleResult = new RuleData();
+		try {
+			ruleResult = kubeCoreManager.createRule(ruleData);	
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw new ZcpException("30004", "createRule exception: " + e.getMessage());
+		}
+		
 
 		if (ruleResult != null) {
 			Timer timer = new Timer();
@@ -325,8 +353,13 @@ public class RuleService {
 	}
 
 	@SuppressWarnings("unused")
-	public RuleVo updateRule(int ruleId, RuleVo ruleVo) {
-		Boolean result = kubeCoreManager.deleteRule(ruleId);
+	public RuleVo updateRule(int ruleId, RuleVo ruleVo) throws ZcpException {
+		try {
+			Boolean result = kubeCoreManager.deleteRule(ruleId);	
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw new ZcpException("30005", "deleteRule exception: " + e.getMessage());
+		}
 
 		RuleData ruleData = new RuleData();
 
@@ -340,8 +373,15 @@ public class RuleService {
 		ruleData.setRuleSeverity(ruleVo.getSeverity());
 		ruleData.setRuleChannel(ruleVo.getChannel());
 
-		RuleData ruleResult = kubeCoreManager.createRule(ruleData);
-
+		RuleData ruleResult = new RuleData();
+		
+		try {
+			ruleResult = kubeCoreManager.createRule(ruleData);	
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw new ZcpException("30006", "createRule exception: " + e.getMessage());
+		}
+		
 		if (ruleResult != null) {
 			Timer timer = new Timer();
 			TimerTask task = new TimerTask() {
@@ -378,8 +418,14 @@ public class RuleService {
 		return ruleVo;
 	}
 
-	public Boolean deleteRule(int id) {
-		Boolean result = kubeCoreManager.deleteRule(id);
+	public Boolean deleteRule(int id) throws ZcpException {
+		Boolean result = null;
+		try {
+			result = kubeCoreManager.deleteRule(id);	
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw new ZcpException("30007", "deleteRule exception: " + e.getMessage());
+		}
 
 		if (result != null) {
 			Timer timer = new Timer();

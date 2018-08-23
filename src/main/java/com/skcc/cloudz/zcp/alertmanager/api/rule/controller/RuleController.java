@@ -1,6 +1,5 @@
 package com.skcc.cloudz.zcp.alertmanager.api.rule.controller;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -28,7 +27,7 @@ public class RuleController {
 	private RuleService ruleService;
 
 	@RequestMapping(value = "rule", method = RequestMethod.GET)
-	public ResponseEntity<List<RuleVo>> getRuleList() throws IOException {
+	public ResponseEntity<List<RuleVo>> getRuleList() throws Exception {
 
 		List<RuleVo> ruleList = ruleService.getRuleList();
 		if (ruleList.isEmpty()) {
@@ -38,7 +37,7 @@ public class RuleController {
 	}
 
 	@RequestMapping(value = "rule/{id}", method = RequestMethod.GET)
-	public ResponseEntity<RuleVo> getRuleDtl(@PathVariable("id") final int id) {
+	public ResponseEntity<RuleVo> getRuleDtl(@PathVariable("id") final int id) throws Exception {
 		RuleVo ruleDtl = ruleService.findById(id);
 		if (ruleDtl == null) {
 			return new ResponseEntity<RuleVo>(HttpStatus.NOT_FOUND);
@@ -48,17 +47,16 @@ public class RuleController {
 
 	@SuppressWarnings("unused")
 	@RequestMapping(value = "rule", method = RequestMethod.POST)
-	public ResponseEntity<Void> createRule(@RequestBody final RuleVo ruleVo, final UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<Void> createRule(@RequestBody final RuleVo ruleVo, final UriComponentsBuilder ucBuilder) throws Exception {
 		RuleVo createRule = ruleService.createRule(ruleVo);
 
 		HttpHeaders headers = new HttpHeaders();
-		// headers.setLocation(ucBuilder.path("rule/{id}").buildAndExpand(createRule.getId()).toUri());
 		headers.setLocation(ucBuilder.path("alert/rules").build().toUri());
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "rule/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<RuleVo> updateRule(@PathVariable("id") final int id, @RequestBody final RuleVo ruleVo) {
+	public ResponseEntity<RuleVo> updateRule(@PathVariable("id") final int id, @RequestBody final RuleVo ruleVo) throws Exception {
 		RuleVo updateRule = ruleService.updateRule(id, ruleVo);
 
 		if (updateRule == null) {
@@ -68,7 +66,7 @@ public class RuleController {
 	}
 
 	@RequestMapping(value = "rule/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Void> deleteRule(@PathVariable("id") final int id) {
+	public ResponseEntity<Void> deleteRule(@PathVariable("id") final int id) throws Exception {
 		RuleVo ruleResult = ruleService.findById(id);
 
 		if (ruleResult == null) {
@@ -80,7 +78,7 @@ public class RuleController {
 	}
 
 	/*@RequestMapping(value = "namespaceList", method = RequestMethod.GET)
-	public ResponseEntity<List<String>> getNamespaceList() throws IOException {
+	public ResponseEntity<List<String>> getNamespaceList() throws Exception {
 
 		List<String> namespaceList = ruleService.getNamespaceList();
 		if (namespaceList.isEmpty()) {
