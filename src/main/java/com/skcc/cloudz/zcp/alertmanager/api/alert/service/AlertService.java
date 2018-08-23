@@ -42,7 +42,7 @@ public class AlertService {
 			resultObj = prometheusManager.getAlertCount();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("10001", "AlertCount exception: " + e.getMessage());
+			throw new ZcpException("10001", "getAlertCount exception: " + e.getMessage());
 		}
 		AlertCountVo alertCountVo = new AlertCountVo();
 
@@ -66,7 +66,7 @@ public class AlertService {
 			resultObj = prometheusManager.getApiServer();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("10002", "ApiServer exception: " + e.getMessage());
+			throw new ZcpException("10002", "getApiServer exception: " + e.getMessage());
 		}
 
 		ApiServerVo apiServerVo = new ApiServerVo();
@@ -100,7 +100,7 @@ public class AlertService {
 			resultObj = prometheusManager.getNodeNotReadyCnt();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("10003", "NodeNotReadyCnt exception: " + e.getMessage());
+			throw new ZcpException("10003", "getNodeNotReady exception: " + e.getMessage());
 		}
 
 		JSONObject resultTotObj = new JSONObject();
@@ -108,7 +108,7 @@ public class AlertService {
 			resultTotObj = prometheusManager.getNodeNotReadyTotCnt();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("10004", "NodeNotReadyTotCnt exception: " + e.getMessage());
+			throw new ZcpException("10004", "getNodeNotReadyTotCnt exception: " + e.getMessage());
 		}
 
 		if (resultObj != null) {
@@ -154,7 +154,7 @@ public class AlertService {
 			resultObj = prometheusManager.getNodeDownCnt();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("10005", "NodeDownCnt exception: " + e.getMessage());
+			throw new ZcpException("10005", "getNodeDownCnt exception: " + e.getMessage());
 		}
 
 		JSONObject resultTotObj = new JSONObject();
@@ -162,7 +162,7 @@ public class AlertService {
 			resultTotObj = prometheusManager.getNodeDownTotCnt();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("10006", "NodeDownTotCnt exception: " + e.getMessage());
+			throw new ZcpException("10006", "getNodeDownTotCnt exception: " + e.getMessage());
 		}
 
 		if (resultObj != null) {
@@ -209,7 +209,7 @@ public class AlertService {
 			resultObj = alertManager.getAlertList();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("10007", "AlertList exception: " + e.getMessage());
+			throw new ZcpException("10007", "getAlertList exception: " + e.getMessage());
 		}
 
 		if (resultObj != null) {
@@ -261,7 +261,7 @@ public class AlertService {
 			resultArr = mariaManager.getAlertHistoryList(time);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("10008", "AlertHistoryList exception: " + e.getMessage());
+			throw new ZcpException("10008", "getAlertHistoryList exception: " + e.getMessage());
 		}
 
 		if (resultArr != null) {
