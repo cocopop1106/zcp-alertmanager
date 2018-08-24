@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 import com.skcc.cloudz.zcp.alertmanager.common.vo.ChannelData;
 import com.skcc.cloudz.zcp.alertmanager.common.vo.ChannelDtlVo;
 import com.skcc.cloudz.zcp.alertmanager.common.vo.ChannelVo;
-import com.skcc.cloudz.zcp.alertmanager.common.vo.ConfigMapVo;
 import com.skcc.cloudz.zcp.alertmanager.common.vo.RepeatVo;
 import com.skcc.cloudz.zcp.alertmanager.common.vo.RuleData;
 import com.skcc.cloudz.zcp.alertmanager.common.util.Message;
@@ -59,7 +58,7 @@ public class KubeCoreManager {
 	Message message;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public List<ChannelData> getChannelList() {
+	public List<ChannelData> getChannelList() throws Exception {
 
 		FileWriter writer = null;
 		List listChannel = null;
@@ -101,7 +100,7 @@ public class KubeCoreManager {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
-	public ChannelData createChannel(ChannelData channel) {
+	public ChannelData createChannel(ChannelData channel) throws Exception {
 
 		List<ChannelData> ruleList = new ArrayList<ChannelData>();
 		FileWriter writer = null;
@@ -187,7 +186,7 @@ public class KubeCoreManager {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
-	public ChannelDtlVo updateChannel(int id, ChannelDtlVo channelDtlVo) {
+	public ChannelDtlVo updateChannel(int id, ChannelDtlVo channelDtlVo) throws Exception {
 		FileWriter writer = null;
 		List receiverList = null;
 		Map<String, Object> newChannelMap = new LinkedHashMap<String, Object>();
@@ -435,7 +434,7 @@ public class KubeCoreManager {
 	}
 
 	@SuppressWarnings({ "unused", "unchecked", "rawtypes" })
-	public Boolean deleteChannel(int id, String channel) {
+	public Boolean deleteChannel(int id, String channel) throws Exception {
 		List<RuleData> ruleList = new ArrayList<RuleData>();
 		FileWriter writer = null;
 		List receiverList = null;
@@ -533,7 +532,7 @@ public class KubeCoreManager {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
-	public List<RuleData> getRuleList() {
+	public List<RuleData> getRuleList() throws Exception {
 		FileWriter writer = null;
 		List listRules = null;
 
@@ -590,7 +589,7 @@ public class KubeCoreManager {
 	}
 
 	@SuppressWarnings({ "unused", "unchecked", "rawtypes" })
-	public RuleData createRule(RuleData createRuleVo) {
+	public RuleData createRule(RuleData createRuleVo) throws Exception {
 		List<RuleData> ruleList = new ArrayList<RuleData>();
 		FileWriter writer = null;
 
@@ -698,7 +697,7 @@ public class KubeCoreManager {
 	}
 
 	@SuppressWarnings({ "unused", "unchecked", "rawtypes" })
-	public Boolean deleteRule(int ruleId) {
+	public Boolean deleteRule(int ruleId) throws Exception {
 		List<RuleData> ruleList = new ArrayList<RuleData>();
 		FileWriter writer = null;
 
@@ -778,7 +777,7 @@ public class KubeCoreManager {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Map<String, Object> getRepeatInterval() {
+	public Map<String, Object> getRepeatInterval() throws Exception {
 
 		FileWriter writer = null;
 		Map<String, Object> routeMap = new HashMap<String, Object>();
@@ -813,7 +812,7 @@ public class KubeCoreManager {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
-	public RepeatVo updateRepeatInterval(RepeatVo repeatVo) {
+	public RepeatVo updateRepeatInterval(RepeatVo repeatVo) throws Exception {
 		FileWriter writer = null;
 
 		Map<String, Object> routeMap = new LinkedHashMap<String, Object>();
@@ -919,7 +918,7 @@ public class KubeCoreManager {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
-	public ChannelVo updateChannelName(int id, ChannelVo channelVo) {
+	public ChannelVo updateChannelName(int id, ChannelVo channelVo) throws Exception {
 		FileWriter writer = null;
 		List receiverList = null;
 		Map<String, Object> newChannelMap = new LinkedHashMap<String, Object>();
@@ -1071,7 +1070,7 @@ public class KubeCoreManager {
 	}
 
 	@SuppressWarnings({ "unused", "unchecked", "rawtypes" })
-	public Boolean deleteNotification(int id, String channel, ChannelDtlVo channelDtlVo) {
+	public Boolean deleteNotification(int id, String channel, ChannelDtlVo channelDtlVo) throws Exception {
 		List<RuleData> ruleList = new ArrayList<RuleData>();
 		FileWriter writer = null;
 		List receiverList = null;

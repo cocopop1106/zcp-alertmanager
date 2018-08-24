@@ -25,7 +25,7 @@ public class AlertManager {
     private String baseUrl;
 
 	@SuppressWarnings("static-access")
-	public JSONObject getAlertList() {
+	public JSONObject getAlertList() throws Exception {
 		JSONObject jsonObj = new JSONObject();
 
 		try {

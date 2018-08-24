@@ -26,7 +26,7 @@ public class MariaManager {
 	private String password;
 
 	@SuppressWarnings("unchecked")
-	public JSONArray getAlertHistoryList(String time) {
+	public JSONArray getAlertHistoryList(String time) throws Exception {
 		JSONArray jsonArr = new JSONArray();
 		
 		Connection con = null;

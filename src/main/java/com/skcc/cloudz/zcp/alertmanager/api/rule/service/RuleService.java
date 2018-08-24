@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.skcc.cloudz.zcp.alertmanager.common.exception.ZcpErrorCode;
 import com.skcc.cloudz.zcp.alertmanager.common.exception.ZcpException;
 import com.skcc.cloudz.zcp.alertmanager.common.vo.RuleData;
 import com.skcc.cloudz.zcp.alertmanager.common.vo.RuleVo;
@@ -44,7 +45,7 @@ public class RuleService {
 			listRules = kubeCoreManager.getRuleList();	
 		} catch(Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("30001", "getRuleList exception: " + e.getMessage());
+			throw new ZcpException(ZcpErrorCode.GET_RULE_LIST_ERROR, e);
 		}
 		
 		List<RuleVo> ruleViewList = new ArrayList<RuleVo>();
@@ -139,7 +140,7 @@ public class RuleService {
 			listChannels = kubeCoreManager.getChannelList();	
 		} catch(Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("30002", "getNotification exception: " + e.getMessage());
+			throw new ZcpException(ZcpErrorCode.GET_NOTIFICATION_ERROR, e);
 		}
 		
 		Map<String, Object> maplistReceivers;
@@ -179,7 +180,7 @@ public class RuleService {
 			listRules = kubeCoreManager.getRuleList();	
 		} catch(Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("30003", "findById exception: " + e.getMessage());
+			throw new ZcpException(ZcpErrorCode.GET_RULE_DETAIL_ERROR, e);
 		}
 		
 		List<RuleVo> ruleViewList = new ArrayList<RuleVo>();
@@ -308,7 +309,7 @@ public class RuleService {
 			ruleResult = kubeCoreManager.createRule(ruleData);	
 		} catch(Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("30004", "createRule exception: " + e.getMessage());
+			throw new ZcpException(ZcpErrorCode.CREATE_RULE_ERROR, e);
 		}
 		
 
@@ -358,7 +359,7 @@ public class RuleService {
 			Boolean result = kubeCoreManager.deleteRule(ruleId);	
 		} catch(Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("30005", "deleteRule exception: " + e.getMessage());
+			throw new ZcpException(ZcpErrorCode.UPDATE_RULE_ERROR, e);
 		}
 
 		RuleData ruleData = new RuleData();
@@ -379,7 +380,7 @@ public class RuleService {
 			ruleResult = kubeCoreManager.createRule(ruleData);	
 		} catch(Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("30006", "createRule exception: " + e.getMessage());
+			throw new ZcpException(ZcpErrorCode.UPDATE_RULE_ERROR, e);
 		}
 		
 		if (ruleResult != null) {
@@ -424,7 +425,7 @@ public class RuleService {
 			result = kubeCoreManager.deleteRule(id);	
 		} catch(Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("30007", "deleteRule exception: " + e.getMessage());
+			throw new ZcpException(ZcpErrorCode.DELETE_RULE_ERROR, e);
 		}
 
 		if (result != null) {

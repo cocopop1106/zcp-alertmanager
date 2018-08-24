@@ -9,6 +9,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.skcc.cloudz.zcp.alertmanager.common.exception.ZcpErrorCode;
 import com.skcc.cloudz.zcp.alertmanager.common.exception.ZcpException;
 import com.skcc.cloudz.zcp.alertmanager.common.util.TimestampUtil;
 import com.skcc.cloudz.zcp.alertmanager.common.vo.AlertCountVo;
@@ -42,7 +43,7 @@ public class AlertService {
 			resultObj = prometheusManager.getAlertCount();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("10001", "getAlertCount exception: " + e.getMessage());
+			throw new ZcpException(ZcpErrorCode.GET_ALERT_COUNT_ERROR, e);
 		}
 		AlertCountVo alertCountVo = new AlertCountVo();
 
@@ -66,7 +67,7 @@ public class AlertService {
 			resultObj = prometheusManager.getApiServer();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("10002", "getApiServer exception: " + e.getMessage());
+			throw new ZcpException(ZcpErrorCode.GET_API_SERVER_ERROR, e);
 		}
 
 		ApiServerVo apiServerVo = new ApiServerVo();
@@ -100,7 +101,7 @@ public class AlertService {
 			resultObj = prometheusManager.getNodeNotReadyCnt();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("10003", "getNodeNotReady exception: " + e.getMessage());
+			throw new ZcpException(ZcpErrorCode.GET_NODE_NOT_READY_ERROR, e);
 		}
 
 		JSONObject resultTotObj = new JSONObject();
@@ -108,7 +109,7 @@ public class AlertService {
 			resultTotObj = prometheusManager.getNodeNotReadyTotCnt();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("10004", "getNodeNotReadyTotCnt exception: " + e.getMessage());
+			throw new ZcpException(ZcpErrorCode.GET_NODE_NOT_READY_TOT_CNT_ERROR, e);
 		}
 
 		if (resultObj != null) {
@@ -154,7 +155,7 @@ public class AlertService {
 			resultObj = prometheusManager.getNodeDownCnt();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("10005", "getNodeDownCnt exception: " + e.getMessage());
+			throw new ZcpException(ZcpErrorCode.GET_NODE_DOWN_CNT_ERROR, e);
 		}
 
 		JSONObject resultTotObj = new JSONObject();
@@ -162,7 +163,7 @@ public class AlertService {
 			resultTotObj = prometheusManager.getNodeDownTotCnt();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("10006", "getNodeDownTotCnt exception: " + e.getMessage());
+			throw new ZcpException(ZcpErrorCode.GET_NODE_DOWN_TOT_CNT_ERROR, e);
 		}
 
 		if (resultObj != null) {
@@ -209,7 +210,7 @@ public class AlertService {
 			resultObj = alertManager.getAlertList();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("10007", "getAlertList exception: " + e.getMessage());
+			throw new ZcpException(ZcpErrorCode.GET_ALERT_LIST_ERROR, e);
 		}
 
 		if (resultObj != null) {
@@ -261,7 +262,7 @@ public class AlertService {
 			resultArr = mariaManager.getAlertHistoryList(time);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("10008", "getAlertHistoryList exception: " + e.getMessage());
+			throw new ZcpException(ZcpErrorCode.GET_ALERT_HISTORY_LIST_ERROR, e);
 		}
 
 		if (resultArr != null) {

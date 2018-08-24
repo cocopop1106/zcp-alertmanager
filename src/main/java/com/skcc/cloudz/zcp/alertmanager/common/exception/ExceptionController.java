@@ -1,10 +1,5 @@
 package com.skcc.cloudz.zcp.alertmanager.common.exception;
 
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-
-import java.io.IOException;
-import java.util.Properties;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -13,7 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.skcc.cloudz.zcp.alertmanager.common.vo.RtnVO;
+import com.skcc.cloudz.zcp.alertmanager.common.vo.ErrorVO;
 
 import io.kubernetes.client.ApiException;
 
@@ -22,47 +17,43 @@ public class ExceptionController {
 
 	private final Logger logger = LoggerFactory.getLogger(ExceptionController.class);
 
-	private Properties properties = new Properties();
-
-	public ExceptionController() throws IOException {
-		properties.load(getClass().getClassLoader().getResourceAsStream("exception.properties"));
-	}
-
 	@ExceptionHandler(Exception.class)
 	@ResponseBody
 	public Object exceptionResolver(HttpServletRequest req, Exception e) {
-		RtnVO vo = new RtnVO();
-		logger.debug("UnKnown Error...{}", e);
-		if (e instanceof ZcpException) {
-			vo.setCode(((ZcpException) e).getCode());
-		} else if (e instanceof ApiException) {
-			vo.setCode(String.valueOf(((ApiException) e).getCode()));
-		} else {
-			vo.setCode("500");
-		}
-
-		vo.setMsg(e.getMessage());
+		logger.debug("UnKnown Error...", e);
+		ErrorVO vo = new ErrorVO();
+		String code = String.format("%d", ZcpErrorCode.UNKNOWN_ERROR.getCode());
+		vo.setCode(code);
+		vo.setMsg(ZcpErrorCode.UNKNOWN_ERROR.toString());
+		vo.setDetail(e.toString());
 		return vo;
 	}
 
 	@ExceptionHandler(ApiException.class)
 	@ResponseBody
 	public Object exceptionResolver(HttpServletRequest req, ApiException e) {
-		RtnVO vo = new RtnVO();
+		logger.debug("Kebe Exception...", e);
+		ErrorVO vo = new ErrorVO();
 		logger.debug(e.getResponseHeaders() == null ? "" : e.getResponseHeaders().toString());
 		logger.debug(e.getResponseBody());
 		logger.debug(e.getMessage());
-		logger.debug("", e);
-		vo.setData(e.getResponseBody());
-		vo.setCode("K500");// 코드 수정 예정
-		vo.setMsg(e.getMessage());
+		String code = String.format("%d", ZcpErrorCode.KUBERNETES_UNKNOWN_ERROR.getCode());
+		vo.setDetail(e.getResponseBody());
+		vo.setCode(code);
+		vo.setMsg(ZcpErrorCode.KEYCLOAK_UNKNOWN_ERROR.toString());
+		
 		return vo;
 	}
 
 	@ExceptionHandler(ZcpException.class)
 	@ResponseBody
 	public Object zcpExceptionResolver(HttpServletRequest req, ZcpException e) {
-		RtnVO vo = new RtnVO(e.getCode(), e.getMessage());
+		logger.debug("ZcpException...", e);
+		String code = String.format("%d", e.getCode().getCode());
+		ErrorVO vo = new ErrorVO();
+		vo.setCode(code);
+		vo.setMsg(e.getCode().getMessage());
+		vo.setDetail(e.getApiMsg());
 		return vo;
 	}
 

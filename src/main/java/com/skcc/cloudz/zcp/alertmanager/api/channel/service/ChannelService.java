@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.skcc.cloudz.zcp.alertmanager.common.exception.ZcpErrorCode;
 import com.skcc.cloudz.zcp.alertmanager.common.exception.ZcpException;
 import com.skcc.cloudz.zcp.alertmanager.common.vo.ChannelData;
 import com.skcc.cloudz.zcp.alertmanager.common.vo.ChannelDtlVo;
@@ -46,7 +47,7 @@ public class ChannelService {
 			listChannels = kubeCoreManager.getChannelList();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("20001", "getChannelList exception: " + e.getMessage());
+			throw new ZcpException(ZcpErrorCode.GET_CHANNEL_LIST_ERROR, e);
 		}
 
 		List<ChannelListVo> channelViewList = new ArrayList<ChannelListVo>();
@@ -90,7 +91,7 @@ public class ChannelService {
 			listChannels = kubeCoreManager.getChannelList();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("20002", "findById exception: " + e.getMessage());
+			throw new ZcpException(ZcpErrorCode.GET_CHANNEL_DETAIL_ERROR, e);
 		}
 
 		List<ChannelDtlVo> channelViewList = new ArrayList<ChannelDtlVo>();
@@ -205,7 +206,7 @@ public class ChannelService {
 			channelResult = kubeCoreManager.createChannel(channelData);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("20003", "createChannel exception: " + e.getMessage());
+			throw new ZcpException(ZcpErrorCode.CREATE_CHANNEL_ERROR, e);
 		}
 
 		if (channelResult != null) {
@@ -250,7 +251,7 @@ public class ChannelService {
 			result = kubeCoreManager.deleteChannel(id, channel);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("20004", "deleteChannel exception: " + e.getMessage());
+			throw new ZcpException(ZcpErrorCode.DELETE_CHANNEL_ERROR, e);
 		}
 
 		if (result != null) {
@@ -296,7 +297,7 @@ public class ChannelService {
 			result = kubeCoreManager.updateChannel(id, channelDtlVo);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("20005", "updateChannel exception: " + e.getMessage());
+			throw new ZcpException(ZcpErrorCode.UPDATE_CHANNEL_ERROR, e);
 		}
 
 		if (result != null) {
@@ -342,7 +343,7 @@ public class ChannelService {
 			routeMap = kubeCoreManager.getRepeatInterval();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("20006", "getRepeatInterval exception: " + e.getMessage());
+			throw new ZcpException(ZcpErrorCode.GET_REPEAT_INTERVAL_ERROR, e);
 		}
 
 		RepeatVo repeatVo = new RepeatVo();
@@ -358,7 +359,7 @@ public class ChannelService {
 			result = kubeCoreManager.updateRepeatInterval(repeatVo);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("20007", "updateRepeatInterval exception: " + e.getMessage());
+			throw new ZcpException(ZcpErrorCode.UPDATE_REPEAT_INTERVAL_ERROR, e);
 		}
 
 		if (result != null) {
@@ -396,7 +397,7 @@ public class ChannelService {
 			result = kubeCoreManager.updateChannelName(id, channelVo);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("20008", "updateChannelName exception: " + e.getMessage());
+			throw new ZcpException(ZcpErrorCode.UPDATE_CHANNEL_NAME_ERROR, e);
 		}
 
 		if (result != null) {
@@ -434,7 +435,7 @@ public class ChannelService {
 			result = kubeCoreManager.deleteNotification(id, channel, channelDtlVo);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ZcpException("20009", "deleteNotification exception: " + e.getMessage());
+			throw new ZcpException(ZcpErrorCode.DELETE_NOTIFICATION_ERROR, e);
 		}
 
 		if (result != null) {
