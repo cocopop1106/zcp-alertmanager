@@ -30,7 +30,7 @@ spec:
                 - "management"
       containers:
       - name: zcp-alertmanager
-        image: cloudzcp/zcp-alertmanager
+        image: cloudzcp/zcp-alertmanager:1.0.0
         imagePullPolicy: Always
         ports:
         - name: cont-port
