@@ -6,7 +6,7 @@ props:
   alertManager:
     baseUrl: ${ALERT_BASE_URI}
     configMap: ${ALERT_CONFIGMAP}
-    namespace: ${NAMESPACE}
+    namespace: ${ALERT_NAMESPACE}
   prometheus:
     baseUrl: ${PROMET_BASE_URI}
     configMap: ${PROMET_CONFIGMAP}
