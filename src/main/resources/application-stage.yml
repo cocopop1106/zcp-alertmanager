@@ -10,7 +10,7 @@ props:
   prometheus:
     baseUrl: ${PROMET_BASE_URI}
     configMap: ${PROMET_CONFIGMAP}
-    namespace: ${NAMESPACE}
+    namespace: ${ALERT_NAMESPACE}
   mariaDB:
     url: ${MARIADB_URI}
     id: ${MARIADB_ID}
